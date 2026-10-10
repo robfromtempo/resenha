@@ -1,0 +1,12 @@
+{
+  "client_id": "https://robfromtempo.github.io/resenha/oauth/client-metadata.json",
+  "client_name": "Resenha",
+  "client_uri": "https://robfromtempo.github.io/resenha/",
+  "application_type": "native",
+  "grant_types": ["authorization_code", "refresh_token"],
+  "response_types": ["code"],
+  "redirect_uris": ["io.github.robfromtempo:/oauth/callback"],
+  "scope": "atproto repo:buzz.bookhive.book",
+  "token_endpoint_auth_method": "none",
+  "dpop_bound_access_tokens": true
+}
