@@ -1,0 +1,6 @@
+{
+  "about": "Accounts, reviews and posts Resenha hides for everyone after a report. Reviews are identified by the reviewer's DID and the book's hive ID; posts by their at:// URI.",
+  "accounts": [],
+  "reviews": [],
+  "posts": []
+}
