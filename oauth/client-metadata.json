@@ -6,7 +6,7 @@
   "grant_types": ["authorization_code", "refresh_token"],
   "response_types": ["code"],
   "redirect_uris": ["io.github.robfromtempo:/oauth/callback"],
-  "scope": "atproto repo:buzz.bookhive.book",
+  "scope": "atproto repo:buzz.bookhive.book repo:app.bsky.feed.like repo:app.bsky.feed.post?action=create rpc:app.bsky.feed.getAuthorFeed?aud=did:web:api.bsky.app%23bsky_appview rpc:com.atproto.moderation.createReport?aud=did:plc:ar7c4by46qjdydhdevvrndac%23atproto_labeler",
   "token_endpoint_auth_method": "none",
   "dpop_bound_access_tokens": true
 }
