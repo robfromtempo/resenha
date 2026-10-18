@@ -92,6 +92,7 @@ async function reviewPage(did, rkey) {
           ${author.avatar ? `<img class="avatar" src="${escape(author.avatar)}" alt="">` : `<span class="avatar placeholder">${escape((author.name || "?").replace(/^@/, "").slice(0, 1).toUpperCase())}</span>`}
           <span><strong>${escape(author.handle ? `@${author.handle}` : author.name)}</strong>${published ? `<span class="date">${escape(published.toLocaleDateString("en", { dateStyle: "long" }))}</span>` : ""}</span>
         </a>
+        <h1 class="review-title">${escape(doc.title)}</h1>
         ${typeof stars === "number" ? starsSVG(stars) : ""}
         <hr class="rule">
         <div class="markdown">${render(doc)}</div>
@@ -366,6 +367,7 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .book .cover { width: 100%; max-width: 15rem; display: block; margin: 0 auto 1.2rem; border-radius: 6px;
                    box-shadow: 0 4px 16px rgba(0,0,0,.14); border: .5px solid rgba(0,0,0,.08); }
     .book-title { font: 400 1.75rem/1.15 var(--display); margin: 0 0 .35rem; text-align: center; }
+    .review-title { font: 400 2.4rem/1.1 var(--display); margin: 1rem 0 .5rem; text-wrap: balance; }
     .book-author { margin: 0 0 1rem; text-align: center; color: var(--ink2); font-size: .9rem; text-decoration: underline; text-underline-offset: 2px; }
     .book-facts, .book-genres { margin: 0 0 .4rem; color: var(--ink2); font-size: .8rem; line-height: 1.5; }
     .card-image { width: 100%; border-radius: 12px; margin-bottom: 2rem; }
@@ -424,6 +426,7 @@ function page({ title, description = "", canonical, image, type = "website", hea
     @media (max-width: 52rem) {
       main { padding: 1.5rem 1rem 3rem; }
       .review-layout { grid-template-columns: minmax(0, 1fr); gap: 1.8rem; }
+      .review-title { font-size: 2rem; }
       /* The book shrinks to a compact row above the review, as on iPhone. */
       .book { position: static; display: flex; align-items: center; gap: .9rem; padding: .7rem; background: var(--raised);
               border: 1px solid var(--rule); border-radius: 16px; }
