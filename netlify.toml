@@ -19,3 +19,9 @@
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Content-Type = "application/json"
+
+# Tells Apple devices that resenha.ink review links open in Resenha. Served as JSON, at its exact path, with no redirect.
+[[headers]]
+  for = "/.well-known/apple-app-site-association"
+  [headers.values]
+    Content-Type = "application/json"
