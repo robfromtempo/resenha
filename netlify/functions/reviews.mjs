@@ -90,7 +90,8 @@ async function reviewPage(did, rkey) {
     canonical: address,
     image,
     type: "article",
-    head: `<link rel="${DOCUMENT}" href="${escape(record.uri)}">`,
+    // Bluesky's crawler reads both tags to draw the review's rich link card. It doesn't run scripts, so they're in the page itself.
+    head: `<link rel="${DOCUMENT}" href="${escape(record.uri)}">${typeof doc.site === "string" && doc.site.startsWith("at://") ? `<link rel="${PUBLICATION}" href="${escape(doc.site)}">` : ""}`,
     body,
   }), 200, 600);
 }
