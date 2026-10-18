@@ -14,6 +14,9 @@ const ORIGIN = "https://resenha.ink";
 const PUBLICATION = "site.standard.publication";
 const DOCUMENT = "site.standard.document";
 const APPVIEW = "https://public.api.bsky.app";
+/// Resenha on the App Store. One app for iPhone, iPad and Mac; Apple opens the right store for each.
+const APP_STORE_ID = "6821354481";
+const APP_STORE_URL = `https://apps.apple.com/app/id${APP_STORE_ID}`;
 
 export const config = {
   path: [
@@ -257,9 +260,10 @@ function page({ title, description = "", canonical, image, type = "website", hea
   ${canonical ? `<meta property="og:url" content="${escape(canonical)}">` : ""}
   ${image ? `<meta property="og:image" content="${escape(image)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">` : ""}
   <meta name="twitter:card" content="${image ? "summary_large_image" : "summary"}">
+  <meta name="apple-itunes-app" content="app-id=${APP_STORE_ID}">
   <style>
-    :root { --paper: #F4F5F7; --ink: #1D2024; --ink2: #626971; --rule: #E1E4E8; color-scheme: light dark; }
-    @media (prefers-color-scheme: dark) { :root { --paper: #17191C; --ink: #E8EAED; --ink2: #9AA1A9; --rule: #2C3036; } }
+    :root { --paper: #F4F5F7; --card: #FCFCFD; --ink: #1D2024; --ink2: #626971; --rule: #E1E4E8; color-scheme: light dark; }
+    @media (prefers-color-scheme: dark) { :root { --paper: #17191C; --card: #202328; --ink: #E8EAED; --ink2: #9AA1A9; --rule: #2C3036; } }
     body { margin: 0; background: var(--paper); color: var(--ink); font-family: "New York", ui-serif, Georgia, serif; }
     main { max-width: 42rem; margin: 0 auto; padding: 3rem 1rem 4rem; }
     a { color: inherit; }
@@ -277,16 +281,51 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .comments { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); font-family: -apple-system, system-ui, sans-serif; }
     .reviews { list-style: none; padding: 0; }
     .reviews li { display: flex; justify-content: space-between; gap: 1rem; padding: .9rem 0; border-bottom: 1px solid var(--rule); font-size: 1.1rem; }
+    .get-app { display: flex; align-items: center; gap: .9rem; padding: .8rem 1rem; margin: 0 0 2.5rem; border-radius: 14px;
+               background: var(--card); border: 1px solid var(--rule); font-family: -apple-system, system-ui, sans-serif; }
+    .get-app img { width: 44px; height: 44px; border-radius: 10px; flex: none; }
+    .get-app p { margin: 0; flex: 1; font-size: .9rem; line-height: 1.35; color: var(--ink2); }
+    .get-app strong { display: block; color: var(--ink); font-size: 1rem; }
+    .get-app a.button { flex: none; text-decoration: none; background: var(--ink); color: var(--paper); font-weight: 600; font-size: .9rem;
+                        padding: .55rem .95rem; border-radius: 999px; white-space: nowrap; }
+    .get-app[data-platform="other"] a.button { display: none; }
+    @media (max-width: 30rem) { .get-app { flex-wrap: wrap; } .get-app a.button { width: 100%; text-align: center; } }
     footer { margin-top: 4rem; font-family: -apple-system, system-ui, sans-serif; font-size: .85rem; color: var(--ink2); }
   </style>
 </head>
 <body>
   <main>
+    ${getApp()}
     ${body}
     <footer>Published with <a href="/">Resenha</a> on the AT Protocol.</footer>
   </main>
 </body>
 </html>`;
+}
+
+/// An invitation to the app, above every page. Pages are cached once for every visitor, so the server can't tailor it;
+/// a few lines in the browser name the visitor's device, or leave just the note on Android, Windows or Linux.
+/// Without scripts it reads "Get Resenha on the App Store". Crawlers only need the tags in the head.
+function getApp() {
+  return `<aside class="get-app" data-platform="apple">
+      <img src="/icon.png" alt="">
+      <p><strong>Resenha</strong><span class="get-app-note">Read and write book reviews on the Atmosphere.</span></p>
+      <a class="button" href="${APP_STORE_URL}">Get Resenha on the App Store</a>
+    </aside>
+    <script>
+      (function () {
+        var aside = document.currentScript.previousElementSibling;
+        var ua = navigator.userAgent;
+        var touchMac = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+        var device = /iPhone|iPod/.test(ua) ? "iPhone" : (/iPad/.test(ua) || touchMac) ? "iPad" : /Macintosh/.test(ua) ? "Mac" : null;
+        if (device) {
+          aside.querySelector("a.button").textContent = "Get Resenha for " + device;
+        } else {
+          aside.dataset.platform = "other";
+          aside.querySelector(".get-app-note").textContent = "An app for reading and writing book reviews, for iPhone, iPad and Mac.";
+        }
+      })();
+    </script>`;
 }
 
 // MARK: - Responses
