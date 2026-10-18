@@ -20,8 +20,8 @@ export const config = {
     "/.well-known/site.standard.publication/p/:did",
     "/p/:did",
     "/p/:did/:rkey",
-    "/@:handle",
-    "/@:handle/*",
+    // One catch-all: Netlify doesn't match a named segment that ends the address, as in /@alice.example.
+    "/@*",
   ],
 };
 
