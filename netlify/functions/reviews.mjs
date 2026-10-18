@@ -14,6 +14,8 @@ const ORIGIN = "https://resenha.ink";
 const PUBLICATION = "site.standard.publication";
 const DOCUMENT = "site.standard.document";
 const APPVIEW = "https://public.api.bsky.app";
+const LINK = "ink.resenha.bookReview";
+const BOOKHIVE = "https://bookhive.buzz/xrpc";
 /// Resenha on the App Store. One app for iPhone, iPad and Mac; Apple opens the right store for each.
 const APP_STORE_ID = "6821354481";
 const APP_STORE_URL = `https://apps.apple.com/app/id${APP_STORE_ID}`;
@@ -73,29 +75,39 @@ async function reviewPage(did, rkey) {
   const record = await json(`${pds}/xrpc/com.atproto.repo.getRecord?repo=${did}&collection=${DOCUMENT}&rkey=${encodeURIComponent(rkey)}`);
   const doc = record?.value;
   if (!doc?.title) return notFound();
-  const author = await authorOf(did);
+  // The book comes from Resenha's link for the review, when there is one: BookHive's catalogue for the cover and details,
+  // the reader's BookHive record for their rating.
+  const [author, link] = await Promise.all([authorOf(did), linkFor(pds, did, record.uri)]);
+  const [book, stars] = link ? await Promise.all([bookHiveBook(link.hiveId), starsOf(pds, link.book)]) : [null, null];
   const address = `${ORIGIN}/p/${did}/${rkey}`;
   const summary = excerpt(doc.description || doc.textContent || "", 300);
-  const image = doc.coverImage?.ref?.$link ? blobURL(pds, did, doc.coverImage.ref.$link) : null;
+  const card = doc.coverImage?.ref?.$link ? blobURL(pds, did, doc.coverImage.ref.$link) : null;
   const published = doc.publishedAt ? new Date(doc.publishedAt) : null;
   const body = `
-    <header>
-      <p class="eyebrow"><a href="/p/${did}">${escape(author.name)}</a></p>
-      <h1>${escape(doc.title)}</h1>
-      <p class="meta">${escape(author.handle ? `@${author.handle}` : did)}${published ? ` · ${escape(published.toLocaleDateString("en", { dateStyle: "long" }))}` : ""}</p>
-    </header>
-    ${image ? `<img class="cover" src="${escape(image)}" alt="">` : ""}
-    <article>${render(doc)}</article>
-    ${doc.bskyPostRef?.uri ? `<p class="comments"><a href="${escape(blueskyPostURL(doc.bskyPostRef.uri, author.handle))}">Comments on Bluesky</a></p>` : ""}`;
+    <div class="review-layout">
+      ${book ? bookColumn(book) : card ? `<img class="card-image" src="${escape(card)}" alt="">` : ""}
+      <article class="review">
+        <p class="eyebrow">Review by</p>
+        <a class="byline" href="/p/${did}">
+          ${author.avatar ? `<img class="avatar" src="${escape(author.avatar)}" alt="">` : `<span class="avatar placeholder">${escape((author.name || "?").replace(/^@/, "").slice(0, 1).toUpperCase())}</span>`}
+          <span><strong>${escape(author.handle ? `@${author.handle}` : author.name)}</strong>${published ? `<span class="date">${escape(published.toLocaleDateString("en", { dateStyle: "long" }))}</span>` : ""}</span>
+        </a>
+        ${typeof stars === "number" ? starsSVG(stars) : ""}
+        <hr class="rule">
+        <div class="markdown">${render(doc)}</div>
+        ${doc.bskyPostRef?.uri ? `<p class="comments"><a href="${escape(blueskyPostURL(doc.bskyPostRef.uri, author.handle))}">Comments on Bluesky</a></p>` : ""}
+      </article>
+    </div>`;
   return html(page({
     title: `${doc.title} · ${author.name}`,
     description: summary,
     canonical: address,
-    image,
+    image: card,
     type: "article",
     // Bluesky's crawler reads both tags to draw the review's rich link card. It doesn't run scripts, so they're in the page itself.
     head: `<link rel="${DOCUMENT}" href="${escape(record.uri)}">${typeof doc.site === "string" && doc.site.startsWith("at://") ? `<link rel="${PUBLICATION}" href="${escape(doc.site)}">` : ""}`,
     body,
+    wide: Boolean(book),
   }), 200, 600);
 }
 
@@ -110,7 +122,12 @@ async function publicationPage(did) {
   const items = docs.map((r) => {
     const rkey = r.uri.split("/").pop();
     const date = r.value.publishedAt ? new Date(r.value.publishedAt).toLocaleDateString("en", { dateStyle: "medium" }) : "";
-    return `<li><a href="/p/${did}/${escape(rkey)}">${escape(r.value.title)}</a><span>${escape(date)}</span></li>`;
+    const preview = excerpt(r.value.description || r.value.textContent || "", 220);
+    return `<li><a href="/p/${did}/${escape(rkey)}">
+        <span class="row-title">${escape(r.value.title)}</span>
+        ${date ? `<span class="row-date">${escape(date)}</span>` : ""}
+        ${preview ? `<span class="row-excerpt">${escape(preview)}</span>` : ""}
+      </a></li>`;
   }).join("");
   return html(page({
     title: publication.value.name,
@@ -118,10 +135,12 @@ async function publicationPage(did) {
     canonical: `${ORIGIN}/p/${did}`,
     head: `<link rel="${PUBLICATION}" href="${escape(publication.uri)}">`,
     body: `
-      <header>
-        <h1>${escape(publication.value.name)}</h1>
-        <p class="meta">${escape(author.handle ? `@${author.handle}` : did)}</p>
-        ${publication.value.description ? `<p>${escape(publication.value.description)}</p>` : ""}
+      <header class="publication">
+        ${author.avatar ? `<img class="avatar large" src="${escape(author.avatar)}" alt="">` : ""}
+        <div>
+          <h1>${escape(publication.value.name)}</h1>
+          <p class="meta">${escape(author.handle ? `@${author.handle}` : did)} · ${docs.length} ${docs.length === 1 ? "review" : "reviews"}</p>
+        </div>
       </header>
       ${items ? `<ul class="reviews">${items}</ul>` : `<p class="note">No reviews yet.</p>`}`,
   }), 200, 600);
@@ -158,7 +177,42 @@ async function authorOf(did) {
   const doc = await didDocument(did);
   const handle = doc?.alsoKnownAs?.find((a) => a.startsWith("at://"))?.slice(5) ?? null;
   const profile = await json(`${APPVIEW}/xrpc/app.bsky.actor.getProfile?actor=${encodeURIComponent(did)}`);
-  return { handle, name: profile?.displayName || (handle ? `@${handle}` : did) };
+  const avatar = typeof profile?.avatar === "string" && profile.avatar.startsWith("https://") ? profile.avatar : null;
+  return { handle, name: profile?.displayName || (handle ? `@${handle}` : did), avatar };
+}
+
+/** Resenha's link from a review to its book: the book's BookHive ID and the reader's BookHive record. */
+async function linkFor(pds, did, documentURI) {
+  const links = await listAll(pds, did, LINK);
+  const found = links.find((r) => r.value?.document === documentURI);
+  const hiveId = found?.value?.hiveId;
+  if (typeof hiveId !== "string" || !/^[A-Za-z0-9_-]{1,64}$/.test(hiveId)) return null;
+  return { hiveId, book: typeof found.value.book === "string" ? found.value.book : null };
+}
+
+/** The book in BookHive's catalogue: title, authors, cover and facts. */
+async function bookHiveBook(hiveId) {
+  const result = await json(`${BOOKHIVE}/buzz.bookhive.searchBooks?id=${encodeURIComponent(hiveId)}`);
+  const book = result?.books?.[0];
+  if (!book?.title) return null;
+  const cover = [book.cover, book.thumbnail].find((c) => typeof c === "string" && c.startsWith("https://")) ?? null;
+  return {
+    title: book.title,
+    authors: String(book.authors ?? "").split("\t").filter(Boolean).join(", "),
+    cover,
+    year: book.publicationYear,
+    pages: book.numPages,
+    genres: (book.genres ?? []).filter((g) => typeof g === "string").slice(0, 6),
+  };
+}
+
+/** The reader's rating on their BookHive record, 1 to 10. */
+async function starsOf(pds, bookURI) {
+  const parts = typeof bookURI === "string" ? bookURI.split("/") : [];
+  if (parts.length !== 5 || parts[3] !== "buzz.bookhive.book") return null;
+  const record = await json(`${pds}/xrpc/com.atproto.repo.getRecord?repo=${parts[2]}&collection=buzz.bookhive.book&rkey=${encodeURIComponent(parts[4])}`);
+  const stars = record?.value?.stars;
+  return Number.isInteger(stars) && stars >= 1 && stars <= 10 ? stars : null;
 }
 
 /** The reader's publication on resenha.ink: the one whose address is this site's page for their DID. */
@@ -243,7 +297,33 @@ function escape(value) {
   return String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 }
 
-function page({ title, description = "", canonical, image, type = "website", head = "", body }) {
+/** The book beside the review, as the app's book column shows it. On narrow screens it becomes a compact row. */
+function bookColumn(book) {
+  const facts = [book.year, book.pages ? `${book.pages} pages` : null].filter(Boolean).join(" · ");
+  return `<aside class="book">
+      ${book.cover ? `<img class="cover" src="${escape(book.cover)}" alt="Cover of ${escape(book.title)}">` : ""}
+      <div class="book-text">
+        <h2 class="book-title">${escape(book.title)}</h2>
+        ${book.authors ? `<p class="book-author">${escape(book.authors)}</p>` : ""}
+        ${facts ? `<p class="book-facts">${escape(facts)}</p>` : ""}
+        ${book.genres.length ? `<p class="book-genres">${escape(book.genres.join(" · "))}</p>` : ""}
+      </div>
+    </aside>`;
+}
+
+/** A 1–10 rating as five stars in halves, like the app's. */
+function starsSVG(stars) {
+  const path = "M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z";
+  const icons = [0, 1, 2, 3, 4].map((i) => {
+    const fill = Math.max(0, Math.min(2, stars - i * 2)); // 0 empty, 1 half, 2 full
+    const id = `half${i}`;
+    const paint = fill === 2 ? "var(--accent)" : fill === 1 ? `url(#${id})` : "var(--rule)";
+    return `<svg viewBox="0 0 24 24" aria-hidden="true">${fill === 1 ? `<defs><linearGradient id="${id}"><stop offset="50%" stop-color="var(--accent)"/><stop offset="50%" stop-color="var(--rule)"/></linearGradient></defs>` : ""}<path d="${path}" fill="${paint}"/></svg>`;
+  }).join("");
+  return `<p class="stars" role="img" aria-label="${stars / 2} out of 5 stars">${icons}</p>`;
+}
+
+function page({ title, description = "", canonical, image, type = "website", head = "", body, wide = false }) {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -261,43 +341,106 @@ function page({ title, description = "", canonical, image, type = "website", hea
   ${image ? `<meta property="og:image" content="${escape(image)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">` : ""}
   <meta name="twitter:card" content="${image ? "summary_large_image" : "summary"}">
   <meta name="apple-itunes-app" content="app-id=${APP_STORE_ID}">
+  <link rel="icon" href="/icon.png">
   <style>
-    :root { --paper: #F4F5F7; --card: #FCFCFD; --ink: #1D2024; --ink2: #626971; --rule: #E1E4E8; color-scheme: light dark; }
-    @media (prefers-color-scheme: dark) { :root { --paper: #17191C; --card: #202328; --ink: #E8EAED; --ink2: #9AA1A9; --rule: #2C3036; } }
-    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "New York", ui-serif, Georgia, serif; }
-    main { max-width: 42rem; margin: 0 auto; padding: 3rem 1rem 4rem; }
+    /* Resenha's palette and type, as in the app: Instrument Serif for headings, New York for reading, SF for the interface. */
+    @font-face { font-family: "Instrument Serif"; src: url("/fonts/InstrumentSerif-Regular.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "Instrument Serif"; font-style: italic; src: url("/fonts/InstrumentSerif-Italic.ttf") format("truetype"); font-display: swap; }
+    :root {
+      --paper: #F4F5F7; --raised: #FCFCFD; --ink: #1D2024; --ink2: #626971; --ink3: #A3A9B0;
+      --rule: #E1E4E8; --accent: #6E7782; --link: #2F5F8F; --code: #E2E5EA;
+      --display: "Instrument Serif", ui-serif, Georgia, serif;
+      --reading: ui-serif, "New York", "Iowan Old Style", Georgia, serif;
+      --interface: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--interface); -webkit-font-smoothing: antialiased; }
+    main { max-width: ${wide ? "68rem" : "44rem"}; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
     a { color: inherit; }
-    h1 { font-size: 2.4rem; line-height: 1.15; margin: .3rem 0 .5rem; font-weight: 500; }
-    .eyebrow, .meta, .note, .reviews span { font-family: -apple-system, system-ui, sans-serif; color: var(--ink2); }
-    .eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; margin: 0; }
-    .eyebrow a { text-decoration: none; }
-    .meta { font-size: .9rem; margin: 0 0 2rem; }
-    .cover { width: 100%; height: auto; border-radius: 12px; margin-bottom: 2rem; }
-    article { font-size: 1.15rem; line-height: 1.65; overflow-wrap: anywhere; }
-    article img { max-width: 100%; }
-    article blockquote { margin: 1.5rem 0; padding-left: 1rem; border-left: 3px solid var(--rule); color: var(--ink2); font-style: italic; }
-    article code { background: var(--rule); padding: .1em .3em; border-radius: 4px; font-size: .9em; }
-    article hr { border: 0; border-top: 1px solid var(--rule); margin: 2rem 0; }
-    .comments { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); font-family: -apple-system, system-ui, sans-serif; }
-    .reviews { list-style: none; padding: 0; }
-    .reviews li { display: flex; justify-content: space-between; gap: 1rem; padding: .9rem 0; border-bottom: 1px solid var(--rule); font-size: 1.1rem; }
-    .get-app { display: flex; align-items: center; gap: .9rem; padding: .8rem 1rem; margin: 0 0 2.5rem; border-radius: 14px;
-               background: var(--card); border: 1px solid var(--rule); font-family: -apple-system, system-ui, sans-serif; }
+    .eyebrow { font: 600 .75rem/1.2 var(--interface); text-transform: uppercase; letter-spacing: .1em; color: var(--ink2); margin: 0 0 .6rem; }
+
+    /* The book, beside the review on wide screens. */
+    .review-layout { display: grid; gap: 3.5rem; grid-template-columns: ${wide ? "17rem minmax(0, 1fr)" : "minmax(0, 1fr)"}; align-items: start; }
+    .book { position: sticky; top: 2rem; }
+    .book .cover { width: 100%; max-width: 15rem; display: block; margin: 0 auto 1.2rem; border-radius: 6px;
+                   box-shadow: 0 4px 16px rgba(0,0,0,.14); border: .5px solid rgba(0,0,0,.08); }
+    .book-title { font: 400 1.75rem/1.15 var(--display); margin: 0 0 .35rem; text-align: center; }
+    .book-author { margin: 0 0 1rem; text-align: center; color: var(--ink2); font-size: .9rem; text-decoration: underline; text-underline-offset: 2px; }
+    .book-facts, .book-genres { margin: 0 0 .4rem; color: var(--ink2); font-size: .8rem; line-height: 1.5; }
+    .card-image { width: 100%; border-radius: 12px; margin-bottom: 2rem; }
+
+    /* The review, as the app's reader lays it out. */
+    .byline { display: flex; align-items: center; gap: .75rem; text-decoration: none; margin-bottom: 1rem; }
+    .byline strong { display: block; font-size: 1rem; }
+    .byline .date { display: block; font-size: .85rem; color: var(--ink2); margin-top: .1rem; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: none; background: var(--rule); }
+    .avatar.placeholder { display: grid; place-items: center; color: var(--ink2); font-weight: 600; }
+    .avatar.large { width: 64px; height: 64px; }
+    .stars { display: flex; gap: 3px; margin: 0 0 1.2rem; }
+    .stars svg { width: 15px; height: 15px; }
+    hr.rule { width: 64px; margin: 0 0 1.6rem; border: 0; border-top: 1px solid var(--rule); }
+    .markdown { font-family: var(--reading); font-size: 1.25rem; line-height: 1.6; overflow-wrap: anywhere; }
+    .markdown > * { margin: 0 0 1rem; }
+    .markdown h1, .markdown h2, .markdown h3, .markdown h4 { font-family: var(--display); font-weight: 400; line-height: 1.15; margin: 1.5rem 0 .8rem; }
+    .markdown h1 { font-size: 2rem; } .markdown h2 { font-size: 1.6rem; } .markdown h3, .markdown h4 { font-size: 1.4rem; }
+    .markdown a { color: var(--link); text-underline-offset: 3px; }
+    .markdown blockquote { margin: 0 0 1rem; padding-left: 1.1rem; border-left: 3px solid rgba(110,119,130,.45); color: var(--ink2); font-style: italic; }
+    .markdown blockquote p { margin: 0; }
+    .markdown ul, .markdown ol { padding-left: 1.6rem; }
+    .markdown li { margin-bottom: .2rem; }
+    .markdown li::marker { color: var(--ink2); }
+    .markdown code { font: .8em/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--code); padding: .1em .3em; border-radius: 4px; }
+    .markdown pre { background: var(--code); border: 1px solid var(--rule); border-radius: 10px; padding: .9rem 1rem; overflow-x: auto; }
+    .markdown pre code { background: none; padding: 0; font-size: .7em; }
+    .markdown hr { border: 0; text-align: center; margin: 1.5rem 0; }
+    .markdown hr::after { content: "⁂"; color: var(--ink3); font-family: var(--reading); }
+    .markdown img { max-width: 100%; border-radius: 8px; }
+    .comments { margin-top: 2.5rem; padding-top: 1.2rem; border-top: 1px solid var(--rule); font-size: .95rem; }
+    .comments a { color: var(--link); }
+
+    /* A reader's publication: their reviews, newest first. */
+    header.publication { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+    header.publication h1 { font: 400 2.4rem/1.1 var(--display); margin: 0; }
+    .meta, .note { color: var(--ink2); font-size: .9rem; margin: .3rem 0 0; }
+    .reviews { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--rule); }
+    .reviews a { display: block; padding: 1.1rem 0; border-bottom: 1px solid var(--rule); text-decoration: none; }
+    .row-title { display: block; font: 600 1.1rem/1.3 var(--reading); }
+    .row-date { display: block; font-size: .8rem; color: var(--ink3); margin: .2rem 0 .4rem; }
+    .row-excerpt { display: block; font: 1rem/1.5 var(--reading); color: var(--ink2); }
+
+    /* The invitation to the app. */
+    .get-app { display: flex; align-items: center; gap: .9rem; padding: .85rem 1rem; margin: 0 0 2.5rem; border-radius: 18px;
+               background: var(--raised); border: 1px solid var(--rule); }
     .get-app img { width: 44px; height: 44px; border-radius: 10px; flex: none; }
     .get-app p { margin: 0; flex: 1; font-size: .9rem; line-height: 1.35; color: var(--ink2); }
-    .get-app strong { display: block; color: var(--ink); font-size: 1rem; }
-    .get-app a.button { flex: none; box-sizing: border-box; text-decoration: none; background: var(--ink); color: var(--paper); font-weight: 600; font-size: .9rem;
-                        padding: .55rem .95rem; border-radius: 999px; white-space: nowrap; }
+    .get-app strong { display: block; color: var(--ink); font: 400 1.35rem/1.1 var(--display); }
+    .get-app a.button { flex: none; box-sizing: border-box; text-decoration: none; background: var(--ink); color: var(--paper); font-weight: 600;
+                        font-size: .9rem; padding: .6rem 1rem; border-radius: 999px; white-space: nowrap; }
     .get-app[data-platform="other"] a.button { display: none; }
+    footer { margin-top: 4rem; font-size: .8rem; color: var(--ink3); }
+    footer a { color: var(--ink2); }
+
+    @media (max-width: 52rem) {
+      main { padding: 1.5rem 1rem 3rem; }
+      .review-layout { grid-template-columns: minmax(0, 1fr); gap: 1.8rem; }
+      /* The book shrinks to a compact row above the review, as on iPhone. */
+      .book { position: static; display: flex; align-items: center; gap: .9rem; padding: .7rem; background: var(--raised);
+              border: 1px solid var(--rule); border-radius: 16px; }
+      .book .cover { width: 52px; margin: 0; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,.12); }
+      .book-title { font: 600 1.05rem/1.25 var(--reading); text-align: left; margin: 0 0 .15rem; }
+      .book-author { text-align: left; margin: 0; }
+      .book-facts, .book-genres { display: none; }
+      .markdown { font-size: 1.15rem; }
+    }
     @media (max-width: 30rem) { .get-app { flex-wrap: wrap; } .get-app a.button { width: 100%; text-align: center; } }
-    footer { margin-top: 4rem; font-family: -apple-system, system-ui, sans-serif; font-size: .85rem; color: var(--ink2); }
   </style>
 </head>
 <body>
   <main>
     ${getApp()}
     ${body}
-    <footer>Published with <a href="/">Resenha</a> on the AT Protocol.</footer>
+    <footer>Published with <a href="/">Resenha</a> on the Atmosphere.</footer>
   </main>
 </body>
 </html>`;
