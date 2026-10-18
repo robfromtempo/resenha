@@ -286,7 +286,7 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .get-app img { width: 44px; height: 44px; border-radius: 10px; flex: none; }
     .get-app p { margin: 0; flex: 1; font-size: .9rem; line-height: 1.35; color: var(--ink2); }
     .get-app strong { display: block; color: var(--ink); font-size: 1rem; }
-    .get-app a.button { flex: none; text-decoration: none; background: var(--ink); color: var(--paper); font-weight: 600; font-size: .9rem;
+    .get-app a.button { flex: none; box-sizing: border-box; text-decoration: none; background: var(--ink); color: var(--paper); font-weight: 600; font-size: .9rem;
                         padding: .55rem .95rem; border-radius: 999px; white-space: nowrap; }
     .get-app[data-platform="other"] a.button { display: none; }
     @media (max-width: 30rem) { .get-app { flex-wrap: wrap; } .get-app a.button { width: 100%; text-align: center; } }
