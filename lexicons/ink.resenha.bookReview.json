@@ -1,0 +1,37 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.bookReview",
+  "description": "Connects a book review, published as a site.standard.document, to the book it reviews.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "One per reviewed book. The record key is the book's BookHive ID (hiveId), so a reader's review of a book can be found with a single getRecord.",
+      "key": "any",
+      "record": {
+        "type": "object",
+        "required": ["document", "book", "hiveId", "createdAt"],
+        "properties": {
+          "document": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "The site.standard.document that holds the review. Its content is the formatted review; its textContent is the same review as plain text."
+          },
+          "book": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "The reader's buzz.bookhive.book record for the book. Its review field holds the same review as plain text."
+          },
+          "hiveId": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "The book's BookHive ID. Also the record key."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    }
+  }
+}

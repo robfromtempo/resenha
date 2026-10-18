@@ -5,3 +5,17 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+# resenha.ink is the app's sign-in identity, so its metadata names resenha.ink. GitHub Pages keeps serving the
+# older metadata at this same path for builds that still sign in as robfromtempo.github.io.
+[[redirects]]
+  from = "/oauth/client-metadata.json"
+  to = "/oauth/client-metadata.resenha-ink.json"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/oauth/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/json"
