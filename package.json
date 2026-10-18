@@ -1,0 +1,9 @@
+{
+  "name": "resenha-site",
+  "private": true,
+  "type": "module",
+  "description": "resenha.ink: static pages, plus a function that serves Standard.site reviews from readers' own repositories.",
+  "dependencies": {
+    "marked": "16.3.0"
+  }
+}

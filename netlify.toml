@@ -1,0 +1,7 @@
+# Netlify serves this repository as resenha.ink. GitHub Pages keeps serving the same files at its own address.
+[build]
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
