@@ -1,0 +1,75 @@
+{
+  "langName": "English",
+  "ogLocale": "en_US",
+  "meta": {
+    "title": "Resenha — Book reviews, in your own words",
+    "description": "Resenha is a writing app for the books in your BookHive library. Write long-form reviews with real formatting, publish them to the open web, and follow what your friends are reading. For iPhone, iPad and Mac.",
+    "ogDescription": "Write long-form reviews of the books in your BookHive library, publish them to the open web, and follow what your friends are reading."
+  },
+  "bar": {
+    "getApp": "Get the App",
+    "getFor": "Get Resenha for {device}",
+    "language": "Language"
+  },
+  "hero": {
+    "eyebrow": "For iPhone, iPad and Mac",
+    "title": "Book reviews, in your <em>own</em> words.",
+    "lede": "<strong>A writing app for the books you read.</strong> Write long-form reviews of the books in your BookHive library, publish them to the open web, and see what the readers you follow are reading.",
+    "badgeLabel": "Download Resenha on the App Store",
+    "badgeAlt": "Download on the App Store",
+    "note": "Available for iPhone, iPad and Mac.",
+    "noteDevice": "Resenha for your {device} is on the App Store.",
+    "noteOther": "Resenha is for iPhone, iPad and Mac.",
+    "phoneAlt": "Resenha on iPhone, showing a library of book covers."
+  },
+  "statement": "Write about {1} the books you love, publish them {2} to the open web, and see {3} <span class=\"muted\">what your friends are reading.</span>",
+  "write": {
+    "eyebrow": "Write",
+    "title": "A word processor for reviews.",
+    "body": "Headings, quotes, lists and links, and a title of its own. Mark spoilers, choose the language, and pick up any draft on your other devices through iCloud.",
+    "chips": ["Formatting", "Spoiler warnings", "Kobo highlights", "Drafts in iCloud"],
+    "alt": "Writing a review in Resenha on a Mac."
+  },
+  "follow": {
+    "eyebrow": "Follow",
+    "title": "The Parlor.",
+    "body": "See what the readers you follow are starting, finishing and reviewing, as it happens. Following someone in Resenha is the same follow as on Bluesky and BookHive.",
+    "chips": ["Live updates", "Readers’ shelves", "Friends’ reviews"],
+    "alt": "The Parlor on iPad, showing what followed readers started and finished."
+  },
+  "publish": {
+    "eyebrow": "Publish",
+    "title": "On the open web.",
+    "body": "Your reviews live in your own account on the Atmosphere: formatted on resenha.ink, as plain text on BookHive, and posted to Bluesky and Mu Social, where replies become comments.",
+    "chips": ["resenha.ink", "BookHive", "Bluesky & Mu Social"],
+    "alt": "Reading a community review in Resenha on iPhone."
+  },
+  "import": {
+    "eyebrow": "Import",
+    "title": "Bring your books with you.",
+    "body": "Coming from Goodreads, StoryGraph or Hardcover? Export your library there and choose the file in Resenha. Every book is found in BookHive’s catalogue, and you check the matches before anything is saved.",
+    "steps": [
+      "<strong>Export your library</strong> from Goodreads, StoryGraph or Hardcover.",
+      "<strong>Choose the file</strong> in Resenha, which finds each book on BookHive.",
+      "<strong>Check and import.</strong> Ratings, reading status, dates, owned books and reviews come along."
+    ],
+    "aside": "Private notes are never imported.",
+    "alt": "Importing a library from Goodreads, StoryGraph or Hardcover in Resenha on iPhone."
+  },
+  "collect": {
+    "eyebrow": "Collect",
+    "title": "Your whole library.",
+    "body": "Everything you’ve read, are reading or want to read, in one place. Scan a barcode to add a book, and sort your books onto shelves you can share.",
+    "chips": ["Barcode scanning", "Shelves", "Reading dates"],
+    "alt": "A library of book covers in Resenha on a Mac."
+  },
+  "closing": {
+    "title": "Your reading, in your own words.",
+    "subtitle": "Resenha for iPhone, iPad and Mac.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "feedback": "Send Feedback",
+    "bluesky": "@resenha.ink on Bluesky",
+    "legal": "© 2026 Resenha. Book covers belong to their publishers."
+  }
+}

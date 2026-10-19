@@ -1,0 +1,295 @@
+/* resenha.ink, the landing page. Resenha's own palette and type: Instrument Serif for display,
+   the system face for text, paper greys and ink. The app is light only, and so is its page. */
+
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/InstrumentSerif-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/InstrumentSerif-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  --paper: #F4F5F7;
+  --raised: #FCFCFD;
+  --ink: #1D2024;
+  --ink2: #626971;
+  --ink3: #A3A9B0;
+  --rule: #E1E4E8;
+  --accent: #6E7782;
+  --display: "Instrument Serif", "New York", ui-serif, Georgia, serif;
+  --text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
+  --reading: "New York", ui-serif, Georgia, serif;
+  --gutter: clamp(16px, 4vw, 40px);
+  --shadow-cover: 0 18px 40px -14px rgba(29, 32, 36, .45), 0 4px 10px -4px rgba(29, 32, 36, .2);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 17px/1.55 var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; height: auto; }
+figure { margin: 0; }
+a { color: inherit; }
+
+/* Soft light at the top of the page, like paper under a lamp. */
+.glow {
+  position: absolute; inset: 0 0 auto 0; height: 1100px; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(60% 45% at 50% 0%, #fff 0%, rgba(255, 255, 255, 0) 70%),
+    radial-gradient(40% 35% at 15% 20%, rgba(255, 255, 255, .9) 0%, rgba(255, 255, 255, 0) 70%),
+    radial-gradient(40% 35% at 85% 25%, rgba(255, 255, 255, .9) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+/* MARK: - The bar */
+
+.bar {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 20;
+  display: flex; align-items: center; gap: 10px;
+  width: min(460px, calc(100% - 2 * var(--gutter)));
+  padding: 7px 7px 7px 10px; border-radius: 999px;
+  background: rgba(252, 252, 253, .72);
+  -webkit-backdrop-filter: saturate(1.6) blur(18px); backdrop-filter: saturate(1.6) blur(18px);
+  border: 1px solid rgba(29, 32, 36, .08);
+  box-shadow: 0 10px 30px -12px rgba(29, 32, 36, .25);
+}
+.bar img { width: 28px; height: 28px; border-radius: 7px; }
+.bar .name { font: 400 1.35rem/1 var(--display); text-decoration: none; margin-right: auto; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+  padding: 9px 16px; border-radius: 999px; text-decoration: none;
+  background: var(--ink); color: var(--paper); font-weight: 600; font-size: .9rem;
+}
+
+/* The language menu, between the name and the download button. */
+.lang { position: relative; }
+.lang summary {
+  list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+  padding: 8px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; letter-spacing: .04em; color: var(--ink2);
+}
+.lang summary::-webkit-details-marker { display: none; }
+.lang summary:hover, .lang[open] summary { background: rgba(29, 32, 36, .06); color: var(--ink); }
+.lang svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.lang ul {
+  position: absolute; right: 0; top: calc(100% + 10px); margin: 0; padding: 6px; list-style: none; min-width: 160px;
+  background: rgba(252, 252, 253, .96); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+  border: 1px solid rgba(29, 32, 36, .08); border-radius: 16px; box-shadow: 0 18px 40px -16px rgba(29, 32, 36, .35);
+}
+.lang li a { display: block; padding: 8px 12px; border-radius: 10px; text-decoration: none; font-size: .92rem; }
+.lang li a:hover { background: rgba(29, 32, 36, .06); }
+.lang li a[aria-current] { font-weight: 600; }
+.lang li a[aria-current]::after { content: "✓"; float: right; color: var(--ink2); }
+
+/* Longer words need a little more room for the headline. */
+:lang(de) .hero h1, :lang(es) .hero h1, :lang(fr) .hero h1, :lang(it) .hero h1, :lang(pt) .hero h1 { max-width: 16ch; }
+
+/* Instrument Serif has no Japanese, so Japanese headings use the system's Mincho, which suits it. */
+:root:lang(ja) { --display: "Instrument Serif", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif; }
+:lang(ja) .hero h1 { max-width: 12em; letter-spacing: 0; line-height: 1.15; font-size: clamp(2.4rem, 6vw, 4.4rem); }
+:lang(ja) .statement { line-height: 1.5; font-size: clamp(1.6rem, 3.8vw, 2.8rem); }
+:lang(ja) .feature h2 { line-height: 1.2; font-size: clamp(2rem, 3.8vw, 3rem); }
+:lang(ja) .closing h2 { line-height: 1.25; font-size: clamp(2rem, 5vw, 3.2rem); }
+
+/* MARK: - The hero */
+
+main { position: relative; z-index: 1; }
+.hero { position: relative; text-align: center; padding: 132px var(--gutter) 0; }
+.eyebrow {
+  margin: 0 0 18px; font-size: .78rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink2);
+}
+.hero h1 {
+  margin: 0 auto; max-width: 13ch; font: 400 clamp(3.2rem, 8.5vw, 6.4rem)/.95 var(--display); letter-spacing: -.01em;
+}
+.hero h1 em { font-style: italic; }
+.lede {
+  margin: 22px auto 0; max-width: 34rem; color: var(--ink2); font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+}
+.lede strong { color: var(--ink); font-weight: 600; }
+.cta { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.badge img { height: 52px; width: auto; }
+.cta .note { margin: 0; font-size: .85rem; color: var(--ink3); }
+
+/* The stage: the phone, with books drifting around it at three depths. */
+.stage { position: relative; height: clamp(620px, 78vw, 860px); max-width: 1180px; margin: 36px auto 0; }
+.stage .iphone { position: absolute; left: 50%; top: 40px; transform: translateX(-50%); --w: clamp(250px, 26vw, 320px); z-index: 3; }
+.cover {
+  position: absolute; left: var(--x); top: var(--y); width: var(--size, 92px); z-index: var(--z, 2);
+  will-change: transform;
+}
+.cover img {
+  width: 100%; height: auto; border-radius: 4px; box-shadow: var(--shadow-cover);
+  transform: rotate(var(--r, 0deg));
+  animation: drift var(--t, 9s) ease-in-out var(--d, 0s) infinite alternate;
+}
+.cover.far img { filter: blur(1.4px) saturate(.85); opacity: .55; }
+.cover.mid img { filter: blur(.4px); opacity: .9; }
+@keyframes drift {
+  from { transform: translateY(-8px) rotate(var(--r, 0deg)); }
+  to { transform: translateY(10px) rotate(calc(var(--r, 0deg) + 2deg)); }
+}
+
+/* MARK: - Device frames, drawn rather than pictured, so they stay sharp at any size */
+
+.iphone {
+  --w: 300px;
+  width: var(--w); padding: calc(var(--w) * .032); border-radius: calc(var(--w) * .17);
+  background: linear-gradient(145deg, #3a3d42, #16181b 40%, #2a2d31);
+  box-shadow: 0 0 0 1px #5b5f66 inset, 0 40px 80px -30px rgba(29, 32, 36, .55), 0 18px 36px -18px rgba(29, 32, 36, .35);
+  position: relative;
+}
+.iphone img { width: 100%; border-radius: calc(var(--w) * .14); }
+.iphone::after { /* the Dynamic Island */
+  content: ""; position: absolute; left: 50%; top: calc(var(--w) * .062); transform: translateX(-50%);
+  width: 31%; height: calc(var(--w) * .085); border-radius: 999px; background: #050505;
+}
+
+.ipad {
+  --w: 560px;
+  width: var(--w); padding: calc(var(--w) * .028); border-radius: calc(var(--w) * .058);
+  background: linear-gradient(145deg, #3a3d42, #16181b 45%, #2a2d31);
+  box-shadow: 0 0 0 1px #5b5f66 inset, 0 40px 80px -30px rgba(29, 32, 36, .5);
+}
+.ipad img { width: 100%; border-radius: calc(var(--w) * .033); }
+
+.macbook { --w: 860px; width: var(--w); }
+.macbook .lid {
+  padding: calc(var(--w) * .018) calc(var(--w) * .018) calc(var(--w) * .03); border-radius: calc(var(--w) * .022) calc(var(--w) * .022) 0 0;
+  background: #0d0e10; box-shadow: 0 0 0 1px #4a4d52 inset;
+}
+.macbook .lid img { width: 100%; border-radius: 3px; }
+.macbook .base {
+  position: relative; width: 112%; margin-left: -6%; height: calc(var(--w) * .026);
+  border-radius: 0 0 calc(var(--w) * .03) calc(var(--w) * .03) / 0 0 calc(var(--w) * .016) calc(var(--w) * .016);
+  background: linear-gradient(#e6e8eb, #c3c7cc 60%, #9ea3a9);
+  box-shadow: 0 30px 60px -24px rgba(29, 32, 36, .55);
+}
+.macbook .base::before { /* the opening notch */
+  content: ""; position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+  width: 16%; height: 42%; border-radius: 0 0 10px 10px; background: linear-gradient(#b9bdc2, #d4d7db);
+}
+
+/* MARK: - The sentence with books in it */
+
+.statement {
+  max-width: 1040px; margin: 40px auto 0; padding: 80px var(--gutter);
+  text-align: center; font: 400 clamp(2rem, 5vw, 3.7rem)/1.18 var(--display); letter-spacing: -.005em;
+}
+.statement .muted { color: var(--ink3); }
+.books {
+  display: inline-flex; vertical-align: -.18em; margin: 0 .12em;
+}
+.books img {
+  height: 1.05em; width: auto; border-radius: 2px; box-shadow: 0 6px 14px -6px rgba(29, 32, 36, .5);
+  margin-left: -.22em; transform: rotate(var(--r, 0deg)); background: var(--raised);
+  border: 1px solid rgba(255, 255, 255, .8);
+}
+.books img:first-child { margin-left: 0; }
+
+/* MARK: - Features */
+
+.feature {
+  max-width: 1180px; margin: 0 auto; padding: 90px var(--gutter);
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: 56px;
+}
+.feature.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.feature.flip .copy { order: 2; }
+.feature .device { display: flex; justify-content: center; }
+.feature h2 { margin: 0; font: 400 clamp(2.4rem, 4.6vw, 3.6rem)/1 var(--display); }
+.feature p { margin: 18px 0 0; color: var(--ink2); font-size: 1.08rem; max-width: 30rem; }
+.feature .device .macbook { --w: min(680px, 100%); }
+.feature .device .ipad { --w: min(440px, 88vw); }
+.feature .device .iphone { --w: min(280px, 66vw); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; padding: 0; list-style: none; }
+.chips li {
+  font-size: .82rem; font-weight: 500; color: var(--ink2); padding: 6px 12px; border-radius: 999px;
+  background: var(--raised); border: 1px solid var(--rule);
+}
+
+/* The import section: numbered steps, and books tumbling in behind the phone. */
+.steps { list-style: none; counter-reset: step; margin: 26px 0 0; padding: 0; display: grid; gap: 14px; max-width: 30rem; }
+.steps li { counter-increment: step; position: relative; padding-left: 44px; color: var(--ink2); line-height: 1.45; }
+.steps li strong { color: var(--ink); font-weight: 600; }
+.steps li::before {
+  content: counter(step); position: absolute; left: 0; top: -2px; width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center; font: 400 1.15rem/1 var(--display); color: var(--ink);
+  background: var(--raised); border: 1px solid var(--rule);
+}
+.feature .aside { margin-top: 14px; font-size: .85rem; color: var(--ink3); }
+.import-art { position: relative; width: min(460px, 92vw); display: flex; justify-content: center; padding: 30px 0; }
+.import-art .iphone { --w: min(270px, 62vw); z-index: 2; }
+.import-art .flow {
+  position: absolute; width: 92px; border-radius: 4px; box-shadow: var(--shadow-cover); z-index: 1;
+  transform: rotate(var(--r, 0deg));
+}
+
+/* MARK: - The closing card */
+
+.closing {
+  position: relative; overflow: hidden; margin: 60px var(--gutter) var(--gutter); border-radius: 36px;
+  padding: 88px var(--gutter) 40px; text-align: center; color: #F4F5F7;
+  background:
+    radial-gradient(70% 60% at 50% 120%, rgba(244, 245, 247, .16), rgba(244, 245, 247, 0) 70%),
+    linear-gradient(#24272c, #15171a);
+}
+.closing .icon { width: 76px; height: 76px; margin: 0 auto; border-radius: 18px; box-shadow: 0 16px 40px -12px rgba(0, 0, 0, .6); }
+.closing h2 { margin: 26px 0 0; font: 400 clamp(2.4rem, 6vw, 4rem)/1 var(--display); }
+.closing p { margin: 12px 0 0; color: var(--ink3); }
+.closing .badge { display: inline-block; margin-top: 30px; }
+.closing nav { margin-top: 44px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; font-size: .9rem; }
+.closing nav a { color: #C9CDD2; text-decoration: none; }
+.closing nav a:hover { color: #fff; }
+.closing .legal {
+  display: inline-block; margin-top: 36px; padding: 8px 16px; border-radius: 999px; font-size: .78rem; color: var(--ink3);
+  background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .08);
+}
+.closing .shelf { /* a few books along the bottom of the card */
+  position: absolute; inset: auto 0 -40px; display: flex; justify-content: center; gap: 14px; opacity: .14; pointer-events: none;
+}
+.closing .shelf img { height: 150px; width: auto; border-radius: 3px; }
+
+/* MARK: - Motion */
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s cubic-bezier(.2, .7, .2, 1); }
+.reveal.is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cover img { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* MARK: - Narrow screens */
+
+@media (max-width: 900px) {
+  .feature, .feature.flip { grid-template-columns: minmax(0, 1fr); gap: 36px; padding: 64px var(--gutter); text-align: center; }
+  .feature.flip .copy { order: 0; }
+  .feature p { margin-left: auto; margin-right: auto; }
+  .chips { justify-content: center; }
+  .steps { margin-left: auto; margin-right: auto; text-align: left; }
+  .cover.wide { display: none; }
+}
+@media (max-width: 600px) {
+  .hero { padding-top: 112px; }
+  /* Edge to edge, so the covers run off the screen rather than stopping at the margin. */
+  .stage { height: 600px; overflow-x: clip; margin-left: calc(-1 * var(--gutter)); margin-right: calc(-1 * var(--gutter)); }
+  .stage .iphone { --w: 240px; top: 30px; }
+  /* Fewer covers, at the edges, peeking out from behind the phone. */
+  .cover { width: calc(var(--size, 92px) * .72); left: var(--mx, var(--x)); top: var(--my, var(--y)); }
+  .statement { padding: 48px var(--gutter); margin-top: 10px; }
+  .closing { border-radius: 28px; padding-top: 64px; }
+  .bar .pill { padding: 8px 13px; font-size: .84rem; }
+}

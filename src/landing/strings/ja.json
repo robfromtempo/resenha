@@ -1,0 +1,92 @@
+{
+  "langName": "日本語",
+  "ogLocale": "ja_JP",
+  "meta": {
+    "title": "Resenha — 本の感想を、自分の言葉で",
+    "description": "Resenhaは、BookHiveのライブラリにある本のための書評アプリです。書式つきの長文の書評を書き、オープンなウェブに公開し、友だちが何を読んでいるかを追いかけられます。iPhone、iPad、Mac対応。",
+    "ogDescription": "BookHiveのライブラリにある本の書評をじっくり書いて、オープンなウェブに公開し、友だちが何を読んでいるかを追いかけましょう。"
+  },
+  "bar": {
+    "getApp": "アプリを入手",
+    "getFor": "{device}版Resenhaを入手",
+    "language": "言語"
+  },
+  "hero": {
+    "eyebrow": "iPhone、iPad、Mac対応",
+    "title": "本の感想を、<br><em>自分の</em>言葉で。",
+    "lede": "<strong>読んだ本のための、書くアプリ。</strong>BookHiveのライブラリにある本の書評をじっくり書いて、オープンなウェブに公開し、フォローしている人たちが何を読んでいるかを確かめましょう。",
+    "badgeLabel": "App StoreでResenhaをダウンロード",
+    "badgeAlt": "App Storeからダウンロード",
+    "note": "iPhone、iPad、Macで使えます。",
+    "noteDevice": "{device}版ResenhaはApp Storeで入手できます。",
+    "noteOther": "ResenhaはiPhone、iPad、Mac向けのアプリです。",
+    "phoneAlt": "本の表紙が並ぶライブラリを表示したiPhone版Resenha。"
+  },
+  "statement": "大好きな本 {1} について書いて、オープンなウェブ {2} に公開して、{3} <span class=\"muted\">友だちの読んでいる本をのぞいてみよう。</span>",
+  "write": {
+    "eyebrow": "書く",
+    "title": "書評のためのワープロ。",
+    "body": "見出し、引用、リスト、リンク、そして書評ごとのタイトル。ネタバレの指定や言語の選択もでき、下書きはiCloudでほかのデバイスから続きを書けます。",
+    "chips": [
+      "書式",
+      "ネタバレ警告",
+      "Koboのハイライト",
+      "iCloudの下書き"
+    ],
+    "alt": "Mac版Resenhaで書評を書いているところ。"
+  },
+  "follow": {
+    "eyebrow": "フォロー",
+    "title": "サロン。",
+    "body": "フォローしている人が読み始めた本、読み終えた本、書いた書評を、リアルタイムで。Resenhaでのフォローは、BlueskyやBookHiveでのフォローと同じです。",
+    "chips": [
+      "リアルタイム更新",
+      "ほかの読者の本棚",
+      "友だちの書評"
+    ],
+    "alt": "フォローしている読者が読み始めた本と読み終えた本を表示したiPad版のサロン。"
+  },
+  "publish": {
+    "eyebrow": "公開する",
+    "title": "オープンなウェブへ。",
+    "body": "書評はAtmosphere上のあなた自身のアカウントに保存されます。resenha.inkでは書式つきで、BookHiveではプレーンテキストで表示され、BlueskyやMu Socialに投稿すれば、返信がそのままコメントになります。",
+    "chips": [
+      "resenha.ink",
+      "BookHive",
+      "Bluesky・Mu Social"
+    ],
+    "alt": "iPhone版Resenhaでコミュニティの書評を読んでいるところ。"
+  },
+  "import": {
+    "eyebrow": "読み込む",
+    "title": "本と一緒に引っ越そう。",
+    "body": "Goodreads、StoryGraph、Hardcoverを使っていましたか？そちらでライブラリを書き出して、Resenhaでファイルを選ぶだけ。すべての本をBookHiveのカタログから探し出し、保存する前に照合結果を確認できます。",
+    "steps": [
+      "Goodreads、StoryGraph、Hardcoverから<strong>ライブラリを書き出す</strong>。",
+      "Resenhaで<strong>ファイルを選ぶ</strong>と、それぞれの本をBookHiveで探します。",
+      "<strong>確認して読み込む。</strong>評価、読書ステータス、日付、所有している本、書評も一緒に移せます。"
+    ],
+    "aside": "非公開のメモが読み込まれることはありません。",
+    "alt": "iPhone版ResenhaでGoodreads、StoryGraph、Hardcoverからライブラリを読み込んでいるところ。"
+  },
+  "collect": {
+    "eyebrow": "集める",
+    "title": "あなたのライブラリを丸ごと。",
+    "body": "読んだ本、読んでいる本、読みたい本を、ひとつの場所に。バーコードをスキャンして本を追加し、共有できる本棚に整理しましょう。",
+    "chips": [
+      "バーコードスキャン",
+      "本棚",
+      "読書日"
+    ],
+    "alt": "本の表紙が並ぶMac版Resenhaのライブラリ。"
+  },
+  "closing": {
+    "title": "あなたの読書を、自分の言葉で。",
+    "subtitle": "iPhone、iPad、Mac版Resenha。",
+    "privacy": "プライバシー",
+    "terms": "利用規約",
+    "feedback": "フィードバックを送る",
+    "bluesky": "Blueskyの@resenha.ink",
+    "legal": "© 2026 Resenha。本の表紙の権利は各出版社に帰属します。"
+  }
+}

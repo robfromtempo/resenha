@@ -1,0 +1,92 @@
+{
+  "langName": "Español",
+  "ogLocale": "es_ES",
+  "meta": {
+    "title": "Resenha — Reseñas de libros, con tus propias palabras",
+    "description": "Resenha es una app de escritura para los libros de tu biblioteca de BookHive. Escribe reseñas extensas con formato de verdad, publícalas en la web abierta y sigue lo que leen tus amigos. Para iPhone, iPad y Mac.",
+    "ogDescription": "Escribe reseñas extensas de los libros de tu biblioteca de BookHive, publícalas en la web abierta y sigue lo que leen tus amigos."
+  },
+  "bar": {
+    "getApp": "Descargar la app",
+    "getFor": "Descargar Resenha para {device}",
+    "language": "Idioma"
+  },
+  "hero": {
+    "eyebrow": "Para iPhone, iPad y Mac",
+    "title": "Reseñas de libros, con tus <em>propias</em> palabras.",
+    "lede": "<strong>Una app de escritura para los libros que lees.</strong> Escribe reseñas extensas de los libros de tu biblioteca de BookHive, publícalas en la web abierta y descubre qué leen las personas a las que sigues.",
+    "badgeLabel": "Descargar Resenha en el App Store",
+    "badgeAlt": "Consíguelo en el App Store",
+    "note": "Disponible para iPhone, iPad y Mac.",
+    "noteDevice": "Resenha para tu {device} está en el App Store.",
+    "noteOther": "Resenha es para iPhone, iPad y Mac.",
+    "phoneAlt": "Resenha en el iPhone, con una biblioteca llena de portadas."
+  },
+  "statement": "Escribe sobre {1} los libros que amas, publícalos {2} en la web abierta y descubre {3} <span class=\"muted\">lo que leen tus amigos.</span>",
+  "write": {
+    "eyebrow": "Escribe",
+    "title": "Un procesador de textos para reseñas.",
+    "body": "Títulos, citas, listas y enlaces, y un título propio para cada reseña. Marca los spoilers, elige el idioma y retoma cualquier borrador en tus otros dispositivos con iCloud.",
+    "chips": [
+      "Formato",
+      "Avisos de spoilers",
+      "Subrayados de Kobo",
+      "Borradores en iCloud"
+    ],
+    "alt": "Escribiendo una reseña en Resenha en un Mac."
+  },
+  "follow": {
+    "eyebrow": "Sigue",
+    "title": "El Salón.",
+    "body": "Mira qué empiezan, terminan y reseñan las personas a las que sigues, en el momento en que ocurre. Seguir a alguien en Resenha es lo mismo que seguirlo en Bluesky y BookHive.",
+    "chips": [
+      "Al momento",
+      "Estanterías de otros lectores",
+      "Reseñas de tus amigos"
+    ],
+    "alt": "El Salón en el iPad, con lo que empezaron y terminaron los lectores que sigues."
+  },
+  "publish": {
+    "eyebrow": "Publica",
+    "title": "En la web abierta.",
+    "body": "Tus reseñas viven en tu propia cuenta en la Atmosphere: con formato en resenha.ink, como texto sin formato en BookHive y publicadas en Bluesky y Mu Social, donde las respuestas se convierten en comentarios.",
+    "chips": [
+      "resenha.ink",
+      "BookHive",
+      "Bluesky y Mu Social"
+    ],
+    "alt": "Leyendo una reseña de la comunidad en Resenha en el iPhone."
+  },
+  "import": {
+    "eyebrow": "Importa",
+    "title": "Trae tus libros contigo.",
+    "body": "¿Vienes de Goodreads, StoryGraph o Hardcover? Exporta allí tu biblioteca y elige el archivo en Resenha. Cada libro se busca en el catálogo de BookHive, y tú revisas las coincidencias antes de guardar nada.",
+    "steps": [
+      "<strong>Exporta tu biblioteca</strong> de Goodreads, StoryGraph o Hardcover.",
+      "<strong>Elige el archivo</strong> en Resenha, que encuentra cada libro en BookHive.",
+      "<strong>Revisa e importa.</strong> Valoraciones, estado de lectura, fechas, libros que tienes y reseñas vienen incluidos."
+    ],
+    "aside": "Las notas privadas nunca se importan.",
+    "alt": "Importando una biblioteca de Goodreads, StoryGraph o Hardcover en Resenha en el iPhone."
+  },
+  "collect": {
+    "eyebrow": "Colecciona",
+    "title": "Toda tu biblioteca.",
+    "body": "Todo lo que has leído, estás leyendo o quieres leer, en un solo lugar. Escanea un código de barras para añadir un libro y ordena tus libros en estanterías que puedes compartir.",
+    "chips": [
+      "Escaneo de códigos de barras",
+      "Estanterías",
+      "Fechas de lectura"
+    ],
+    "alt": "Una biblioteca de portadas en Resenha en un Mac."
+  },
+  "closing": {
+    "title": "Tus lecturas, con tus propias palabras.",
+    "subtitle": "Resenha para iPhone, iPad y Mac.",
+    "privacy": "Privacidad",
+    "terms": "Condiciones",
+    "feedback": "Enviar comentarios",
+    "bluesky": "@resenha.ink en Bluesky",
+    "legal": "© 2026 Resenha. Las portadas pertenecen a sus editoriales."
+  }
+}

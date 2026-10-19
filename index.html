@@ -2,22 +2,187 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Resenha</title>
-  <style>
-    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #F4F5F7; color: #1D2024;
-           font-family: "New York", ui-serif, Georgia, serif; }
-    main { max-width: 34rem; padding: 2rem; text-align: center; }
-    h1 { font-size: 2.6rem; margin: 0 0 .5rem; }
-    p { color: #626971; font-size: 1.15rem; line-height: 1.6; }
-    a { color: #626971; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Resenha — Book reviews, in your own words</title>
+  <meta name="description" content="Resenha is a writing app for the books in your BookHive library. Write long-form reviews with real formatting, publish them to the open web, and follow what your friends are reading. For iPhone, iPad and Mac.">
+  <meta name="apple-itunes-app" content="app-id=6821354481">
+  <meta name="theme-color" content="#F4F5F7">
+  <link rel="canonical" href="https://resenha.ink/">
+  <link rel="alternate" hreflang="en" href="https://resenha.ink/">
+  <link rel="alternate" hreflang="de" href="https://resenha.ink/de/">
+  <link rel="alternate" hreflang="es" href="https://resenha.ink/es/">
+  <link rel="alternate" hreflang="fr" href="https://resenha.ink/fr/">
+  <link rel="alternate" hreflang="it" href="https://resenha.ink/it/">
+  <link rel="alternate" hreflang="ja" href="https://resenha.ink/ja/">
+  <link rel="alternate" hreflang="pt" href="https://resenha.ink/pt/">
+  <link rel="alternate" hreflang="x-default" href="https://resenha.ink/">
+  <link rel="icon" href="/icon.png">
+  <link rel="apple-touch-icon" href="/icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Resenha">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Resenha — Book reviews, in your own words">
+  <meta property="og:description" content="Write long-form reviews of the books in your BookHive library, publish them to the open web, and follow what your friends are reading.">
+  <meta property="og:url" content="https://resenha.ink/">
+  <meta property="og:image" content="https://resenha.ink/assets/landing/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <script>
+    // A first visit to the English page from a browser set to another of the site's languages goes to that page.
+    // Choosing a language from the menu is remembered, and wins from then on.
+    (function () {
+      try {
+        var chosen = localStorage.getItem("resenha.lang");
+        if (chosen) { if (chosen !== "en") location.replace("/" + chosen + "/"); return; }
+        var have = ["de","es","fr","it","ja","pt"];
+        var wanted = (navigator.languages || [navigator.language || "en"]).map(function (l) { return String(l).slice(0, 2).toLowerCase(); });
+        for (var i = 0; i < wanted.length; i++) {
+          if (wanted[i] === "en") return;
+          if (have.indexOf(wanted[i]) >= 0) { location.replace("/" + wanted[i] + "/"); return; }
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preload" href="/fonts/InstrumentSerif-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="/assets/landing/landing.css">
 </head>
 <body>
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="bar">
+    <img src="/icon.png" alt="">
+    <a class="name" href="/">Resenha</a>
+    <details class="lang">
+      <summary aria-label="Language"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg><span>EN</span></summary>
+      <ul><li><a href="/" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a></li><li><a href="/de/" hreflang="de" lang="de" data-lang="de">Deutsch</a></li><li><a href="/es/" hreflang="es" lang="es" data-lang="es">Español</a></li><li><a href="/fr/" hreflang="fr" lang="fr" data-lang="fr">Français</a></li><li><a href="/it/" hreflang="it" lang="it" data-lang="it">Italiano</a></li><li><a href="/ja/" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li><li><a href="/pt/" hreflang="pt" lang="pt" data-lang="pt">Português</a></li></ul>
+    </details>
+    <a class="pill" href="https://apps.apple.com/app/id6821354481" data-get-app>Get the App</a>
+  </header>
+
   <main>
-    <h1>Resenha</h1>
-    <p>Long-form reviews for the books in your BookHive library, for Mac and iPad.</p>
-    <p><a href="privacy.html">Privacy</a></p>
+    <section class="hero">
+      <p class="eyebrow">For iPhone, iPad and Mac</p>
+      <h1>Book reviews, in your <em>own</em> words.</h1>
+      <p class="lede"><strong>A writing app for the books you read.</strong> Write long-form reviews of the books in your BookHive library, publish them to the open web, and see what the readers you follow are reading.</p>
+      <div class="cta">
+        <a class="badge" href="https://apps.apple.com/app/id6821354481" aria-label="Download Resenha on the App Store"><img src="/assets/landing/badges/app-store-black-en.svg" alt="Download on the App Store" height="52"></a>
+        <p class="note" data-get-app-note>Available for iPhone, iPad and Mac.</p>
+      </div>
+
+      <div class="stage">
+        <div class="cover near" style="--x:6%;--y:40px;--size:110px;--r:-6deg;--z:4;--t:9s;--d:-0s;--mx:-7%;--my:40px" data-speed="0.18"><img src="/assets/landing/covers/piranesi.jpg" alt="" width="110" decoding="async"></div>
+        <div class="cover mid" style="--x:22%;--y:120px;--size:84px;--r:4deg;--z:2;--t:11s;--d:-1.2s;--mx:4%;--my:210px" data-speed="0.1"><img src="/assets/landing/covers/circe.jpg" alt="" width="84" decoding="async"></div>
+        <div class="cover mid wide" style="--x:3%;--y:300px;--size:96px;--r:3deg;--z:2;--t:10s;--d:-0.6s" data-speed="0.1"><img src="/assets/landing/covers/the-night-circus.jpg" alt="" width="96" decoding="async"></div>
+        <div class="cover near" style="--x:25%;--y:340px;--size:120px;--r:-3deg;--z:4;--t:12s;--d:-2s;--mx:-5%;--my:340px" data-speed="0.18"><img src="/assets/landing/covers/dune.jpg" alt="" width="120" decoding="async"></div>
+        <div class="cover far wide" style="--x:11%;--y:520px;--size:86px;--r:6deg;--z:1;--t:13s;--d:-0.3s" data-speed="0.05"><img src="/assets/landing/covers/jane-eyre.jpg" alt="" width="86" decoding="async"></div>
+        <div class="cover near" style="--x:24%;--y:580px;--size:100px;--r:5deg;--z:4;--t:9.5s;--d:-1.6s;--mx:3%;--my:480px" data-speed="0.18"><img src="/assets/landing/covers/the-hobbit.jpg" alt="" width="100" decoding="async"></div>
+        <div class="cover far wide" style="--x:14%;--y:200px;--size:70px;--r:-8deg;--z:1;--t:14s;--d:-2.4s" data-speed="0.05"><img src="/assets/landing/covers/beloved.jpg" alt="" width="70" decoding="async"></div>
+        <div class="cover far wide" style="--x:2%;--y:660px;--size:78px;--r:-4deg;--z:1;--t:12s;--d:-1s" data-speed="0.05"><img src="/assets/landing/covers/middlemarch.jpg" alt="" width="78" decoding="async"></div>
+        <div class="cover near" style="--x:70%;--y:60px;--size:118px;--r:5deg;--z:4;--t:10s;--d:-0.4s;--mx:83%;--my:50px" data-speed="0.18"><img src="/assets/landing/covers/project-hail-mary.jpg" alt="" width="118" decoding="async"></div>
+        <div class="cover mid" style="--x:86%;--y:160px;--size:88px;--r:-5deg;--z:2;--t:12s;--d:-1.8s;--mx:79%;--my:200px" data-speed="0.1"><img src="/assets/landing/covers/klara-and-the-sun.jpg" alt="" width="88" decoding="async"></div>
+        <div class="cover mid wide" style="--x:68%;--y:310px;--size:92px;--r:-3deg;--z:2;--t:11s;--d:-0.9s" data-speed="0.1"><img src="/assets/landing/covers/the-song-of-achilles.jpg" alt="" width="92" decoding="async"></div>
+        <div class="cover near" style="--x:84%;--y:360px;--size:112px;--r:6deg;--z:4;--t:9s;--d:-2.2s;--mx:85%;--my:330px" data-speed="0.18"><img src="/assets/landing/covers/babel.jpg" alt="" width="112" decoding="async"></div>
+        <div class="cover near" style="--x:72%;--y:540px;--size:104px;--r:-6deg;--z:4;--t:10.5s;--d:-1.1s;--mx:80%;--my:470px" data-speed="0.18"><img src="/assets/landing/covers/normal-people.jpg" alt="" width="104" decoding="async"></div>
+        <div class="cover far wide" style="--x:89%;--y:590px;--size:80px;--r:4deg;--z:1;--t:13s;--d:-0.2s" data-speed="0.05"><img src="/assets/landing/covers/the-left-hand-of-darkness.jpg" alt="" width="80" decoding="async"></div>
+        <div class="cover far wide" style="--x:80%;--y:240px;--size:70px;--r:8deg;--z:1;--t:14s;--d:-1.4s" data-speed="0.05"><img src="/assets/landing/covers/station-eleven.jpg" alt="" width="70" decoding="async"></div>
+        <div class="cover far wide" style="--x:93%;--y:40px;--size:72px;--r:-6deg;--z:1;--t:12.5s;--d:-2.6s" data-speed="0.05"><img src="/assets/landing/covers/never-let-me-go.jpg" alt="" width="72" decoding="async"></div>
+        <figure class="iphone">
+          <img src="/assets/landing/screens/iphone-library.webp" alt="Resenha on iPhone, showing a library of book covers." width="780" height="1695" fetchpriority="high">
+        </figure>
+      </div>
+    </section>
+
+    <p class="statement reveal">Write about <span class="books" aria-hidden="true"><img src="/assets/landing/covers/the-night-circus.jpg" alt="" style="--r:-6deg" loading="lazy" decoding="async"><img src="/assets/landing/covers/the-song-of-achilles.jpg" alt="" style="--r:4deg" loading="lazy" decoding="async"></span> the books you love, publish them <span class="books" aria-hidden="true"><img src="/assets/landing/covers/one-hundred-years-of-solitude.jpg" alt="" style="--r:-6deg" loading="lazy" decoding="async"><img src="/assets/landing/covers/lessons-in-chemistry.jpg" alt="" style="--r:4deg" loading="lazy" decoding="async"></span> to the open web, and see <span class="books" aria-hidden="true"><img src="/assets/landing/covers/a-gentleman-in-moscow.jpg" alt="" style="--r:-6deg" loading="lazy" decoding="async"><img src="/assets/landing/covers/the-midnight-library.jpg" alt="" style="--r:4deg" loading="lazy" decoding="async"><img src="/assets/landing/covers/pride-and-prejudice.jpg" alt="" style="--r:-3deg" loading="lazy" decoding="async"></span> <span class="muted">what your friends are reading.</span></p>
+
+    <section class="feature reveal">
+      <div class="copy">
+        <p class="eyebrow">Write</p>
+        <h2>A word processor for reviews.</h2>
+        <p>Headings, quotes, lists and links, and a title of its own. Mark spoilers, choose the language, and pick up any draft on your other devices through iCloud.</p>
+        <ul class="chips"><li>Formatting</li><li>Spoiler warnings</li><li>Kobo highlights</li><li>Drafts in iCloud</li></ul>
+      </div>
+      <div class="device">
+        <div class="macbook"><div class="lid"><img src="/assets/landing/screens/mac-editor.webp" alt="Writing a review in Resenha on a Mac." width="1800" height="1125" loading="lazy"></div><div class="base"></div></div>
+      </div>
+    </section>
+
+    <section class="feature flip reveal">
+      <div class="copy">
+        <p class="eyebrow">Follow</p>
+        <h2>The Parlor.</h2>
+        <p>See what the readers you follow are starting, finishing and reviewing, as it happens. Following someone in Resenha is the same follow as on Bluesky and BookHive.</p>
+        <ul class="chips"><li>Live updates</li><li>Readers’ shelves</li><li>Friends’ reviews</li></ul>
+      </div>
+      <div class="device">
+        <figure class="ipad"><img src="/assets/landing/screens/ipad-parlor.webp" alt="The Parlor on iPad, showing what followed readers started and finished." width="1240" height="1799" loading="lazy"></figure>
+      </div>
+    </section>
+
+    <section class="feature reveal">
+      <div class="copy">
+        <p class="eyebrow">Publish</p>
+        <h2>On the open web.</h2>
+        <p>Your reviews live in your own account on the Atmosphere: formatted on resenha.ink, as plain text on BookHive, and posted to Bluesky and Mu Social, where replies become comments.</p>
+        <ul class="chips"><li>resenha.ink</li><li>BookHive</li><li>Bluesky &amp; Mu Social</li></ul>
+      </div>
+      <div class="device">
+        <figure class="iphone"><img src="/assets/landing/screens/iphone-review.webp" alt="Reading a community review in Resenha on iPhone." width="780" height="1695" loading="lazy"></figure>
+      </div>
+    </section>
+
+    <section class="feature flip reveal import">
+      <div class="copy">
+        <p class="eyebrow">Import</p>
+        <h2>Bring your books with you.</h2>
+        <p>Coming from Goodreads, StoryGraph or Hardcover? Export your library there and choose the file in Resenha. Every book is found in BookHive’s catalogue, and you check the matches before anything is saved.</p>
+        <ol class="steps">
+          <li><strong>Export your library</strong> from Goodreads, StoryGraph or Hardcover.</li>
+          <li><strong>Choose the file</strong> in Resenha, which finds each book on BookHive.</li>
+          <li><strong>Check and import.</strong> Ratings, reading status, dates, owned books and reviews come along.</li>
+        </ol>
+        <p class="aside">Private notes are never imported.</p>
+      </div>
+      <div class="device">
+        <div class="import-art">
+          <img class="flow" style="--r:-12deg;left:4%;top:12%" src="/assets/landing/covers/the-hobbit.jpg" alt="" loading="lazy">
+          <img class="flow" style="--r:9deg;right:2%;top:22%" src="/assets/landing/covers/one-hundred-years-of-solitude.jpg" alt="" loading="lazy">
+          <img class="flow" style="--r:-6deg;left:10%;bottom:10%" src="/assets/landing/covers/jane-eyre.jpg" alt="" loading="lazy">
+          <img class="flow" style="--r:7deg;right:8%;bottom:6%" src="/assets/landing/covers/station-eleven.jpg" alt="" loading="lazy">
+          <figure class="iphone"><img src="/assets/landing/screens/iphone-import.webp" alt="Importing a library from Goodreads, StoryGraph or Hardcover in Resenha on iPhone." width="780" height="1695" loading="lazy"></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature reveal">
+      <div class="copy">
+        <p class="eyebrow">Collect</p>
+        <h2>Your whole library.</h2>
+        <p>Everything you’ve read, are reading or want to read, in one place. Scan a barcode to add a book, and sort your books onto shelves you can share.</p>
+        <ul class="chips"><li>Barcode scanning</li><li>Shelves</li><li>Reading dates</li></ul>
+      </div>
+      <div class="device">
+        <div class="macbook"><div class="lid"><img src="/assets/landing/screens/mac-library.webp" alt="A library of book covers in Resenha on a Mac." width="1800" height="1125" loading="lazy"></div><div class="base"></div></div>
+      </div>
+    </section>
   </main>
+
+  <footer class="closing">
+    <div class="shelf" aria-hidden="true">
+      <img src="/assets/landing/covers/the-remains-of-the-day.jpg" alt="" loading="lazy"><img src="/assets/landing/covers/the-martian.jpg" alt="" loading="lazy"><img src="/assets/landing/covers/tomorrow-and-tomorrow-and-tomorrow.jpg" alt="" loading="lazy"><img src="/assets/landing/covers/circe.jpg" alt="" loading="lazy"><img src="/assets/landing/covers/dune.jpg" alt="" loading="lazy"><img src="/assets/landing/covers/piranesi.jpg" alt="" loading="lazy"><img src="/assets/landing/covers/babel.jpg" alt="" loading="lazy">
+    </div>
+    <img class="icon" src="/icon.png" alt="">
+    <h2>Your reading, in your own words.</h2>
+    <p>Resenha for iPhone, iPad and Mac.</p>
+    <a class="badge" href="https://apps.apple.com/app/id6821354481" aria-label="Download Resenha on the App Store"><img src="/assets/landing/badges/app-store-white-en.svg" alt="Download on the App Store" height="52"></a>
+    <nav>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="https://userinput.app/s/did:plc:o45y7ehjcfhasrzjjtsxloc5/3mxksvihdi32z">Send Feedback</a>
+      <a href="https://bsky.app/profile/resenha.ink">@resenha.ink on Bluesky</a>
+    </nav>
+    <p class="legal">© 2026 Resenha. Book covers belong to their publishers.</p>
+  </footer>
+
+  <script type="application/json" id="landing-strings">{"getApp":"Get the App","getFor":"Get Resenha for {device}","noteDevice":"Resenha for your {device} is on the App Store.","noteOther":"Resenha is for iPhone, iPad and Mac."}</script>
+  <script src="/assets/landing/landing.js" defer></script>
 </body>
 </html>

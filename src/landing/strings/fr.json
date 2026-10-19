@@ -1,0 +1,75 @@
+{
+  "langName": "Français",
+  "ogLocale": "fr_FR",
+  "meta": {
+    "title": "Resenha — Des critiques de livres, avec vos propres mots",
+    "description": "Resenha est une app d’écriture pour les livres de votre bibliothèque BookHive. Écrivez des critiques détaillées avec une vraie mise en forme, publiez-les sur le web ouvert et suivez ce que lisent vos amis. Pour iPhone, iPad et Mac.",
+    "ogDescription": "Écrivez des critiques détaillées des livres de votre bibliothèque BookHive, publiez-les sur le web ouvert et suivez ce que lisent vos amis."
+  },
+  "bar": {
+    "getApp": "Obtenir l’app",
+    "getFor": "Obtenir Resenha pour {device}",
+    "language": "Langue"
+  },
+  "hero": {
+    "eyebrow": "Pour iPhone, iPad et Mac",
+    "title": "Des critiques de livres, avec vos <em>propres</em> mots.",
+    "lede": "<strong>Une app d’écriture pour les livres que vous lisez.</strong> Écrivez des critiques détaillées des livres de votre bibliothèque BookHive, publiez-les sur le web ouvert et découvrez ce que lisent les personnes que vous suivez.",
+    "badgeLabel": "Télécharger Resenha dans l’App Store",
+    "badgeAlt": "Télécharger dans l’App Store",
+    "note": "Disponible pour iPhone, iPad et Mac.",
+    "noteDevice": "Resenha pour votre {device} est dans l’App Store.",
+    "noteOther": "Resenha est disponible pour iPhone, iPad et Mac.",
+    "phoneAlt": "Resenha sur iPhone, avec une bibliothèque de couvertures de livres."
+  },
+  "statement": "Écrivez sur {1} les livres que vous aimez, publiez-les {2} sur le web ouvert et découvrez {3} <span class=\"muted\">ce que lisent vos amis.</span>",
+  "write": {
+    "eyebrow": "Écrire",
+    "title": "Un traitement de texte pour vos critiques.",
+    "body": "Titres, citations, listes et liens, et un titre bien à elle pour chaque critique. Signalez les spoilers, choisissez la langue et reprenez n’importe quel brouillon sur vos autres appareils grâce à iCloud.",
+    "chips": ["Mise en forme", "Alertes spoilers", "Surlignages Kobo", "Brouillons dans iCloud"],
+    "alt": "Écrire une critique dans Resenha sur un Mac."
+  },
+  "follow": {
+    "eyebrow": "Suivre",
+    "title": "Le Salon.",
+    "body": "Voyez ce que les personnes que vous suivez commencent, terminent et critiquent, au moment où cela se passe. Suivre quelqu’un dans Resenha revient à le suivre sur Bluesky et BookHive.",
+    "chips": ["En direct", "Étagères des lecteurs", "Critiques de vos amis"],
+    "alt": "Le Salon sur iPad, avec ce que les lecteurs suivis ont commencé et terminé."
+  },
+  "publish": {
+    "eyebrow": "Publier",
+    "title": "Sur le web ouvert.",
+    "body": "Vos critiques vivent dans votre propre compte sur l’Atmosphere : mises en forme sur resenha.ink, en texte brut sur BookHive, et publiées sur Bluesky et Mu Social, où les réponses deviennent des commentaires.",
+    "chips": ["resenha.ink", "BookHive", "Bluesky et Mu Social"],
+    "alt": "Lire une critique de la communauté dans Resenha sur iPhone."
+  },
+  "import": {
+    "eyebrow": "Importer",
+    "title": "Emportez vos livres avec vous.",
+    "body": "Vous venez de Goodreads, StoryGraph ou Hardcover ? Exportez-y votre bibliothèque et choisissez le fichier dans Resenha. Chaque livre est retrouvé dans le catalogue de BookHive, et vous vérifiez les correspondances avant que rien ne soit enregistré.",
+    "steps": [
+      "<strong>Exportez votre bibliothèque</strong> depuis Goodreads, StoryGraph ou Hardcover.",
+      "<strong>Choisissez le fichier</strong> dans Resenha, qui retrouve chaque livre sur BookHive.",
+      "<strong>Vérifiez et importez.</strong> Notes, statut de lecture, dates, livres possédés et critiques suivent."
+    ],
+    "aside": "Les notes privées ne sont jamais importées.",
+    "alt": "Importer une bibliothèque depuis Goodreads, StoryGraph ou Hardcover dans Resenha sur iPhone."
+  },
+  "collect": {
+    "eyebrow": "Rassembler",
+    "title": "Toute votre bibliothèque.",
+    "body": "Tout ce que vous avez lu, lisez ou voulez lire, au même endroit. Scannez un code-barres pour ajouter un livre, et rangez vos livres sur des étagères à partager.",
+    "chips": ["Scan de codes-barres", "Étagères", "Dates de lecture"],
+    "alt": "Une bibliothèque de couvertures dans Resenha sur un Mac."
+  },
+  "closing": {
+    "title": "Vos lectures, avec vos propres mots.",
+    "subtitle": "Resenha pour iPhone, iPad et Mac.",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "feedback": "Envoyer un avis",
+    "bluesky": "@resenha.ink sur Bluesky",
+    "legal": "© 2026 Resenha. Les couvertures appartiennent à leurs éditeurs."
+  }
+}
