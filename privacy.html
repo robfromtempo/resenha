@@ -18,16 +18,17 @@
 <body>
   <main>
     <h1>Privacy</h1>
-    <p>Resenha does not have its own accounts, and it does not collect data about you. Its website, resenha.ink, stores nothing: it shows published reviews by reading them from their writers’ public accounts when someone opens them.</p>
+    <p>Resenha does not have its own accounts, and it does not collect data about you. Its website, resenha.ink, shows published reviews by reading them from their writers’ public accounts when someone opens them. The only thing it keeps is the language you choose on its home page, saved in your own browser so the page opens in that language next time.</p>
 
     <h2>On your devices</h2>
     <p>Signing in keeps a session in the keychain on that device, so you stay logged in. Signing out removes it.</p>
     <p>Drafts stay on the device. If iCloud is on, they also sync through your iCloud to your other devices. They are not published, and Resenha does not upload them anywhere else.</p>
+    <p>When you unpublish a review, its text goes back to being a draft, kept the same way, until you delete the draft.</p>
 
     <h2>When you publish</h2>
     <p>Publish saves the review to your own Atmosphere account, the same account you use with BookHive. From then on it belongs to that account. Resenha does not keep a copy.</p>
-    <p>The review is saved twice. Formatted, as a Standard.site article, which resenha.ink and other reading apps show. And as plain text on the book’s BookHive record, so BookHive shows it without formatting marks. Resenha also saves a small record that links the review to its book, and a picture of the book’s cover for its link card. The first time you publish, Resenha creates your publication, named after your profile and with your profile photo. All of it is public, like the review.</p>
-    <p>If “Share on Bluesky” is on, Resenha also posts to Bluesky from your account, with a link to the review. Replies to that post are the review’s comments, and a comment you write in Resenha is posted as a reply from your account. Unpublishing removes the review, its link and the Bluesky post that announced it from your account. Replies other people wrote stay in their own accounts.</p>
+    <p>The review is saved twice. Formatted, as a Standard.site article, which resenha.ink and other reading apps show. And as plain text on the book’s BookHive record, so BookHive shows it without formatting marks. Resenha also saves a small record that links the review to its book, and a picture of the book’s cover for its link card. The review’s title, whether you marked it as having spoilers, and the languages it’s written in are saved with it. The first time you publish, you choose where the review goes: a Book Reviews publication Resenha creates for you, named after your profile and with Resenha’s icon, or one of your existing Standard.site publications. All of it is public, like the review.</p>
+    <p>If “Post to the Atmosphere” is on, Resenha also posts from your account, with a link to the review. The post appears on Bluesky, Mu Social and other apps that read the Atmosphere. Replies to that post are the review’s comments, and a comment you write in Resenha is posted as a reply from your account. Unpublishing removes the review, its link and the Bluesky post that announced it from your account. Replies other people wrote stay in their own accounts.</p>
     <p>resenha.ink is hosted by Netlify, which, like any web host, handles the requests of the people who visit it.</p>
     <p>Your password is entered on your account host’s page, such as Bluesky. It is never sent to Resenha.</p>
 
@@ -38,6 +39,12 @@
     <h2>Following and the Parlor</h2>
     <p>Following a reader saves a follow to your own Atmosphere account. It is the same follow Bluesky and BookHive use, so following or unfollowing in Resenha does the same there, and like other follows it is public.</p>
     <p>The Parlor shows what the people you follow started and finished. To build it, Resenha asks BookHive for their public profiles, and keeps a copy on the device so it opens quickly. Signing out deletes it.</p>
+
+    <h2>Reading reviews</h2>
+    <p>Community reviews come from BookHive’s public feed. To show their writers’ names, Resenha looks them up in Bluesky’s public directory. To know whether a review is marked as having spoilers, and the languages it’s in, Resenha reads the public review links in its writer’s account. Resenha keeps copies of these on the device so lists open quickly. Nothing about you is sent with these requests.</p>
+
+    <h2>Scanning a barcode</h2>
+    <p>On iPhone and iPad, Resenha can use the camera to read a book’s barcode. The picture is read on the device and is never saved or sent anywhere. Only the number it finds, the book’s ISBN, is used to search BookHive’s catalog.</p>
 
     <h2>When you report or block</h2>
     <p>A report is sent from your account to the network’s moderation service, Bluesky’s, with the review, post or account you reported. A block is saved to your own account, where other apps can see and respect it.</p>
@@ -52,10 +59,11 @@
     <h2>What we don’t do</h2>
     <p>No ads. No tracking. No analytics. We don’t sell data, because we don’t hold any.</p>
 
-    <h2>Feedback</h2>
+    <h2>Sending feedback</h2>
+    <p>Feedback you send from Resenha is posted from your account to Resenha’s public board on userinput.app, with any screenshots you add. Like a review, it is public, anyone can read it, and it stays in your account.</p>
     <p><a href="https://userinput.app/s/did:plc:o45y7ehjcfhasrzjjtsxloc5/3mxksvihdi32z">Questions, ideas, and bug reports.</a></p>
 
-    <p class="back"><a href="index.html">Resenha</a> · <a href="terms.html">Terms of Use</a></p>
+    <p class="back"><a href="/">Resenha</a> · <a href="terms.html">Terms of Use</a></p>
   </main>
 </body>
 </html>
