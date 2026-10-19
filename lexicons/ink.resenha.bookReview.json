@@ -9,7 +9,12 @@
       "key": "any",
       "record": {
         "type": "object",
-        "required": ["document", "book", "hiveId", "createdAt"],
+        "required": [
+          "document",
+          "book",
+          "hiveId",
+          "createdAt"
+        ],
         "properties": {
           "document": {
             "type": "string",
@@ -25,6 +30,19 @@
             "type": "string",
             "maxLength": 64,
             "description": "The book's BookHive ID. Also the record key."
+          },
+          "spoiler": {
+            "type": "boolean",
+            "description": "The reader marked the review as giving away parts of the book. The document carries the same mark as a \"spoiler\" self-label."
+          },
+          "langs": {
+            "type": "array",
+            "maxLength": 3,
+            "items": {
+              "type": "string",
+              "format": "language"
+            },
+            "description": "The languages the review is written in, as the reader chose them. BCP-47 codes, as in a Bluesky post's langs."
           },
           "createdAt": {
             "type": "string",

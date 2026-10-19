@@ -80,9 +80,13 @@ async function reviewPage(did, rkey) {
   const [author, link] = await Promise.all([authorOf(did), linkFor(pds, did, record.uri)]);
   const [book, stars] = link ? await Promise.all([bookHiveBook(link.hiveId), starsOf(pds, link.book)]) : [null, null];
   const address = `${ORIGIN}/p/${did}/${rkey}`;
-  const summary = excerpt(doc.description || doc.textContent || "", 300);
+  // A review with spoilers never puts its opening in previews, whatever its description says.
+  const summary = hasSpoilers(doc) ? "This review contains spoilers." : excerpt(doc.description || doc.textContent || "", 300);
   const card = doc.coverImage?.ref?.$link ? blobURL(pds, did, doc.coverImage.ref.$link) : null;
   const published = doc.publishedAt ? new Date(doc.publishedAt) : null;
+  const spoilers = hasSpoilers(doc);
+  const lang = link?.langs?.[0];
+  const markdown = `<div class="markdown"${lang ? ` lang="${escape(lang)}"` : ""}>${render(doc)}</div>`;
   const body = `
     <div class="review-layout">
       ${book ? bookColumn(book) : card ? `<img class="card-image" src="${escape(card)}" alt="">` : ""}
@@ -94,8 +98,11 @@ async function reviewPage(did, rkey) {
         </a>
         <h1 class="review-title">${escape(doc.title)}</h1>
         ${typeof stars === "number" ? starsSVG(stars) : ""}
+        ${spoilers ? `<p class="spoiler-badge">Spoilers</p>` : ""}
         <hr class="rule">
-        <div class="markdown">${render(doc)}</div>
+        ${spoilers
+          ? `<details class="spoilers"><summary><strong>This review contains spoilers.</strong> <span>Show review</span></summary>${markdown}</details>`
+          : markdown}
         ${doc.bskyPostRef?.uri ? `<p class="comments"><a href="${escape(blueskyPostURL(doc.bskyPostRef.uri, author.handle))}">Comments on Bluesky</a></p>` : ""}
       </article>
     </div>`;
@@ -123,7 +130,7 @@ async function publicationPage(did) {
   const items = docs.map((r) => {
     const rkey = r.uri.split("/").pop();
     const date = r.value.publishedAt ? new Date(r.value.publishedAt).toLocaleDateString("en", { dateStyle: "medium" }) : "";
-    const preview = excerpt(r.value.description || r.value.textContent || "", 220);
+    const preview = hasSpoilers(r.value) ? "Contains spoilers." : excerpt(r.value.description || r.value.textContent || "", 220);
     return `<li><a href="/p/${did}/${escape(rkey)}">
         <span class="row-title">${escape(r.value.title)}</span>
         ${date ? `<span class="row-date">${escape(date)}</span>` : ""}
@@ -188,7 +195,17 @@ async function linkFor(pds, did, documentURI) {
   const found = links.find((r) => r.value?.document === documentURI);
   const hiveId = found?.value?.hiveId;
   if (typeof hiveId !== "string" || !/^[A-Za-z0-9_-]{1,64}$/.test(hiveId)) return null;
-  return { hiveId, book: typeof found.value.book === "string" ? found.value.book : null };
+  // The languages the writer said the review is in, as BCP-47 codes, for the text's lang attribute.
+  const langs = Array.isArray(found.value.langs)
+    ? found.value.langs.filter((code) => typeof code === "string" && /^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$/.test(code))
+    : [];
+  return { hiveId, book: typeof found.value.book === "string" ? found.value.book : null, langs };
+}
+
+/** Whether the writer marked the review as having spoilers: a "spoiler" self-label on the document. */
+function hasSpoilers(doc) {
+  const values = doc?.labels?.values;
+  return Array.isArray(values) && values.some((label) => label?.val === "spoiler");
 }
 
 /** The book in BookHive's catalogue: title, authors, cover and facts. */
@@ -398,6 +415,11 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .markdown hr { border: 0; text-align: center; margin: 1.5rem 0; }
     .markdown hr::after { content: "⁂"; color: var(--ink3); font-family: var(--reading); }
     .markdown img { max-width: 100%; border-radius: 8px; }
+    .spoiler-badge { display: inline-block; margin: .6rem 0 0; padding: .15rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 600; color: #9B4A4A; background: rgba(155, 74, 74, .1); }
+    details.spoilers > summary { cursor: pointer; list-style: none; padding: 1rem 1.1rem; border-radius: 14px; background: var(--raised); }
+    details.spoilers > summary::-webkit-details-marker { display: none; }
+    details.spoilers > summary span { color: var(--link); margin-left: .4rem; }
+    details.spoilers[open] > summary { margin-bottom: 1.2rem; }
     .comments { margin-top: 2.5rem; padding-top: 1.2rem; border-top: 1px solid var(--rule); font-size: .95rem; }
     .comments a { color: var(--link); }
 
