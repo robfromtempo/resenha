@@ -7,6 +7,7 @@
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -19,6 +20,11 @@ const LANGUAGES = ["en", "de", "es", "fr", "it", "ja", "pt"];
 
 const strings = Object.fromEntries(LANGUAGES.map((lang) => [lang, JSON.parse(readFileSync(join(here, "strings", `${lang}.json`), "utf8"))]));
 const pathFor = (lang) => (lang === "en" ? "/" : `/${lang}/`);
+
+/** The stylesheet and script, addressed by their contents, so a browser never pairs a new page with an old copy. */
+const fingerprint = (file) => createHash("sha256").update(readFileSync(join(root, file))).digest("hex").slice(0, 10);
+const CSS = `/assets/landing/landing.css?v=${fingerprint("assets/landing/landing.css")}`;
+const JS = `/assets/landing/landing.js?v=${fingerprint("assets/landing/landing.js")}`;
 
 // MARK: - The books around the phone, at three depths
 
@@ -132,7 +138,7 @@ ${lang === "en" ? `  <script>
     })();
   </script>
 ` : ""}  <link rel="preload" href="/fonts/InstrumentSerif-Regular.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="/assets/landing/landing.css">
+  <link rel="stylesheet" href="${CSS}">
 </head>
 <body>
   <div class="glow" aria-hidden="true"></div>
@@ -141,7 +147,7 @@ ${lang === "en" ? `  <script>
     <img src="/icon.png" alt="">
     <a class="name" href="${pathFor(lang)}">Resenha</a>
     ${languageMenu(lang)}
-    <a class="pill" href="${APP}" data-get-app>${esc(t.bar.getApp)}</a>
+    <a class="pill" href="${APP}"><span class="long" data-get-app>${esc(t.bar.getApp)}</span><span class="short">${esc(t.bar.getApp)}</span></a>
   </header>
 
   <main>
@@ -252,7 +258,7 @@ ${t.import.steps.map((s) => `          <li>${s}</li>`).join("\n")}
   </footer>
 
   <script type="application/json" id="landing-strings">${scriptStrings.replace(/</g, "\\u003c")}</script>
-  <script src="/assets/landing/landing.js" defer></script>
+  <script src="${JS}" defer></script>
 </body>
 </html>
 `;

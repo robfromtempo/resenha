@@ -68,7 +68,9 @@ a { color: inherit; }
   box-shadow: 0 10px 30px -12px rgba(29, 32, 36, .25);
 }
 .bar img { width: 28px; height: 28px; border-radius: 7px; }
-.bar .name { font: 400 1.35rem/1 var(--display); text-decoration: none; margin-right: auto; }
+.bar .name { font: 400 1.35rem/1 var(--display); text-decoration: none; margin-right: auto; white-space: nowrap; }
+.bar img, .bar .pill, .bar .lang { flex: none; }
+.pill .short { display: none; }
 .pill {
   display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
   padding: 9px 16px; border-radius: 999px; text-decoration: none;
@@ -292,4 +294,15 @@ main { position: relative; z-index: 1; }
   .statement { padding: 48px var(--gutter); margin-top: 10px; }
   .closing { border-radius: 28px; padding-top: 64px; }
   .bar .pill { padding: 8px 13px; font-size: .84rem; }
+}
+/* On phones the bar has no room to name the device, which the hero below already does, and the globe stands for
+   the language menu. On the smallest phones the icon stands for the name too. */
+@media (max-width: 480px) {
+  .pill .long { display: none; }
+  .pill .short { display: inline; }
+  .lang summary span { display: none; }
+}
+@media (max-width: 380px) {
+  .bar .name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .bar .lang { margin-left: auto; }
 }
