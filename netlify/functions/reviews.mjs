@@ -9,7 +9,7 @@
 // Addresses use the DID because a handle can change hands. The handle form only ever redirects.
 
 import { Marked } from "marked";
-import { renderBlocks, blocksPlainText, BLOCK_STYLES, BLOCK_SCRIPT } from "./blocks.mjs";
+import { renderBlocks, blocksPlainText, BLOCK_STYLES, BLOCK_SCRIPT, frameMarkdownCode } from "./blocks.mjs";
 
 const ORIGIN = "https://resenha.ink";
 const PUBLICATION = "site.standard.publication";
@@ -316,7 +316,7 @@ const markdown = new Marked({
 async function render(doc, pds, did) {
   const content = doc.content;
   if (content?.$type === "at.markpub.markdown" && typeof content.text?.markdown === "string") {
-    return markdown.parse(content.text.markdown);
+    return frameMarkdownCode(markdown.parse(content.text.markdown));
   }
   if (content?.$type === "pub.leaflet.content") {
     return await renderBlocks(content, { pds, did, images: (cid) => `/img/${did}/${cid}` });

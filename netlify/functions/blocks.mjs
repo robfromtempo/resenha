@@ -69,9 +69,9 @@ function renderBlock(block, ctx) {
     case "orderedList":
       return list(block, true);
     case "code":
-      return `<pre><code${block.language ? ` class="language-${escapeAttr(block.language)}"` : ""}>${escape(block.plaintext ?? "")}</code></pre>`;
+      return codeFrame(block.plaintext ?? "", block.language);
     case "math":
-      return `<pre class="math"><code>${escape(block.tex ?? "")}</code></pre>`;
+      return codeFrame(block.tex ?? "", "latex");
     case "horizontalRule":
       return "<hr>";
     case "image":
@@ -247,6 +247,167 @@ function atLink(uri) {
   return `<a class="card" href="${escapeAttr(href)}" rel="nofollow noopener"><span class="card-body"><strong>A post on the Atmosphere</strong><span class="card-host">leaflet.pub</span></span></a>`;
 }
 
+// MARK: - Code
+
+/* Code as an editor shows it: a bar with the language and a copy button, numbered lines, and colour for keywords,
+ * strings, numbers, comments, types and calls. The same small lexer as the app's, so both readers agree. */
+const C_FAMILY = ["if", "else", "for", "while", "do", "switch", "case", "default", "break", "continue", "return", "goto", "struct", "union", "enum", "typedef", "static", "const", "extern", "inline", "void", "int", "char", "float", "double", "long", "short", "unsigned", "signed", "bool", "true", "false", "sizeof", "NULL", "nullptr"];
+const JS_KEYWORDS = ["const", "let", "var", "function", "class", "extends", "return", "if", "else", "for", "while", "do", "switch", "case", "default", "break", "continue", "new", "this", "super", "import", "export", "from", "try", "catch", "finally", "throw", "typeof", "instanceof", "in", "of", "null", "undefined", "true", "false", "async", "await", "yield", "static", "get", "set", "delete", "void", "with", "as", "constructor"];
+const lang = (name, keywords, extra = {}) => ({ name, keywords: new Set(keywords), lineComments: ["//"], blockComment: ["/*", "*/"], quotes: ['"', "'"], capitalisedTypes: true, attributeMarks: ["@"], caseInsensitive: false, ...extra });
+const LANGUAGES = {
+  swift: lang("Swift", ["let", "var", "func", "class", "struct", "enum", "protocol", "extension", "import", "if", "else", "guard", "switch", "case", "default", "for", "while", "repeat", "in", "return", "break", "continue", "fallthrough", "throw", "throws", "rethrows", "try", "catch", "do", "defer", "init", "deinit", "self", "Self", "super", "static", "final", "private", "public", "internal", "fileprivate", "open", "override", "mutating", "nonmutating", "async", "await", "actor", "where", "is", "as", "nil", "true", "false", "some", "any", "typealias", "associatedtype", "inout", "lazy", "weak", "unowned", "subscript", "operator", "precedencegroup", "indirect", "convenience", "required", "dynamic", "optional", "get", "set", "willSet", "didSet", "macro"]),
+  javascript: lang("JavaScript", JS_KEYWORDS),
+  typescript: lang("TypeScript", [...JS_KEYWORDS, "interface", "type", "enum", "implements", "readonly", "declare", "namespace", "abstract", "public", "private", "protected", "keyof", "satisfies"]),
+  python: lang("Python", ["def", "class", "return", "if", "elif", "else", "for", "while", "in", "not", "and", "or", "is", "None", "True", "False", "import", "from", "as", "with", "try", "except", "finally", "raise", "lambda", "pass", "break", "continue", "yield", "global", "nonlocal", "async", "await", "del", "assert", "match", "case", "self"], { lineComments: ["#"], blockComment: null }),
+  ruby: lang("Ruby", ["def", "end", "class", "module", "if", "elsif", "else", "unless", "while", "until", "for", "in", "do", "return", "yield", "begin", "rescue", "ensure", "raise", "self", "nil", "true", "false", "and", "or", "not", "then", "when", "case", "require", "include", "extend", "attr_accessor", "attr_reader", "lambda", "proc"], { lineComments: ["#"], blockComment: null }),
+  go: lang("Go", ["package", "import", "func", "var", "const", "type", "struct", "interface", "map", "chan", "go", "defer", "if", "else", "for", "range", "switch", "case", "default", "select", "return", "break", "continue", "fallthrough", "goto", "nil", "true", "false", "make", "new", "len", "cap", "append", "error", "string", "int", "int64", "float64", "bool", "byte", "rune"]),
+  rust: lang("Rust", ["fn", "let", "mut", "const", "static", "struct", "enum", "impl", "trait", "for", "in", "while", "loop", "if", "else", "match", "return", "break", "continue", "pub", "crate", "mod", "use", "as", "where", "self", "Self", "super", "ref", "move", "dyn", "unsafe", "async", "await", "type", "true", "false", "Some", "None", "Ok", "Err", "String", "Vec", "Option", "Result", "Box"], { attributeMarks: ["#"] }),
+  kotlin: lang("Kotlin", ["fun", "val", "var", "class", "object", "interface", "data", "sealed", "open", "override", "abstract", "private", "public", "internal", "protected", "if", "else", "when", "for", "while", "do", "in", "is", "as", "return", "break", "continue", "try", "catch", "finally", "throw", "null", "true", "false", "this", "super", "import", "package", "suspend", "lateinit", "companion", "by", "get", "set"]),
+  java: lang("Java", [...C_FAMILY, "class", "interface", "extends", "implements", "public", "private", "protected", "abstract", "final", "new", "this", "super", "import", "package", "try", "catch", "finally", "throw", "throws", "instanceof", "null", "boolean", "byte", "var", "record", "sealed", "permits", "synchronized", "volatile"]),
+  c: lang("C", C_FAMILY, { attributeMarks: ["#"] }),
+  cpp: lang("C++", [...C_FAMILY, "class", "namespace", "using", "template", "typename", "new", "delete", "this", "virtual", "public", "private", "protected", "try", "catch", "throw", "auto", "constexpr", "override", "final", "std"], { attributeMarks: ["#"] }),
+  csharp: lang("C#", [...C_FAMILY, "class", "namespace", "using", "new", "this", "base", "virtual", "override", "public", "private", "protected", "internal", "try", "catch", "finally", "throw", "var", "string", "async", "await", "foreach", "in", "is", "as", "null", "get", "set", "record", "interface"], { attributeMarks: ["#"] }),
+  objc: lang("Objective-C", [...C_FAMILY, "self", "super", "nil", "YES", "NO", "id", "instancetype", "interface", "implementation", "property", "end", "import", "synthesize", "selector", "class", "protocol", "try", "catch", "finally", "throw"], { attributeMarks: ["@", "#"] }),
+  php: lang("PHP", ["function", "class", "public", "private", "protected", "static", "return", "if", "else", "elseif", "foreach", "for", "while", "echo", "new", "null", "true", "false", "array", "use", "namespace", "require", "include", "try", "catch", "throw", "fn", "match", "abstract", "interface", "extends", "implements"], { lineComments: ["//", "#"] }),
+  shell: lang("Shell", ["if", "then", "else", "elif", "fi", "for", "in", "do", "done", "while", "case", "esac", "function", "return", "export", "local", "echo", "cd", "ls", "sudo", "brew", "npm", "git", "xcodebuild", "cat", "grep", "curl", "source", "exit", "set", "read"], { lineComments: ["#"], blockComment: null, capitalisedTypes: false, attributeMarks: [] }),
+  sql: lang("SQL", ["select", "from", "where", "insert", "into", "values", "update", "set", "delete", "create", "table", "drop", "alter", "join", "left", "right", "inner", "outer", "on", "group", "by", "order", "having", "limit", "offset", "as", "and", "or", "not", "null", "is", "in", "exists", "between", "like", "distinct", "count", "sum", "avg", "min", "max", "with", "union", "primary", "key", "references", "index", "returning", "case", "when", "then", "else", "end"], { lineComments: ["--"], capitalisedTypes: false, attributeMarks: [], caseInsensitive: true }),
+  json: lang("JSON", ["true", "false", "null"], { lineComments: [], blockComment: null, quotes: ['"'], capitalisedTypes: false, attributeMarks: [] }),
+  yaml: lang("YAML", ["true", "false", "null", "yes", "no"], { lineComments: ["#"], blockComment: null, capitalisedTypes: false, attributeMarks: [] }),
+  css: lang("CSS", ["important", "media", "import", "font-face", "keyframes", "supports"], { lineComments: [], capitalisedTypes: false }),
+  html: lang("HTML", ["html", "head", "body", "div", "span", "p", "a", "img", "ul", "ol", "li", "h1", "h2", "h3", "h4", "section", "article", "nav", "header", "footer", "main", "script", "style", "link", "meta", "title", "button", "input", "form", "table", "tr", "td", "th", "svg", "path"], { lineComments: [], blockComment: ["<!--", "-->"], capitalisedTypes: false, attributeMarks: [] }),
+  markdown: lang("Markdown", [], { lineComments: [], blockComment: null, quotes: [], capitalisedTypes: false, attributeMarks: ["#"] }),
+  latex: lang("LaTeX", [], { lineComments: ["%"], blockComment: null, quotes: [], capitalisedTypes: false, attributeMarks: ["\\"] }),
+};
+const LANGUAGE_ALIASES = { js: "javascript", jsx: "javascript", mjs: "javascript", node: "javascript", ts: "typescript", tsx: "typescript", py: "python", python3: "python", rb: "ruby", golang: "go", rs: "rust", kt: "kotlin", kts: "kotlin", "c++": "cpp", cc: "cpp", cxx: "cpp", h: "c", hpp: "cpp", cs: "csharp", "c#": "csharp", "objective-c": "objc", objectivec: "objc", m: "objc", sh: "shell", bash: "shell", zsh: "shell", fish: "shell", console: "shell", terminal: "shell", yml: "yaml", htm: "html", xml: "html", svg: "html", scss: "css", less: "css", postgres: "sql", postgresql: "sql", mysql: "sql", sqlite: "sql", md: "markdown", tex: "latex" };
+
+function languageFor(name, code) {
+  if (typeof name === "string" && name.trim()) {
+    const key = name.trim().toLowerCase();
+    return { language: LANGUAGES[LANGUAGE_ALIASES[key] ?? key] ?? null, label: LANGUAGES[LANGUAGE_ALIASES[key] ?? key]?.name ?? name.trim() };
+  }
+  const detected = detectLanguage(code);
+  return { language: detected, label: detected?.name ?? "Code" };
+}
+
+function detectLanguage(code) {
+  const sample = String(code).slice(0, 4000);
+  const has = (pattern) => new RegExp(pattern, "m").test(sample);
+  if (has("^\\s*[\\[{]") && has("\"\\s*:") && !has("\\b(func|def|function|let|var|const)\\b")) return LANGUAGES.json;
+  if (has("\\b(func|let|var|guard)\\b") && has("\\b(func|guard|struct|protocol|extension)\\b")) return LANGUAGES.swift;
+  if (has("^\\s*(def|class) \\w+.*:\\s*$") && !has("[{};]\\s*$")) return LANGUAGES.python;
+  if (has("\\b(import|from)\\b.*\\n") && has("^\\s*def ")) return LANGUAGES.python;
+  if (has("\\b(const|let|var|function)\\b") && has("=>|console\\.|require\\(|import .* from")) return LANGUAGES.javascript;
+  if (has("\\bfunc \\w+\\(.*\\) .*\\{") && has("\\bpackage \\w+|:= ")) return LANGUAGES.go;
+  if (has("\\bfn \\w+\\(|\\blet mut\\b|impl |pub fn")) return LANGUAGES.rust;
+  if (has("\\bfun \\w+\\(|\\bval \\w+")) return LANGUAGES.kotlin;
+  if (has("\\bpublic (static )?(class|void)\\b|System\\.out")) return LANGUAGES.java;
+  if (has("#include\\b|\\bstd::|printf\\(")) return LANGUAGES.cpp;
+  if (has("^\\s*(SELECT|INSERT|UPDATE|DELETE|CREATE|WITH)\\b") && has("\\bFROM\\b|\\bINTO\\b|\\bTABLE\\b")) return LANGUAGES.sql;
+  if (has("^\\s*(\\$ |#!/bin/|sudo |brew |npm |git )")) return LANGUAGES.shell;
+  if (has("^\\s*<[a-zA-Z!]") && has("</\\w+>|/>")) return LANGUAGES.html;
+  if (has("^\\s*[.#]?[\\w-]+\\s*\\{[^}]*:[^}]*\\}")) return LANGUAGES.css;
+  if (has("^\\s*def \\w+|\\bend\\s*$|\\bputs\\b")) return LANGUAGES.ruby;
+  return null;
+}
+
+/** The code as [text, kind] pieces: keyword, string, number, comment, type, function, attribute or plain. */
+function tokenize(code, language) {
+  if (!language) return [[code, "plain"]];
+  const chars = Array.from(code);
+  const tokens = [];
+  let i = 0;
+  const isWord = (ch) => /[\p{L}\p{N}_]/u.test(ch);
+  const matches = (marker) => chars.slice(i, i + marker.length).join("") === marker;
+  const push = (end, kind) => { tokens.push([chars.slice(i, end).join(""), kind]); i = end; };
+  while (i < chars.length) {
+    const ch = chars[i];
+    const lineComment = language.lineComments.find(matches);
+    if (lineComment) {
+      let end = i;
+      while (end < chars.length && chars[end] !== "\n") end++;
+      push(end, "comment");
+      continue;
+    }
+    if (language.blockComment && matches(language.blockComment[0])) {
+      const close = language.blockComment[1];
+      let end = i + language.blockComment[0].length;
+      while (end < chars.length) {
+        if (chars.slice(end, end + close.length).join("") === close) { end += close.length; break; }
+        end++;
+      }
+      push(end, "comment");
+      continue;
+    }
+    if (language.quotes.includes(ch)) {
+      const triple = matches(ch.repeat(3));
+      let end = i + (triple ? 3 : 1);
+      while (end < chars.length) {
+        if (chars[end] === "\\") { end += 2; continue; }
+        if (triple) {
+          if (chars[end] === ch && chars[end + 1] === ch && chars[end + 2] === ch) { end += 3; break; }
+        } else if (chars[end] === ch) { end++; break; } else if (chars[end] === "\n") { break; }
+        end++;
+      }
+      push(end, "string");
+      continue;
+    }
+    if (/\p{N}/u.test(ch) || (ch === "." && /[0-9]/.test(chars[i + 1] ?? "") && (i === 0 || !isWord(chars[i - 1])))) {
+      let end = i + 1;
+      while (end < chars.length && (/[0-9a-fA-F_.xXob]/.test(chars[end]) || ((chars[end] === "+" || chars[end] === "-") && /[eE]/.test(chars[end - 1])))) end++;
+      push(end, "number");
+      continue;
+    }
+    if (language.attributeMarks.includes(ch) && /\p{L}/u.test(chars[i + 1] ?? "")) {
+      let end = i + 1;
+      while (end < chars.length && (isWord(chars[end]) || chars[end] === ".")) end++;
+      push(end, "attribute");
+      continue;
+    }
+    if (/\p{L}/u.test(ch) || ch === "_" || ch === "$") {
+      let end = i + 1;
+      while (end < chars.length && isWord(chars[end])) end++;
+      const word = chars.slice(i, end).join("");
+      let kind;
+      if (language.keywords.has(language.caseInsensitive ? word.toLowerCase() : word)) kind = "keyword";
+      else if (language.capitalisedTypes && /^\p{Lu}/u.test(word) && word.length > 1 && /\p{Ll}/u.test(word)) kind = "type";
+      else {
+        let probe = end;
+        while (probe < chars.length && chars[probe] === " ") probe++;
+        kind = chars[probe] === "(" ? "function" : "plain";
+      }
+      push(end, kind);
+      continue;
+    }
+    push(i + 1, "plain");
+  }
+  return tokens;
+}
+
+/** A code block as an editor frame: language bar, copy button, numbered coloured lines. */
+export function codeFrame(code, languageName) {
+  const text = String(code ?? "").replace(/\n+$/, "");
+  const { language, label } = languageFor(languageName, text);
+  const lines = [""];
+  for (const [piece, kind] of tokenize(text, language)) {
+    const parts = piece.split("\n");
+    parts.forEach((part, index) => {
+      if (index > 0) lines.push("");
+      if (!part) return;
+      lines[lines.length - 1] += kind === "plain" ? escape(part) : `<span class="tk-${kind}">${escape(part)}</span>`;
+    });
+  }
+  const body = lines.map((line, index) => `<span class="ln">${index + 1}</span><span class="lc">${line || " "}</span>`).join("\n");
+  return `<div class="codeblock"><div class="code-bar"><span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="code-lang">${escape(label)}</span><button type="button" class="code-copy">Copy</button></div><pre class="code-lines"><code>${body}</code></pre></div>`;
+}
+
+/** Frames the code blocks Markdown produced, so both formats read the same. */
+export function frameMarkdownCode(html) {
+  return html.replace(/<pre><code(?: class="language-([^"]*)")?>([\s\S]*?)<\/code><\/pre>/g, (_, language, body) => {
+    const decoded = body.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&");
+    return codeFrame(decoded, language);
+  });
+}
+
 // MARK: - Rich text
 
 /** Plain text with facets, as HTML. Facet ranges count UTF-8 bytes, and may overlap, so the text is cut at every
@@ -370,6 +531,24 @@ const escapeAttr = escape;
 
 /** Styles for everything above, inside the page's `.markdown` reading column. */
 export const BLOCK_STYLES = `
+    .markdown .codeblock { margin: 0 0 1rem; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--paper-raised, #FCFCFD); }
+    .markdown .code-bar { display: flex; align-items: center; gap: .5rem; padding: .45rem .75rem; background: var(--code); border-bottom: 1px solid var(--rule); font: 500 .72rem/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink2); }
+    .markdown .code-dots { display: inline-flex; gap: 4px; margin-right: .2rem; }
+    .markdown .code-dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--rule); display: block; }
+    .markdown .code-lang { flex: 1; }
+    .markdown .code-copy { font: inherit; color: var(--ink2); background: none; border: 0; padding: .15rem .4rem; border-radius: 6px; cursor: pointer; }
+    .markdown .code-copy:hover { background: rgba(0,0,0,.05); color: var(--ink); }
+    .markdown pre.code-lines { margin: 0; padding: .75rem 0; background: none; border: 0; border-radius: 0; overflow-x: auto; font: .78em/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 4; }
+    .markdown pre.code-lines code { background: none; padding: 0; font-size: inherit; display: grid; grid-template-columns: max-content 1fr; }
+    .markdown pre.code-lines .ln { color: var(--ink3); text-align: right; padding: 0 .9rem 0 .9rem; user-select: none; }
+    .markdown pre.code-lines .lc { padding-right: 1rem; white-space: pre; }
+    .markdown .tk-keyword { color: #AD3DA4; }
+    .markdown .tk-string { color: #C41A16; }
+    .markdown .tk-number { color: #272AD8; }
+    .markdown .tk-comment { color: #6B7A88; font-style: italic; }
+    .markdown .tk-type { color: #0B4F79; }
+    .markdown .tk-function { color: #326D74; }
+    .markdown .tk-attribute { color: #6C36A9; }
     .markdown p.small { font-size: .9em; color: var(--ink2); }
     .markdown p.large { font-size: 1.25em; }
     .markdown mark { background: var(--mark, rgba(255,230,120,.6)); color: inherit; padding: 0 .1em; border-radius: 2px; }
@@ -419,6 +598,16 @@ export const BLOCK_STYLES = `
 
 /** Loads a player into its card when the reader asks, and nothing before. */
 export const BLOCK_SCRIPT = `
+  document.addEventListener("click", function (event) {
+    var copy = event.target.closest(".code-copy");
+    if (!copy) return;
+    var lines = copy.closest(".codeblock").querySelectorAll(".lc");
+    var text = Array.prototype.map.call(lines, function (line) { return line.textContent; }).join("\\n");
+    navigator.clipboard.writeText(text).then(function () {
+      copy.textContent = "Copied";
+      setTimeout(function () { copy.textContent = "Copy"; }, 1600);
+    });
+  });
   document.addEventListener("click", function (event) {
     var button = event.target.closest(".embed-load");
     if (!button) return;
