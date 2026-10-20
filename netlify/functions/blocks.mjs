@@ -104,11 +104,14 @@ function list(block, ordered) {
   const items = (block.children ?? []).map((item) => {
     const content = item?.content ? renderBlock(item.content, listCtx) : "";
     const check = typeof item?.checked === "boolean" ? `<span class="check" aria-hidden="true">${item.checked ? "☑" : "☐"}</span> ` : "";
+    // A nested list of the same kind is the item's children; one of the other kind is a whole list block.
     const nested = item?.children?.length
-      ? list({ children: item.children }, false)
-      : item?.orderedListChildren?.length
-        ? list({ children: item.orderedListChildren }, true)
-        : "";
+      ? list({ children: item.children }, ordered)
+      : item?.orderedListChildren?.children?.length
+        ? list(item.orderedListChildren, true)
+        : item?.unorderedListChildren?.children?.length
+          ? list(item.unorderedListChildren, false)
+          : "";
     return `<li${typeof item?.checked === "boolean" ? ' class="task"' : ""}>${check}${content.replace(/^<p>|<\/p>$/g, "")}${nested}</li>`;
   });
   const start = ordered && Number(block.startIndex) > 1 ? ` start="${Number(block.startIndex)}"` : "";
