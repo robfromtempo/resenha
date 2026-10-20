@@ -9,6 +9,7 @@
 // Addresses use the DID because a handle can change hands. The handle form only ever redirects.
 
 import { Marked } from "marked";
+import { renderBlocks, blocksPlainText, BLOCK_STYLES, BLOCK_SCRIPT } from "./blocks.mjs";
 
 const ORIGIN = "https://resenha.ink";
 const PUBLICATION = "site.standard.publication";
@@ -25,6 +26,8 @@ export const config = {
     "/.well-known/site.standard.publication/p/:did",
     "/p/:did",
     "/p/:did/:rkey",
+    // Pictures in reviews, served from the author's own account by their content address.
+    "/img/:did/:cid",
     // One catch-all: Netlify doesn't match a named segment that ends the address, as in /@alice.example.
     "/@*",
   ],
@@ -36,6 +39,7 @@ export default async (request, context) => {
     if (url.pathname.startsWith("/@")) return await redirectHandle(url);
     const { did, rkey } = context.params;
     if (!isDid(did)) return notFound();
+    if (url.pathname.startsWith("/img/")) return await image(did, context.params.cid);
     if (url.pathname.startsWith("/.well-known/")) return await publicationURI(did);
     if (rkey) return await reviewPage(did, rkey);
     return await publicationPage(did);
@@ -81,12 +85,12 @@ async function reviewPage(did, rkey) {
   const [book, stars] = link ? await Promise.all([bookHiveBook(link.hiveId), starsOf(pds, link.book)]) : [null, null];
   const address = `${ORIGIN}/p/${did}/${rkey}`;
   // A review with spoilers never puts its opening in previews, whatever its description says.
-  const summary = hasSpoilers(doc) ? "This review contains spoilers." : excerpt(doc.description || doc.textContent || "", 300);
+  const summary = hasSpoilers(doc) ? "This review contains spoilers." : excerpt(doc.description || doc.textContent || plainTextOf(doc), 300);
   const card = doc.coverImage?.ref?.$link ? blobURL(pds, did, doc.coverImage.ref.$link) : null;
   const published = doc.publishedAt ? new Date(doc.publishedAt) : null;
   const spoilers = hasSpoilers(doc);
   const lang = link?.langs?.[0];
-  const markdown = `<div class="markdown"${lang ? ` lang="${escape(lang)}"` : ""}>${render(doc)}</div>`;
+  const markdown = `<div class="markdown"${lang ? ` lang="${escape(lang)}"` : ""}>${await render(doc, pds, did)}</div>`;
   const body = `
     <div class="review-layout">
       ${book ? bookColumn(book) : card ? `<img class="card-image" src="${escape(card)}" alt="">` : ""}
@@ -130,7 +134,7 @@ async function publicationPage(did) {
   const items = docs.map((r) => {
     const rkey = r.uri.split("/").pop();
     const date = r.value.publishedAt ? new Date(r.value.publishedAt).toLocaleDateString("en", { dateStyle: "medium" }) : "";
-    const preview = hasSpoilers(r.value) ? "Contains spoilers." : excerpt(r.value.description || r.value.textContent || "", 220);
+    const preview = hasSpoilers(r.value) ? "Contains spoilers." : excerpt(r.value.description || r.value.textContent || plainTextOf(r.value), 220);
     return `<li><a href="/p/${did}/${escape(rkey)}">
         <span class="row-title">${escape(r.value.title)}</span>
         ${date ? `<span class="row-date">${escape(date)}</span>` : ""}
@@ -200,6 +204,26 @@ async function linkFor(pds, did, documentURI) {
     ? found.value.langs.filter((code) => typeof code === "string" && /^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$/.test(code))
     : [];
   return { hiveId, book: typeof found.value.book === "string" ? found.value.book : null, langs };
+}
+
+/** The document's text when it carries none, from its blocks. */
+function plainTextOf(doc) {
+  return doc?.content?.$type === "pub.leaflet.content" ? blocksPlainText(doc.content) : "";
+}
+
+/** A picture from an author's account, by its content address. Addresses never change, so it's cached for a year. */
+async function image(did, cid) {
+  if (!isDid(did) || !/^[a-z2-7]{20,80}$/i.test(cid ?? "")) return notFound("text/plain");
+  const pds = await pdsFor(did);
+  if (!pds) return notFound("text/plain");
+  const upstream = await fetch(`${pds}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(cid)}`);
+  if (!upstream.ok) return notFound("text/plain");
+  const type = upstream.headers.get("content-type") || "application/octet-stream";
+  if (!type.startsWith("image/")) return notFound("text/plain");
+  return new Response(upstream.body, {
+    status: 200,
+    headers: { "Content-Type": type, "Cache-Control": "public, max-age=31536000, immutable", "Netlify-CDN-Cache-Control": "public, durable, max-age=31536000, immutable" },
+  });
 }
 
 /** Whether the writer marked the review as having spoilers: a "spoiler" self-label on the document. */
@@ -289,10 +313,13 @@ const markdown = new Marked({
   },
 });
 
-function render(doc) {
+async function render(doc, pds, did) {
   const content = doc.content;
   if (content?.$type === "at.markpub.markdown" && typeof content.text?.markdown === "string") {
     return markdown.parse(content.text.markdown);
+  }
+  if (content?.$type === "pub.leaflet.content") {
+    return await renderBlocks(content, { pds, did, images: (cid) => `/img/${did}/${cid}` });
   }
   return (doc.textContent ?? "").split(/\n{2,}/).map((p) => `<p>${escape(p).replace(/\n/g, "<br>")}</p>`).join("");
 }
@@ -415,6 +442,7 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .markdown hr { border: 0; text-align: center; margin: 1.5rem 0; }
     .markdown hr::after { content: "⁂"; color: var(--ink3); font-family: var(--reading); }
     .markdown img { max-width: 100%; border-radius: 8px; }
+${BLOCK_STYLES}
     .spoiler-badge { display: inline-block; margin: .6rem 0 0; padding: .15rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 600; color: #9B4A4A; background: rgba(155, 74, 74, .1); }
     details.spoilers > summary { cursor: pointer; list-style: none; padding: 1rem 1.1rem; border-radius: 14px; background: var(--raised); }
     details.spoilers > summary::-webkit-details-marker { display: none; }
@@ -464,6 +492,7 @@ function page({ title, description = "", canonical, image, type = "website", hea
 <body>
   <main>
     ${getApp()}
+    <script>${BLOCK_SCRIPT}</script>
     ${body}
     <footer>Published with <a href="/">Resenha</a> on the Atmosphere.</footer>
   </main>
