@@ -1,0 +1,30 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.friend",
+  "description": "Marks that the account added another reader as a friend in Resenha. Friends are readers who follow each other; this record lets the other reader's app show the follow as a friend request.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "One per friend. The record key is the friend's DID, so whether someone added a reader as a friend can be found with a single getRecord. Written alongside an app.bsky.graph.follow of the same account.",
+      "key": "any",
+      "record": {
+        "type": "object",
+        "required": [
+          "subject",
+          "createdAt"
+        ],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "format": "did",
+            "description": "The reader added as a friend. Also the record key."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    }
+  }
+}

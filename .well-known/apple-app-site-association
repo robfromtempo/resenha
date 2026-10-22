@@ -2,10 +2,22 @@
   "applinks": {
     "details": [
       {
-        "appIDs": ["24FX5MG467.com.robertoramos.Resenha"],
+        "appIDs": [
+          "24FX5MG467.com.robertoramos.Resenha"
+        ],
         "components": [
-          { "/": "/p/*", "comment": "Published reviews and readers' publications" },
-          { "/": "/@*", "comment": "The same pages, by handle" }
+          {
+            "/": "/p/*",
+            "comment": "Published reviews and readers' publications"
+          },
+          {
+            "/": "/@*",
+            "comment": "The same pages, by handle"
+          },
+          {
+            "/": "/friend/*",
+            "comment": "Friend codes: adding a reader as a friend"
+          }
         ]
       }
     ]

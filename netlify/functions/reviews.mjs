@@ -5,6 +5,7 @@
 //   /p/<did>                                          the reader's reviews
 //   /p/<did>/<rkey>                                   one review, with its verification tag and link-card tags
 //   /@<handle>[/...]                                  the same pages by handle; redirects to the DID address
+//   /friend/<did>                                     a reader's friend code: who it adds, and the app to add them with
 //
 // Addresses use the DID because a handle can change hands. The handle form only ever redirects.
 
@@ -26,6 +27,8 @@ export const config = {
     "/.well-known/site.standard.publication/p/:did",
     "/p/:did",
     "/p/:did/:rkey",
+    // A friend code's link. With Resenha installed, the phone opens the app instead of this page.
+    "/friend/:did",
     // Pictures in reviews, served from the author's own account by their content address.
     "/img/:did/:cid",
     // One catch-all: Netlify doesn't match a named segment that ends the address, as in /@alice.example.
@@ -40,6 +43,7 @@ export default async (request, context) => {
     const { did, rkey } = context.params;
     if (!isDid(did)) return notFound();
     if (url.pathname.startsWith("/img/")) return await image(did, context.params.cid);
+    if (url.pathname.startsWith("/friend/")) return await friendPage(did);
     if (url.pathname.startsWith("/.well-known/")) return await publicationURI(did);
     if (rkey) return await reviewPage(did, rkey);
     return await publicationPage(did);
@@ -155,6 +159,29 @@ async function publicationPage(did) {
         </div>
       </header>
       ${items ? `<ul class="reviews">${items}</ul>` : `<p class="note">No reviews yet.</p>`}`,
+  }), 200, 600);
+}
+
+/** Who a friend code adds, for someone whose phone opened it without Resenha. Installing Resenha, signing in and
+ *  opening the link again adds them. */
+async function friendPage(did) {
+  const author = await authorOf(did);
+  const name = author.name;
+  return html(page({
+    title: `Add ${name} as a friend on Resenha`,
+    description: `${name} wants to be friends on Resenha, where readers share what they read and write about books.`,
+    canonical: `${ORIGIN}/friend/${did}`,
+    image: author.avatar ?? undefined,
+    body: `
+      <header class="publication friend">
+        ${author.avatar ? `<img class="avatar large" src="${escape(author.avatar)}" alt="">` : `<span class="avatar large placeholder">${escape(name.replace(/^@/, "").slice(0, 1).toUpperCase())}</span>`}
+        <div>
+          <h1>${escape(name)}</h1>
+          ${author.handle ? `<p class="meta">@${escape(author.handle)}</p>` : ""}
+        </div>
+      </header>
+      <p class="markdown">${escape(name)} wants to be friends on Resenha. Friends follow each other, and see what the other starts, finishes and reviews.</p>
+      <p class="note">Get Resenha, sign in, then open this link again on the same device to add ${escape(name)}.</p>`,
   }), 200, 600);
 }
 
