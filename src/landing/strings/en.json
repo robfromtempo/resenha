@@ -26,22 +26,35 @@
   "write": {
     "eyebrow": "Write",
     "title": "A word processor for reviews.",
-    "body": "Headings, quotes, lists and links, and a title of its own. Mark spoilers, choose the language, and pick up any draft on your other devices through iCloud.",
-    "chips": ["Formatting", "Spoiler warnings", "Kobo highlights", "Drafts in iCloud"],
+    "body": "Headings, quotes, lists, code and links, and a title of its own. Add pictures, posts from Bluesky, players and drawings. Mark spoilers, choose the language, and pick up any draft on your other devices through iCloud.",
+    "chips": [
+      "Formatting",
+      "Pictures & posts",
+      "Kobo highlights",
+      "Drafts in iCloud"
+    ],
     "alt": "Writing a review in Resenha on a Mac."
   },
   "follow": {
     "eyebrow": "Follow",
     "title": "The Parlor.",
     "body": "See what the readers you follow are starting, finishing and reviewing, as it happens. Following someone in Resenha is the same follow as on Bluesky and BookHive.",
-    "chips": ["Live updates", "Readers’ shelves", "Friends’ reviews"],
+    "chips": [
+      "Live updates",
+      "Readers’ shelves",
+      "Friends’ reviews"
+    ],
     "alt": "The Parlor on iPad, showing what followed readers started and finished."
   },
   "publish": {
     "eyebrow": "Publish",
     "title": "On the open web.",
     "body": "Your reviews live in your own account on the Atmosphere: formatted on resenha.ink, as plain text on BookHive, and posted to Bluesky and Mu Social, where replies become comments.",
-    "chips": ["resenha.ink", "BookHive", "Bluesky & Mu Social"],
+    "chips": [
+      "resenha.ink",
+      "BookHive",
+      "Bluesky & Mu Social"
+    ],
     "alt": "Reading a community review in Resenha on iPhone."
   },
   "import": {
@@ -59,8 +72,12 @@
   "collect": {
     "eyebrow": "Collect",
     "title": "Your whole library.",
-    "body": "Everything you’ve read, are reading or want to read, in one place. Scan a barcode to add a book, and sort your books onto shelves you can share.",
-    "chips": ["Barcode scanning", "Shelves", "Reading dates"],
+    "body": "Everything you’ve read, are reading or want to read, in one place. Scan a barcode to add a book, sort your books onto shelves you can share, and see every book on the days you read it in the Timeline.",
+    "chips": [
+      "Barcode scanning",
+      "Shelves",
+      "Timeline"
+    ],
     "alt": "A library of book covers in Resenha on a Mac."
   },
   "closing": {

@@ -26,22 +26,35 @@
   "write": {
     "eyebrow": "Scrivi",
     "title": "Un elaboratore di testi per le recensioni.",
-    "body": "Intestazioni, citazioni, elenchi e link, e un titolo tutto suo. Segnala gli spoiler, scegli la lingua e riprendi qualsiasi bozza sugli altri dispositivi con iCloud.",
-    "chips": ["Formattazione", "Avvisi spoiler", "Evidenziazioni Kobo", "Bozze su iCloud"],
+    "body": "Intestazioni, citazioni, elenchi, codice e link, e un titolo tutto suo. Aggiungi immagini, post da Bluesky, player e disegni. Segnala gli spoiler, scegli la lingua e riprendi qualsiasi bozza sugli altri dispositivi con iCloud.",
+    "chips": [
+      "Formattazione",
+      "Immagini e post",
+      "Evidenziazioni Kobo",
+      "Bozze su iCloud"
+    ],
     "alt": "Scrivere una recensione in Resenha su Mac."
   },
   "follow": {
     "eyebrow": "Segui",
     "title": "Il Salotto.",
     "body": "Guarda cosa iniziano, finiscono e recensiscono le persone che segui, mentre succede. Seguire qualcuno in Resenha è come seguirlo su Bluesky e BookHive.",
-    "chips": ["In tempo reale", "Scaffali dei lettori", "Recensioni degli amici"],
+    "chips": [
+      "In tempo reale",
+      "Scaffali dei lettori",
+      "Recensioni degli amici"
+    ],
     "alt": "Il Salotto su iPad, con ciò che i lettori seguiti hanno iniziato e finito."
   },
   "publish": {
     "eyebrow": "Pubblica",
     "title": "Sul web aperto.",
     "body": "Le tue recensioni vivono nel tuo account sull’Atmosphere: formattate su resenha.ink, come testo semplice su BookHive e pubblicate su Bluesky e Mu Social, dove le risposte diventano commenti.",
-    "chips": ["resenha.ink", "BookHive", "Bluesky e Mu Social"],
+    "chips": [
+      "resenha.ink",
+      "BookHive",
+      "Bluesky e Mu Social"
+    ],
     "alt": "Leggere una recensione della community in Resenha su iPhone."
   },
   "import": {
@@ -59,8 +72,12 @@
   "collect": {
     "eyebrow": "Raccogli",
     "title": "Tutta la tua libreria.",
-    "body": "Tutto ciò che hai letto, stai leggendo o vuoi leggere, in un unico posto. Scansiona un codice a barre per aggiungere un libro e sistema i tuoi libri su scaffali da condividere.",
-    "chips": ["Scansione dei codici a barre", "Scaffali", "Date di lettura"],
+    "body": "Tutto ciò che hai letto, stai leggendo o vuoi leggere, in un unico posto. Scansiona un codice a barre per aggiungere un libro, sistema i tuoi libri su scaffali da condividere e rivedi ogni libro nei giorni in cui l’hai letto nella cronologia.",
+    "chips": [
+      "Scansione dei codici a barre",
+      "Scaffali",
+      "Cronologia"
+    ],
     "alt": "Una libreria di copertine in Resenha su Mac."
   },
   "closing": {

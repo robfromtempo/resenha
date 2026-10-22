@@ -26,22 +26,35 @@
   "write": {
     "eyebrow": "Escreva",
     "title": "Um editor de texto para resenhas.",
-    "body": "Títulos, citações, listas e links, e um título só dela. Marque spoilers, escolha o idioma e continue qualquer rascunho nos seus outros dispositivos pelo iCloud.",
-    "chips": ["Formatação", "Avisos de spoiler", "Destaques do Kobo", "Rascunhos no iCloud"],
+    "body": "Títulos, citações, listas, código e links, e um título só dela. Adicione imagens, posts do Bluesky, players e desenhos. Marque spoilers, escolha o idioma e continue qualquer rascunho nos seus outros dispositivos pelo iCloud.",
+    "chips": [
+      "Formatação",
+      "Imagens e posts",
+      "Destaques do Kobo",
+      "Rascunhos no iCloud"
+    ],
     "alt": "Escrevendo uma resenha no Resenha em um Mac."
   },
   "follow": {
     "eyebrow": "Siga",
     "title": "O Salão.",
     "body": "Veja o que as pessoas que você segue começam, terminam e resenham, na hora em que acontece. Seguir alguém no Resenha é o mesmo que seguir no Bluesky e no BookHive.",
-    "chips": ["Ao vivo", "Estantes dos leitores", "Resenhas dos amigos"],
+    "chips": [
+      "Ao vivo",
+      "Estantes dos leitores",
+      "Resenhas dos amigos"
+    ],
     "alt": "O Salão no iPad, com o que os leitores seguidos começaram e terminaram."
   },
   "publish": {
     "eyebrow": "Publique",
     "title": "Na web aberta.",
     "body": "Suas resenhas ficam na sua própria conta na Atmosphere: formatadas no resenha.ink, como texto simples no BookHive e postadas no Bluesky e no Mu Social, onde as respostas viram comentários.",
-    "chips": ["resenha.ink", "BookHive", "Bluesky e Mu Social"],
+    "chips": [
+      "resenha.ink",
+      "BookHive",
+      "Bluesky e Mu Social"
+    ],
     "alt": "Lendo uma resenha da comunidade no Resenha no iPhone."
   },
   "import": {
@@ -59,8 +72,12 @@
   "collect": {
     "eyebrow": "Reúna",
     "title": "Sua biblioteca inteira.",
-    "body": "Tudo o que você já leu, está lendo ou quer ler, em um só lugar. Escaneie um código de barras para adicionar um livro e organize seus livros em estantes que você pode compartilhar.",
-    "chips": ["Leitura de código de barras", "Estantes", "Datas de leitura"],
+    "body": "Tudo o que você já leu, está lendo ou quer ler, em um só lugar. Escaneie um código de barras para adicionar um livro, organize seus livros em estantes que você pode compartilhar e veja na linha do tempo cada livro nos dias em que o leu.",
+    "chips": [
+      "Leitura de código de barras",
+      "Estantes",
+      "Linha do tempo"
+    ],
     "alt": "Uma biblioteca de capas de livros no Resenha em um Mac."
   },
   "closing": {

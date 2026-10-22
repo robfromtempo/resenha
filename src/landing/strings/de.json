@@ -26,22 +26,35 @@
   "write": {
     "eyebrow": "Schreiben",
     "title": "Eine Textverarbeitung für Rezensionen.",
-    "body": "Überschriften, Zitate, Listen und Links, dazu ein eigener Titel. Markiere Spoiler, wähle die Sprache und schreib jeden Entwurf auf deinen anderen Geräten über iCloud weiter.",
-    "chips": ["Formatierung", "Spoiler-Warnungen", "Kobo-Markierungen", "Entwürfe in iCloud"],
+    "body": "Überschriften, Zitate, Listen, Code und Links, dazu ein eigener Titel. Füge Bilder, Beiträge von Bluesky, Player und Zeichnungen ein. Markiere Spoiler, wähle die Sprache und schreib jeden Entwurf auf deinen anderen Geräten über iCloud weiter.",
+    "chips": [
+      "Formatierung",
+      "Bilder & Beiträge",
+      "Kobo-Markierungen",
+      "Entwürfe in iCloud"
+    ],
     "alt": "Eine Rezension in Resenha auf dem Mac schreiben."
   },
   "follow": {
     "eyebrow": "Folgen",
     "title": "Der Salon.",
     "body": "Sieh, welche Bücher die Menschen, denen du folgst, beginnen, beenden und rezensieren – sobald es passiert. Wem du in Resenha folgst, dem folgst du auch auf Bluesky und BookHive.",
-    "chips": ["Live-Updates", "Regale anderer", "Rezensionen deiner Freunde"],
+    "chips": [
+      "Live-Updates",
+      "Regale anderer",
+      "Rezensionen deiner Freunde"
+    ],
     "alt": "Der Salon auf dem iPad mit den Büchern, die gefolgte Leser begonnen und beendet haben."
   },
   "publish": {
     "eyebrow": "Veröffentlichen",
     "title": "Im offenen Web.",
     "body": "Deine Rezensionen liegen in deinem eigenen Konto in der Atmosphere: formatiert auf resenha.ink, als reiner Text auf BookHive und als Beitrag auf Bluesky und Mu Social, wo Antworten zu Kommentaren werden.",
-    "chips": ["resenha.ink", "BookHive", "Bluesky & Mu Social"],
+    "chips": [
+      "resenha.ink",
+      "BookHive",
+      "Bluesky & Mu Social"
+    ],
     "alt": "Eine Rezension aus der Community in Resenha auf dem iPhone lesen."
   },
   "import": {
@@ -59,8 +72,12 @@
   "collect": {
     "eyebrow": "Sammeln",
     "title": "Deine ganze Bibliothek.",
-    "body": "Alles, was du gelesen hast, gerade liest oder lesen möchtest, an einem Ort. Scanne einen Barcode, um ein Buch hinzuzufügen, und sortiere deine Bücher in Regale, die du teilen kannst.",
-    "chips": ["Barcode-Scan", "Regale", "Lesedaten"],
+    "body": "Alles, was du gelesen hast, gerade liest oder lesen möchtest, an einem Ort. Scanne einen Barcode, um ein Buch hinzuzufügen, sortiere deine Bücher in Regale, die du teilen kannst, und sieh in der Zeitleiste jedes Buch an den Tagen, an denen du es gelesen hast.",
+    "chips": [
+      "Barcode-Scan",
+      "Regale",
+      "Zeitleiste"
+    ],
     "alt": "Eine Bibliothek voller Buchcover in Resenha auf dem Mac."
   },
   "closing": {

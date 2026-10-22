@@ -26,10 +26,10 @@
   "write": {
     "eyebrow": "Escribe",
     "title": "Un procesador de textos para reseñas.",
-    "body": "Títulos, citas, listas y enlaces, y un título propio para cada reseña. Marca los spoilers, elige el idioma y retoma cualquier borrador en tus otros dispositivos con iCloud.",
+    "body": "Títulos, citas, listas, código y enlaces, y un título propio para cada reseña. Añade imágenes, publicaciones de Bluesky, reproductores y dibujos. Marca los spoilers, elige el idioma y retoma cualquier borrador en tus otros dispositivos con iCloud.",
     "chips": [
       "Formato",
-      "Avisos de spoilers",
+      "Imágenes y publicaciones",
       "Subrayados de Kobo",
       "Borradores en iCloud"
     ],
@@ -72,11 +72,11 @@
   "collect": {
     "eyebrow": "Colecciona",
     "title": "Toda tu biblioteca.",
-    "body": "Todo lo que has leído, estás leyendo o quieres leer, en un solo lugar. Escanea un código de barras para añadir un libro y ordena tus libros en estanterías que puedes compartir.",
+    "body": "Todo lo que has leído, estás leyendo o quieres leer, en un solo lugar. Escanea un código de barras para añadir un libro, ordena tus libros en estanterías que puedes compartir y mira en la cronología cada libro en los días en que lo leíste.",
     "chips": [
       "Escaneo de códigos de barras",
       "Estanterías",
-      "Fechas de lectura"
+      "Cronología"
     ],
     "alt": "Una biblioteca de portadas en Resenha en un Mac."
   },

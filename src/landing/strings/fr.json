@@ -26,22 +26,35 @@
   "write": {
     "eyebrow": "Écrire",
     "title": "Un traitement de texte pour vos critiques.",
-    "body": "Titres, citations, listes et liens, et un titre bien à elle pour chaque critique. Signalez les spoilers, choisissez la langue et reprenez n’importe quel brouillon sur vos autres appareils grâce à iCloud.",
-    "chips": ["Mise en forme", "Alertes spoilers", "Surlignages Kobo", "Brouillons dans iCloud"],
+    "body": "Titres, citations, listes, code et liens, et un titre bien à elle pour chaque critique. Ajoutez des images, des publications Bluesky, des lecteurs et des dessins. Signalez les spoilers, choisissez la langue et reprenez n’importe quel brouillon sur vos autres appareils grâce à iCloud.",
+    "chips": [
+      "Mise en forme",
+      "Images et publications",
+      "Surlignages Kobo",
+      "Brouillons dans iCloud"
+    ],
     "alt": "Écrire une critique dans Resenha sur un Mac."
   },
   "follow": {
     "eyebrow": "Suivre",
     "title": "Le Salon.",
     "body": "Voyez ce que les personnes que vous suivez commencent, terminent et critiquent, au moment où cela se passe. Suivre quelqu’un dans Resenha revient à le suivre sur Bluesky et BookHive.",
-    "chips": ["En direct", "Étagères des lecteurs", "Critiques de vos amis"],
+    "chips": [
+      "En direct",
+      "Étagères des lecteurs",
+      "Critiques de vos amis"
+    ],
     "alt": "Le Salon sur iPad, avec ce que les lecteurs suivis ont commencé et terminé."
   },
   "publish": {
     "eyebrow": "Publier",
     "title": "Sur le web ouvert.",
     "body": "Vos critiques vivent dans votre propre compte sur l’Atmosphere : mises en forme sur resenha.ink, en texte brut sur BookHive, et publiées sur Bluesky et Mu Social, où les réponses deviennent des commentaires.",
-    "chips": ["resenha.ink", "BookHive", "Bluesky et Mu Social"],
+    "chips": [
+      "resenha.ink",
+      "BookHive",
+      "Bluesky et Mu Social"
+    ],
     "alt": "Lire une critique de la communauté dans Resenha sur iPhone."
   },
   "import": {
@@ -59,8 +72,12 @@
   "collect": {
     "eyebrow": "Rassembler",
     "title": "Toute votre bibliothèque.",
-    "body": "Tout ce que vous avez lu, lisez ou voulez lire, au même endroit. Scannez un code-barres pour ajouter un livre, et rangez vos livres sur des étagères à partager.",
-    "chips": ["Scan de codes-barres", "Étagères", "Dates de lecture"],
+    "body": "Tout ce que vous avez lu, lisez ou voulez lire, au même endroit. Scannez un code-barres pour ajouter un livre, rangez vos livres sur des étagères à partager, et retrouvez chaque livre aux jours où vous l’avez lu dans la chronologie.",
+    "chips": [
+      "Scan de codes-barres",
+      "Étagères",
+      "Chronologie"
+    ],
     "alt": "Une bibliothèque de couvertures dans Resenha sur un Mac."
   },
   "closing": {
