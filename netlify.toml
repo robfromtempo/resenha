@@ -32,3 +32,8 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Access-Control-Allow-Origin = "*"
+
+# Comic posters and banners for the catalog, resized by Netlify's image CDN. Only account servers' blob endpoint
+# may be fetched, so this isn't a general proxy.
+[images]
+  remote_images = ["https://[^/]+/xrpc/com\\.atproto\\.sync\\.getBlob\\?.*"]
