@@ -428,6 +428,10 @@ function page({ title, description = "", canonical, image, type = "website", hea
     /* Resenha's palette and type, as in the app: Instrument Serif for headings, New York for reading, SF for the interface. */
     @font-face { font-family: "Instrument Serif"; src: url("/fonts/InstrumentSerif-Regular.ttf") format("truetype"); font-display: swap; }
     @font-face { font-family: "Instrument Serif"; font-style: italic; src: url("/fonts/InstrumentSerif-Italic.ttf") format("truetype"); font-display: swap; }
+    /* Furifont draws furigana over kanji, for Japanese review text (furifont.antfu.me, SIL OFL: /fonts/OFL-Furifont.txt).
+       It covers only Japanese characters, so browsers fetch it only for a page that has some. */
+    @font-face { font-family: "Furifont Serif"; src: url("/fonts/FurifontSerifVF-0.6.2.woff2") format("woff2"); font-weight: 200 900; font-display: swap;
+                 unicode-range: U+3000-303F, U+3040-30FF, U+31F0-31FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FF00-FFEF; }
     :root {
       --paper: #F4F5F7; --raised: #FCFCFD; --ink: #1D2024; --ink2: #626971; --ink3: #A3A9B0;
       --rule: #E1E4E8; --accent: #6E7782; --link: #2F5F8F; --code: #E2E5EA;
@@ -466,6 +470,8 @@ function page({ title, description = "", canonical, image, type = "website", hea
     /* The writer's line spacing when they chose one in Resenha; otherwise the spacing reviews always had. */
     .markdown { font-family: var(--reading); font-size: 1.25rem; line-height: var(--review-line, 1.6); overflow-wrap: anywhere; }
     .markdown pre { line-height: 1.5; }
+    /* Japanese reviews set their kanji with furigana above them, which needs taller lines. */
+    .markdown:lang(ja) { font-family: "Furifont Serif", var(--reading); line-height: max(var(--review-line, 1.6), 1.9); }
     .markdown > * { margin: 0 0 1rem; }
     .markdown h1, .markdown h2, .markdown h3, .markdown h4 { font-family: var(--display); font-weight: 400; line-height: 1.15; margin: 1.5rem 0 .8rem; }
     .markdown h1 { font-size: 2rem; } .markdown h2 { font-size: 1.6rem; } .markdown h3, .markdown h4 { font-size: 1.4rem; }
