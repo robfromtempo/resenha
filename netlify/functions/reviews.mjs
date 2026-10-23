@@ -94,7 +94,8 @@ async function reviewPage(did, rkey) {
   const published = doc.publishedAt ? new Date(doc.publishedAt) : null;
   const spoilers = hasSpoilers(doc);
   const lang = link?.langs?.[0];
-  const markdown = `<div class="markdown"${lang ? ` lang="${escape(lang)}"` : ""}>${await render(doc, pds, did)}</div>`;
+  const spacing = lineHeightFor(doc);
+  const markdown = `<div class="markdown"${lang ? ` lang="${escape(lang)}"` : ""}${spacing ? ` style="--review-line: ${spacing}"` : ""}>${await render(doc, pds, did)}</div>`;
   const body = `
     <div class="review-layout">
       ${book ? bookColumn(book) : card ? `<img class="card-image" src="${escape(card)}" alt="">` : ""}
@@ -183,6 +184,15 @@ async function friendPage(did) {
       <p class="markdown">${escape(name)} wants to be friends on Resenha. Friends follow each other, and see what the other starts, finishes and reviews.</p>
       <p class="note">Get Resenha, sign in, then open this link again on the same device to add ${escape(name)}.</p>`,
   }), 200, 600);
+}
+
+/** The line height a review was written with in Resenha, from its document's ink.resenha.lineSpacing: a percentage of
+ *  the font's own line height (100, 115, 150 or 200), as word processors count spacing. The app measures from a line
+ *  height of about 1.2, so the web does too. Null for reviews without one, which keep the page's usual spacing. */
+function lineHeightFor(doc) {
+  const percent = doc?.["ink.resenha.lineSpacing"];
+  if (![100, 115, 150, 200].includes(percent)) return null;
+  return (1.2 * percent / 100).toFixed(2);
 }
 
 // MARK: - The AT Protocol
@@ -453,7 +463,9 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .stars { display: flex; gap: 3px; margin: 0 0 1.2rem; }
     .stars svg { width: 15px; height: 15px; }
     hr.rule { width: 64px; margin: 0 0 1.6rem; border: 0; border-top: 1px solid var(--rule); }
-    .markdown { font-family: var(--reading); font-size: 1.25rem; line-height: 1.6; overflow-wrap: anywhere; }
+    /* The writer's line spacing when they chose one in Resenha; otherwise the spacing reviews always had. */
+    .markdown { font-family: var(--reading); font-size: 1.25rem; line-height: var(--review-line, 1.6); overflow-wrap: anywhere; }
+    .markdown pre { line-height: 1.5; }
     .markdown > * { margin: 0 0 1rem; }
     .markdown h1, .markdown h2, .markdown h3, .markdown h4 { font-family: var(--display); font-weight: 400; line-height: 1.15; margin: 1.5rem 0 .8rem; }
     .markdown h1 { font-size: 2rem; } .markdown h2 { font-size: 1.6rem; } .markdown h3, .markdown h4 { font-size: 1.4rem; }
