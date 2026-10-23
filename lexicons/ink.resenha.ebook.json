@@ -1,0 +1,76 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.ebook",
+  "description": "A book file the account keeps for reading in Resenha: an EPUB, a PDF or a comic archive. The file is a blob in the account's repository, which keeps it only while a record refers to it.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "One per file. Deleting the record lets the account's server delete the file.",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": [
+          "file",
+          "format",
+          "title",
+          "createdAt"
+        ],
+        "properties": {
+          "file": {
+            "type": "blob",
+            "accept": [
+              "application/epub+zip",
+              "application/pdf",
+              "application/vnd.comicbook+zip",
+              "application/zip"
+            ],
+            "description": "The book itself."
+          },
+          "format": {
+            "type": "string",
+            "knownValues": [
+              "epub",
+              "pdf",
+              "cbz"
+            ],
+            "description": "How to open the file. A comic archive is a zip of page images, read in file name order."
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 3000,
+            "maxGraphemes": 300,
+            "description": "From the file's own metadata when it has some, otherwise from its file name."
+          },
+          "authors": {
+            "type": "array",
+            "maxLength": 20,
+            "items": {
+              "type": "string",
+              "maxLength": 640,
+              "maxGraphemes": 64
+            }
+          },
+          "cover": {
+            "type": "blob",
+            "accept": [
+              "image/png",
+              "image/jpeg",
+              "image/webp"
+            ],
+            "maxSize": 1000000,
+            "description": "A cover image for showing the book in a list, taken from the file."
+          },
+          "book": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "The account's buzz.bookhive.book record for the same book, when the reader connected the file to their library."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    }
+  }
+}
