@@ -105,7 +105,7 @@ async function reviewPage(did, rkey) {
           ${author.avatar ? `<img class="avatar" src="${escape(author.avatar)}" alt="">` : `<span class="avatar placeholder">${escape((author.name || "?").replace(/^@/, "").slice(0, 1).toUpperCase())}</span>`}
           <span><strong>${escape(author.handle ? `@${author.handle}` : author.name)}</strong>${published ? `<span class="date">${escape(published.toLocaleDateString("en", { dateStyle: "long" }))}</span>` : ""}</span>
         </a>
-        <h1 class="review-title">${escape(doc.title)}</h1>
+        <h1 class="review-title"${lang ? ` lang="${escape(lang)}"` : ""}>${escape(doc.title)}</h1>
         ${typeof stars === "number" ? starsSVG(stars) : ""}
         ${spoilers ? `<p class="spoiler-badge">Spoilers</p>` : ""}
         <hr class="rule">
@@ -472,6 +472,8 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .markdown pre { line-height: 1.5; }
     /* Japanese reviews set their kanji with furigana above them, which needs taller lines. */
     .markdown:lang(ja) { font-family: "Furifont Serif", var(--reading); line-height: max(var(--review-line, 1.6), 1.9); }
+    /* Its title and headings too, a weight heavier, with room for their furigana. */
+    .review-title:lang(ja), .markdown:lang(ja) :is(h1, h2, h3, h4) { font-family: "Furifont Serif", var(--display); font-weight: 500; line-height: 1.6; }
     .markdown > * { margin: 0 0 1rem; }
     .markdown h1, .markdown h2, .markdown h3, .markdown h4 { font-family: var(--display); font-weight: 400; line-height: 1.15; margin: 1.5rem 0 .8rem; }
     .markdown h1 { font-size: 2rem; } .markdown h2 { font-size: 1.6rem; } .markdown h3, .markdown h4 { font-size: 1.4rem; }
