@@ -222,6 +222,19 @@ main { position: relative; z-index: 1; }
   background: var(--raised); border: 1px solid var(--rule);
 }
 
+/* Whose comic is in the picture: its title, and its creator, who the picture links to. */
+.featuring { margin-top: 22px; font-size: .92rem; color: var(--ink2); display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.featuring .label { color: var(--ink3, var(--ink2)); }
+.featuring em { font-family: var(--display); font-style: normal; font-size: 1.15rem; color: var(--ink); }
+.featuring a {
+  display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 999px;
+  background: var(--raised); border: 1px solid var(--rule); color: var(--ink); text-decoration: none;
+}
+.featuring a:hover { border-color: var(--ink2); }
+.featuring a img { width: 28px; height: 28px; border-radius: 50%; }
+.featuring .name { font-weight: 500; }
+.featuring .handle { color: var(--ink2); font-size: .85rem; }
+
 /* The import section: numbered steps, and books tumbling in behind the phone. */
 .steps { list-style: none; counter-reset: step; margin: 26px 0 0; padding: 0; display: grid; gap: 14px; max-width: 30rem; }
 .steps li { counter-increment: step; position: relative; padding-left: 44px; color: var(--ink2); line-height: 1.45; }
