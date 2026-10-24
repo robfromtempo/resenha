@@ -23,7 +23,8 @@ export default async () => {
   try {
     const dids = await listCreators();
     const results = await inPool(dids, CONCURRENCY, (did) => creator(did), () => Date.now() - started > BUDGET_MS);
-    const complete = results.every((r) => r !== undefined);
+    // Every creator was reached: none was left for lack of time, and none failed to answer.
+    const complete = results.every((r) => r !== undefined && !r.failed);
     const series = results.flatMap((r) => r?.series ?? []);
     const profiles = await profilesOf(series.map((s) => s.did));
     for (const item of series) item.creator = profiles.get(item.did) ?? { handle: null, name: null, avatar: null };
@@ -62,13 +63,16 @@ async function listCreators() {
   return dids;
 }
 
-/** One creator's series, with how many chapters each has and when the last one came, from their own server. */
+/** One creator's series, with how many chapters each has and when the last one came, from their own server.
+ *  A creator whose server didn't answer isn't remembered as having nothing: they're asked again next time. */
 async function creator(did) {
   const cached = creators.get(did);
   if (cached && Date.now() - cached.at < 3600_000) return cached;
   const pds = await pdsFor(did);
+  if (pds === undefined) return { series: [], failed: true };
   if (!pds) return remember(did, { series: [] });
   const [seriesRecords, chapterRecords] = await Promise.all([listAll(pds, did, SERIES), listAll(pds, did, CHAPTER)]);
+  if (!seriesRecords || !chapterRecords) return { series: [], failed: true };
   const chapters = new Map();
   for (const record of chapterRecords) {
     const uri = record.value?.series;
@@ -171,24 +175,30 @@ function isDid(did) {
   return typeof did === "string" && (/^did:plc:[a-z2-7]{24}$/.test(did) || /^did:web:[a-z0-9.-]+\.[a-z]{2,}$/i.test(did));
 }
 
+/** DID documents, kept an hour: a creator who moves to another server is found there by the next scan. */
 const didDocuments = new Map();
 
+/** The creator's server; null when their document names none, undefined when it couldn't be read. */
 async function pdsFor(did) {
-  let doc = didDocuments.get(did);
-  if (!doc) {
-    doc = await json(did.startsWith("did:plc:") ? `https://plc.directory/${did}` : `https://${did.slice("did:web:".length)}/.well-known/did.json`);
-    if (doc) didDocuments.set(did, doc);
+  let cached = didDocuments.get(did);
+  if (!cached || Date.now() - cached.at > 3600_000) {
+    const doc = await json(did.startsWith("did:plc:") ? `https://plc.directory/${did}` : `https://${did.slice("did:web:".length)}/.well-known/did.json`);
+    if (!doc) return undefined;
+    cached = { doc, at: Date.now() };
+    didDocuments.set(did, cached);
   }
-  const service = doc?.service?.find((s) => s.id === "#atproto_pds" || s.id === `${did}#atproto_pds`);
+  const service = cached.doc?.service?.find((s) => s.id === "#atproto_pds" || s.id === `${did}#atproto_pds`);
   const endpoint = service?.serviceEndpoint;
   return typeof endpoint === "string" && endpoint.startsWith("https://") ? endpoint.replace(/\/$/, "") : null;
 }
 
+/** Every record of a collection, or null when a page couldn't be read, so a slow server isn't taken for an empty one. */
 async function listAll(pds, did, collection) {
   const records = [];
   let cursor;
   for (let page = 0; page < 10; page++) {
     const result = await json(`${pds}/xrpc/com.atproto.repo.listRecords?repo=${did}&collection=${collection}&limit=100${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`);
+    if (!result) return null;
     records.push(...(result?.records ?? []));
     cursor = result?.cursor;
     if (!cursor || !result?.records?.length) break;
