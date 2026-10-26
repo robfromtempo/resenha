@@ -448,7 +448,13 @@ function page({ title, description = "", canonical, image, type = "website", hea
       --display: "Instrument Serif", ui-serif, Georgia, serif;
       --reading: ui-serif, "New York", "Iowan Old Style", Georgia, serif;
       --interface: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
-      color-scheme: light;
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #1A1C20; --raised: #24272C; --ink: #ECEEF1; --ink2: #A6ACB5; --ink3: #6B7079;
+        --rule: #33373D; --accent: #8E97A3; --link: #7FA6D6; --code: #2C3036;
+      }
     }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--interface); -webkit-font-smoothing: antialiased; }

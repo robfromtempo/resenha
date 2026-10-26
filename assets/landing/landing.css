@@ -17,7 +17,7 @@
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
   --paper: #F4F5F7;
   --raised: #FCFCFD;
   --ink: #1D2024;
@@ -30,6 +30,20 @@
   --reading: "New York", ui-serif, Georgia, serif;
   --gutter: clamp(16px, 4vw, 40px);
   --shadow-cover: 0 18px 40px -14px rgba(29, 32, 36, .45), 0 4px 10px -4px rgba(29, 32, 36, .2);
+}
+
+/* The same page with the lights dimmed: deep grey paper rather than black, off-white ink. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1A1C20;
+    --raised: #24272C;
+    --ink: #ECEEF1;
+    --ink2: #A6ACB5;
+    --ink3: #6B7079;
+    --rule: #33373D;
+    --accent: #8E97A3;
+    --shadow-cover: 0 18px 40px -14px rgba(0, 0, 0, .7), 0 4px 10px -4px rgba(0, 0, 0, .4);
+  }
 }
 
 * { box-sizing: border-box; }
