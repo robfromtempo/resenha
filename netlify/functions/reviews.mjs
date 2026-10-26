@@ -95,7 +95,9 @@ async function reviewPage(did, rkey) {
   const spoilers = hasSpoilers(doc);
   const lang = link?.langs?.[0];
   const spacing = lineHeightFor(doc);
-  const markdown = `<div class="markdown"${lang ? ` lang="${escape(lang)}"` : ""}${spacing ? ` style="--review-line: ${spacing}"` : ""}>${await render(doc, pds, did)}</div>`;
+  const gap = paragraphGapFor(doc);
+  const styles = [spacing ? `--review-line: ${spacing}` : null, gap ? `--review-gap: ${gap}` : null].filter(Boolean).join("; ");
+  const markdown = `<div class="markdown"${lang ? ` lang="${escape(lang)}"` : ""}${styles ? ` style="${styles}"` : ""}>${await render(doc, pds, did)}</div>`;
   const body = `
     <div class="review-layout">
       ${book ? bookColumn(book) : card ? `<img class="card-image" src="${escape(card)}" alt="">` : ""}
@@ -193,6 +195,14 @@ function lineHeightFor(doc) {
   const percent = doc?.["ink.resenha.lineSpacing"];
   if (![100, 115, 150, 200].includes(percent)) return null;
   return (1.2 * percent / 100).toFixed(2);
+}
+
+/** The gap between a review's paragraphs, from its document's ink.resenha.paragraphSpacing: a percentage of the
+ *  text size (40, 90 or 150). Null for reviews without one, which keep the page's usual gap. */
+function paragraphGapFor(doc) {
+  const percent = doc?.["ink.resenha.paragraphSpacing"];
+  if (![40, 90, 150].includes(percent)) return null;
+  return (percent / 100).toFixed(2) + "em";
 }
 
 // MARK: - The AT Protocol
@@ -474,7 +484,7 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .markdown:lang(ja) { font-family: "Furifont Serif", var(--reading); line-height: max(var(--review-line, 1.6), 1.9); }
     /* Its title and headings too, a weight heavier, with room for their furigana. */
     .review-title:lang(ja), .markdown:lang(ja) :is(h1, h2, h3, h4) { font-family: "Furifont Serif", var(--display); font-weight: 500; line-height: 1.6; }
-    .markdown > * { margin: 0 0 1rem; }
+    .markdown > * { margin: 0 0 var(--review-gap, 1rem); }
     .markdown h1, .markdown h2, .markdown h3, .markdown h4 { font-family: var(--display); font-weight: 400; line-height: 1.15; margin: 1.5rem 0 .8rem; }
     .markdown h1 { font-size: 2rem; } .markdown h2 { font-size: 1.6rem; } .markdown h3, .markdown h4 { font-size: 1.4rem; }
     .markdown a { color: var(--link); text-underline-offset: 3px; }
