@@ -4,17 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Terms of Use — Resenha</title>
+  <meta name="theme-color" content="#F4F5F7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1A1C20" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    // The appearance picked with the toggle, set before anything is drawn. Without one the page follows the system.
+    try { var theme = localStorage.getItem("resenha.theme"); if (theme === "dark" || theme === "light") document.documentElement.setAttribute("data-theme", theme); } catch (e) {}
+  </script>
   <style>
-    body { margin: 0; background: #F4F5F7; color: #1D2024;
+    /* Resenha's paper and ink, light or dark as the system is, or as picked with the toggle at the bottom. */
+    :root { color-scheme: light; --paper: #F4F5F7; --ink: #1D2024; --ink2: #626971; --only-light: inline; --only-dark: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) { color-scheme: dark; --paper: #1A1C20; --ink: #ECEEF1; --ink2: #A6ACB5; --only-light: none; --only-dark: inline; }
+    }
+    :root[data-theme="dark"] { color-scheme: dark; --paper: #1A1C20; --ink: #ECEEF1; --ink2: #A6ACB5; --only-light: none; --only-dark: inline; }
+    body { margin: 0; background: var(--paper); color: var(--ink);
            font-family: "New York", ui-serif, Georgia, serif; }
     main { max-width: 36rem; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
     h1 { font-size: 2.4rem; font-weight: 400; margin: 0 0 .25rem; }
     h2 { font-size: 1.25rem; font-weight: 400; margin: 2rem 0 .4rem; }
-    p, li { color: #626971; font-size: 1.1rem; line-height: 1.6; }
+    p, li { color: var(--ink2); font-size: 1.1rem; line-height: 1.6; }
     p { margin: .6rem 0; }
     ul { padding-left: 1.25rem; }
-    a { color: #1D2024; }
+    a { color: var(--ink); }
     .back { margin-top: 2.5rem; }
+    .theme-toggle { font: inherit; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+    .only-light { display: var(--only-light); } .only-dark { display: var(--only-dark); }
   </style>
 </head>
 <body>
@@ -48,7 +63,8 @@
     <h2>Contact</h2>
     <p><a href="https://userinput.app/s/did:plc:o45y7ehjcfhasrzjjtsxloc5/3mxksvihdi32z">Report a problem, abuse, or anything else.</a></p>
 
-    <p class="back"><a href="index.html">Resenha</a> · <a href="privacy.html">Privacy</a></p>
+    <p class="back"><a href="index.html">Resenha</a> · <a href="privacy.html">Privacy</a> · <button class="theme-toggle" type="button" data-theme-toggle data-label-dark="Switch to dark appearance" data-label-light="Switch to light appearance" aria-label="Switch to dark appearance"><span class="only-light">Dark</span><span class="only-dark">Light</span></button></p>
   </main>
+  <script src="/assets/theme.js?v=4ad6472390" defer></script>
 </body>
 </html>

@@ -531,27 +531,29 @@ const escapeAttr = escape;
 
 /** Styles for everything above, inside the page's `.markdown` reading column. */
 export const BLOCK_STYLES = `
-    .markdown .codeblock { margin: 0 0 1rem; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--paper-raised, #FCFCFD); }
+    .markdown .codeblock { margin: 0 0 1rem; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--raised, #FCFCFD); }
     .markdown .code-bar { display: flex; align-items: center; gap: .5rem; padding: .45rem .75rem; background: var(--code); border-bottom: 1px solid var(--rule); font: 500 .72rem/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink2); }
     .markdown .code-dots { display: inline-flex; gap: 4px; margin-right: .2rem; }
     .markdown .code-dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--rule); display: block; }
     .markdown .code-lang { flex: 1; }
     .markdown .code-copy { font: inherit; color: var(--ink2); background: none; border: 0; padding: .15rem .4rem; border-radius: 6px; cursor: pointer; }
-    .markdown .code-copy:hover { background: rgba(0,0,0,.05); color: var(--ink); }
+    .markdown .code-copy:hover { background: var(--hover, rgba(0,0,0,.05)); color: var(--ink); }
     .markdown pre.code-lines { margin: 0; padding: .75rem 0; background: none; border: 0; border-radius: 0; overflow-x: auto; font: .78em/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 4; }
     .markdown pre.code-lines code { background: none; padding: 0; font-size: inherit; display: grid; grid-template-columns: max-content 1fr; }
     .markdown pre.code-lines .ln { color: var(--ink3); text-align: right; padding: 0 .9rem 0 .9rem; user-select: none; }
     .markdown pre.code-lines .lc { padding-right: 1rem; white-space: pre; }
-    .markdown .tk-keyword { color: #AD3DA4; }
-    .markdown .tk-string { color: #C41A16; }
-    .markdown .tk-number { color: #272AD8; }
-    .markdown .tk-comment { color: #6B7A88; font-style: italic; }
-    .markdown .tk-type { color: #0B4F79; }
-    .markdown .tk-function { color: #326D74; }
-    .markdown .tk-attribute { color: #6C36A9; }
+    .markdown .tk-keyword { color: var(--tk-keyword, #AD3DA4); }
+    .markdown .tk-string { color: var(--tk-string, #C41A16); }
+    .markdown .tk-number { color: var(--tk-number, #272AD8); }
+    .markdown .tk-comment { color: var(--tk-comment, #6B7A88); font-style: italic; }
+    .markdown .tk-type { color: var(--tk-type, #0B4F79); }
+    .markdown .tk-function { color: var(--tk-function, #326D74); }
+    .markdown .tk-attribute { color: var(--tk-attribute, #6C36A9); }
     .markdown p.small { font-size: .9em; color: var(--ink2); }
     .markdown p.large { font-size: 1.25em; }
     .markdown mark { background: var(--mark, rgba(255,230,120,.6)); color: inherit; padding: 0 .1em; border-radius: 2px; }
+    /* On dark paper a highlight at full strength turns muddy under light text, so it's laid on thinner. */
+    .markdown mark { background: color-mix(in srgb, var(--mark, rgba(255,230,120,.6)) var(--mark-strength, 100%), transparent); }
     .markdown u { text-underline-offset: 3px; }
     .markdown sup.footnote { color: var(--link); cursor: help; }
     .markdown li.task { list-style: none; margin-left: -1.4rem; }

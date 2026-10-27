@@ -12,6 +12,9 @@
 import { Marked } from "marked";
 import { renderBlocks, blocksPlainText, BLOCK_STYLES, BLOCK_SCRIPT, frameMarkdownCode } from "./blocks.mjs";
 
+/** The site's appearance toggle, addressed by its contents: update the hash when assets/theme.js changes. */
+const THEME_SCRIPT = "/assets/theme.js?v=4ad6472390";
+
 const ORIGIN = "https://resenha.ink";
 const PUBLICATION = "site.standard.publication";
 const DOCUMENT = "site.standard.document";
@@ -434,6 +437,13 @@ function page({ title, description = "", canonical, image, type = "website", hea
   <meta name="twitter:card" content="${image ? "summary_large_image" : "summary"}">
   <meta name="apple-itunes-app" content="app-id=${APP_STORE_ID}">
   <link rel="icon" href="/icon.png">
+  <meta name="theme-color" content="#F4F5F7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1A1C20" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    // The appearance picked with the toggle, set before anything is drawn. Without one the page follows the system.
+    try { var theme = localStorage.getItem("resenha.theme"); if (theme === "dark" || theme === "light") document.documentElement.setAttribute("data-theme", theme); } catch (e) {}
+  </script>
   <style>
     /* Resenha's palette and type, as in the app: Instrument Serif for headings, New York for reading, SF for the interface. */
     @font-face { font-family: "Instrument Serif"; src: url("/fonts/InstrumentSerif-Regular.ttf") format("truetype"); font-display: swap; }
@@ -448,7 +458,31 @@ function page({ title, description = "", canonical, image, type = "website", hea
       --display: "Instrument Serif", ui-serif, Georgia, serif;
       --reading: ui-serif, "New York", "Iowan Old Style", Georgia, serif;
       --interface: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+      --hover: rgba(0,0,0,.05); --cover-edge: rgba(0,0,0,.08); --cover-shadow: rgba(0,0,0,.14);
+      --spoiler-ink: #9B4A4A; --spoiler-fill: rgba(155,74,74,.1);
       color-scheme: light;
+    }
+    /* Dark, as the app's: deep grey paper, off-white ink, and code in Xcode's dark colours. Written twice, for the
+       system's dark appearance and for dark picked with the toggle in the footer; keep the two the same. */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --paper: #1A1C20; --raised: #24272C; --ink: #ECEEF1; --ink2: #A6ACB5; --ink3: #767C86;
+        --rule: #33373D; --accent: #8E97A3; --link: #7FA6D6; --code: #2C3036;
+        --hover: rgba(255,255,255,.08); --cover-edge: rgba(255,255,255,.08); --cover-shadow: rgba(0,0,0,.5);
+        --spoiler-ink: #D07A7A; --spoiler-fill: rgba(208,122,122,.14); --mark-strength: 50%;
+        --tk-keyword: #FC5FA3; --tk-string: #FC6A5D; --tk-number: #D0BF69; --tk-comment: #7F8C98;
+        --tk-type: #5DD8FF; --tk-function: #67B7A4; --tk-attribute: #D0A8FF;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+        --paper: #1A1C20; --raised: #24272C; --ink: #ECEEF1; --ink2: #A6ACB5; --ink3: #767C86;
+        --rule: #33373D; --accent: #8E97A3; --link: #7FA6D6; --code: #2C3036;
+        --hover: rgba(255,255,255,.08); --cover-edge: rgba(255,255,255,.08); --cover-shadow: rgba(0,0,0,.5);
+        --spoiler-ink: #D07A7A; --spoiler-fill: rgba(208,122,122,.14); --mark-strength: 50%;
+        --tk-keyword: #FC5FA3; --tk-string: #FC6A5D; --tk-number: #D0BF69; --tk-comment: #7F8C98;
+        --tk-type: #5DD8FF; --tk-function: #67B7A4; --tk-attribute: #D0A8FF;
+        color-scheme: dark;
     }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--interface); -webkit-font-smoothing: antialiased; }
@@ -460,7 +494,7 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .review-layout { display: grid; gap: 3.5rem; grid-template-columns: ${wide ? "17rem minmax(0, 1fr)" : "minmax(0, 1fr)"}; align-items: start; }
     .book { position: sticky; top: 2rem; }
     .book .cover { width: 100%; max-width: 15rem; display: block; margin: 0 auto 1.2rem; border-radius: 6px;
-                   box-shadow: 0 4px 16px rgba(0,0,0,.14); border: .5px solid rgba(0,0,0,.08); }
+                   box-shadow: 0 4px 16px var(--cover-shadow); border: .5px solid var(--cover-edge); }
     .book-title { font: 400 1.75rem/1.15 var(--display); margin: 0 0 .35rem; text-align: center; }
     .review-title { font: 400 2.4rem/1.1 var(--display); margin: 1rem 0 .5rem; text-wrap: balance; }
     .book-author { margin: 0 0 1rem; text-align: center; color: var(--ink2); font-size: .9rem; text-decoration: underline; text-underline-offset: 2px; }
@@ -500,7 +534,7 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .markdown hr::after { content: "⁂"; color: var(--ink3); font-family: var(--reading); }
     .markdown img { max-width: 100%; border-radius: 8px; }
 ${BLOCK_STYLES}
-    .spoiler-badge { display: inline-block; margin: .6rem 0 0; padding: .15rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 600; color: #9B4A4A; background: rgba(155, 74, 74, .1); }
+    .spoiler-badge { display: inline-block; margin: .6rem 0 0; padding: .15rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 600; color: var(--spoiler-ink); background: var(--spoiler-fill); }
     details.spoilers > summary { cursor: pointer; list-style: none; padding: 1rem 1.1rem; border-radius: 14px; background: var(--raised); }
     details.spoilers > summary::-webkit-details-marker { display: none; }
     details.spoilers > summary span { color: var(--link); margin-left: .4rem; }
@@ -527,8 +561,17 @@ ${BLOCK_STYLES}
     .get-app a.button { flex: none; box-sizing: border-box; text-decoration: none; background: var(--ink); color: var(--paper); font-weight: 600;
                         font-size: .9rem; padding: .6rem 1rem; border-radius: 999px; white-space: nowrap; }
     .get-app[data-platform="other"] a.button { display: none; }
-    footer { margin-top: 4rem; font-size: .8rem; color: var(--ink3); }
+    footer { margin-top: 4rem; font-size: .8rem; color: var(--ink3); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
     footer a { color: var(--ink2); }
+    /* Light or dark: shows the appearance a click goes to. */
+    .theme-toggle { display: inline-grid; place-items: center; width: 34px; height: 34px; flex: none; padding: 0; border: 1px solid var(--rule); border-radius: 50%;
+                    background: var(--raised); color: var(--ink2); cursor: pointer; }
+    .theme-toggle:hover { color: var(--ink); border-color: var(--ink3); }
+    .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .theme-toggle svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .theme-toggle .sun { display: none; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .theme-toggle .sun { display: block; } :root:not([data-theme="light"]) .theme-toggle .moon { display: none; } }
+    :root[data-theme="dark"] .theme-toggle .sun { display: block; } :root[data-theme="dark"] .theme-toggle .moon { display: none; }
 
     @media (max-width: 52rem) {
       main { padding: 1.5rem 1rem 3rem; }
@@ -537,7 +580,7 @@ ${BLOCK_STYLES}
       /* The book shrinks to a compact row above the review, as on iPhone. */
       .book { position: static; display: flex; align-items: center; gap: .9rem; padding: .7rem; background: var(--raised);
               border: 1px solid var(--rule); border-radius: 16px; }
-      .book .cover { width: 52px; margin: 0; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,.12); }
+      .book .cover { width: 52px; margin: 0; border-radius: 4px; box-shadow: 0 2px 6px var(--cover-shadow); }
       .book-title { font: 600 1.05rem/1.25 var(--reading); text-align: left; margin: 0 0 .15rem; }
       .book-author { text-align: left; margin: 0; }
       .book-facts, .book-genres { display: none; }
@@ -551,8 +594,15 @@ ${BLOCK_STYLES}
     ${getApp()}
     <script>${BLOCK_SCRIPT}</script>
     ${body}
-    <footer>Published with <a href="/">Resenha</a> on the Atmosphere.</footer>
+    <footer>
+      <span>Published with <a href="/">Resenha</a> on the Atmosphere.</span>
+      <button class="theme-toggle" type="button" data-theme-toggle data-label-dark="Switch to dark appearance" data-label-light="Switch to light appearance" aria-label="Switch to dark appearance" title="Switch to dark appearance">
+        <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>
+      </button>
+    </footer>
   </main>
+  <script src="${THEME_SCRIPT}" defer></script>
 </body>
 </html>`;
 }

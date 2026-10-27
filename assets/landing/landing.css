@@ -1,5 +1,6 @@
 /* resenha.ink, the landing page. Resenha's own palette and type: Instrument Serif for display,
-   the system face for text, paper greys and ink. The app is light only, and so is its page. */
+   the system face for text, paper greys and ink. It follows the system's appearance, as the app does, unless the
+   visitor picks the other one with the toggle in the bar (assets/theme.js), which sets data-theme on <html>. */
 
 @font-face {
   font-family: "Instrument Serif";
@@ -17,6 +18,12 @@
 }
 
 :root {
+  --display: "Instrument Serif", "New York", ui-serif, Georgia, serif;
+  --text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
+  --reading: "New York", ui-serif, Georgia, serif;
+  --gutter: clamp(16px, 4vw, 40px);
+
+  /* Light: paper under a lamp. */
   color-scheme: light;
   --paper: #F4F5F7;
   --raised: #FCFCFD;
@@ -25,12 +32,88 @@
   --ink3: #A3A9B0;
   --rule: #E1E4E8;
   --accent: #6E7782;
-  --display: "Instrument Serif", "New York", ui-serif, Georgia, serif;
-  --text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
-  --reading: "New York", ui-serif, Georgia, serif;
-  --gutter: clamp(16px, 4vw, 40px);
+  --glow-core: #fff;
+  --glow-side: rgba(255, 255, 255, .9);
+  --glass: rgba(252, 252, 253, .72);
+  --glass-solid: rgba(252, 252, 253, .96);
+  --glass-edge: rgba(29, 32, 36, .08);
+  --hover: rgba(29, 32, 36, .06);
+  --shadow: 29, 32, 36;
   --shadow-cover: 0 18px 40px -14px rgba(29, 32, 36, .45), 0 4px 10px -4px rgba(29, 32, 36, .2);
+  --book-edge: rgba(255, 255, 255, .8);
+  --frame-rim: transparent;
+  --screen: none;
+  --metal: none;
+  --closing-top: #24272c;
+  --closing-bottom: #15171a;
+  --closing-edge: transparent;
+  --only-light: block;
+  --only-dark: none;
 }
+
+/* Dark: the same page with the lights dimmed, as in the app. Deep grey paper rather than black, off-white ink,
+   glass that darkens rather than whitens, and the screenshots a touch dimmer so they don't glare. Written twice,
+   for the system's dark appearance and for dark picked with the toggle; keep the two the same. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #1A1C20;
+    --raised: #24272C;
+    --ink: #ECEEF1;
+    --ink2: #A6ACB5;
+    --ink3: #767C86;
+    --rule: #33373D;
+    --accent: #8E97A3;
+    --glow-core: rgba(236, 238, 241, .07);
+    --glow-side: rgba(236, 238, 241, .035);
+    --glass: rgba(36, 39, 44, .72);
+    --glass-solid: rgba(36, 39, 44, .97);
+    --glass-edge: rgba(255, 255, 255, .09);
+    --hover: rgba(255, 255, 255, .08);
+    --shadow: 0, 0, 0;
+    --shadow-cover: 0 18px 40px -14px rgba(0, 0, 0, .75), 0 4px 10px -4px rgba(0, 0, 0, .5);
+    --book-edge: rgba(255, 255, 255, .14);
+    --frame-rim: rgba(255, 255, 255, .08);
+    --screen: brightness(.9);
+    --metal: brightness(.72) saturate(.9);
+    --closing-top: #2A2E34;
+    --closing-bottom: #202328;
+    --closing-edge: rgba(255, 255, 255, .07);
+    --only-light: none;
+    --only-dark: block;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #1A1C20;
+  --raised: #24272C;
+  --ink: #ECEEF1;
+  --ink2: #A6ACB5;
+  --ink3: #767C86;
+  --rule: #33373D;
+  --accent: #8E97A3;
+  --glow-core: rgba(236, 238, 241, .07);
+  --glow-side: rgba(236, 238, 241, .035);
+  --glass: rgba(36, 39, 44, .72);
+  --glass-solid: rgba(36, 39, 44, .97);
+  --glass-edge: rgba(255, 255, 255, .09);
+  --hover: rgba(255, 255, 255, .08);
+  --shadow: 0, 0, 0;
+  --shadow-cover: 0 18px 40px -14px rgba(0, 0, 0, .75), 0 4px 10px -4px rgba(0, 0, 0, .5);
+  --book-edge: rgba(255, 255, 255, .14);
+  --frame-rim: rgba(255, 255, 255, .08);
+  --screen: brightness(.9);
+  --metal: brightness(.72) saturate(.9);
+  --closing-top: #2A2E34;
+  --closing-bottom: #202328;
+  --closing-edge: rgba(255, 255, 255, .07);
+  --only-light: none;
+  --only-dark: block;
+}
+
+/* What's drawn for one appearance only: the hero's App Store badge, and the toggle's sun and moon. */
+.only-light { display: var(--only-light) !important; }
+.only-dark { display: var(--only-dark) !important; }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
@@ -50,9 +133,9 @@ a { color: inherit; }
 .glow {
   position: absolute; inset: 0 0 auto 0; height: 1100px; pointer-events: none; z-index: 0;
   background:
-    radial-gradient(60% 45% at 50% 0%, #fff 0%, rgba(255, 255, 255, 0) 70%),
-    radial-gradient(40% 35% at 15% 20%, rgba(255, 255, 255, .9) 0%, rgba(255, 255, 255, 0) 70%),
-    radial-gradient(40% 35% at 85% 25%, rgba(255, 255, 255, .9) 0%, rgba(255, 255, 255, 0) 70%);
+    radial-gradient(60% 45% at 50% 0%, var(--glow-core) 0%, transparent 70%),
+    radial-gradient(40% 35% at 15% 20%, var(--glow-side) 0%, transparent 70%),
+    radial-gradient(40% 35% at 85% 25%, var(--glow-side) 0%, transparent 70%);
 }
 
 /* MARK: - The bar */
@@ -62,14 +145,14 @@ a { color: inherit; }
   display: flex; align-items: center; gap: 10px;
   width: min(460px, calc(100% - 2 * var(--gutter)));
   padding: 7px 7px 7px 10px; border-radius: 999px;
-  background: rgba(252, 252, 253, .72);
+  background: var(--glass);
   -webkit-backdrop-filter: saturate(1.6) blur(18px); backdrop-filter: saturate(1.6) blur(18px);
-  border: 1px solid rgba(29, 32, 36, .08);
-  box-shadow: 0 10px 30px -12px rgba(29, 32, 36, .25);
+  border: 1px solid var(--glass-edge);
+  box-shadow: 0 10px 30px -12px rgba(var(--shadow), .25);
 }
 .bar img { width: 28px; height: 28px; border-radius: 7px; }
 .bar .name { font: 400 1.35rem/1 var(--display); text-decoration: none; margin-right: auto; white-space: nowrap; }
-.bar img, .bar .pill, .bar .lang { flex: none; }
+.bar img, .bar .pill, .bar .lang, .bar .theme-toggle { flex: none; }
 .pill .short { display: none; }
 .pill {
   display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
@@ -84,17 +167,26 @@ a { color: inherit; }
   padding: 8px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; letter-spacing: .04em; color: var(--ink2);
 }
 .lang summary::-webkit-details-marker { display: none; }
-.lang summary:hover, .lang[open] summary { background: rgba(29, 32, 36, .06); color: var(--ink); }
+.lang summary:hover, .lang[open] summary { background: var(--hover); color: var(--ink); }
 .lang svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
 .lang ul {
   position: absolute; right: 0; top: calc(100% + 10px); margin: 0; padding: 6px; list-style: none; min-width: 160px;
-  background: rgba(252, 252, 253, .96); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
-  border: 1px solid rgba(29, 32, 36, .08); border-radius: 16px; box-shadow: 0 18px 40px -16px rgba(29, 32, 36, .35);
+  background: var(--glass-solid); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-edge); border-radius: 16px; box-shadow: 0 18px 40px -16px rgba(var(--shadow), .35);
 }
 .lang li a { display: block; padding: 8px 12px; border-radius: 10px; text-decoration: none; font-size: .92rem; }
-.lang li a:hover { background: rgba(29, 32, 36, .06); }
+.lang li a:hover { background: var(--hover); }
 .lang li a[aria-current] { font-weight: 600; }
 .lang li a[aria-current]::after { content: "✓"; float: right; color: var(--ink2); }
+
+/* Light or dark, beside the language menu. It shows the appearance a click goes to. */
+.theme-toggle {
+  display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 50%;
+  background: none; color: var(--ink2); cursor: pointer; font: inherit;
+}
+.theme-toggle:hover { background: var(--hover); color: var(--ink); }
+.theme-toggle:focus-visible, .lang summary:focus-visible, .pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.theme-toggle svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Longer words need a little more room for the headline. */
 :lang(de) .hero h1, :lang(es) .hero h1, :lang(fr) .hero h1, :lang(it) .hero h1, :lang(pt) .hero h1 { max-width: 16ch; }
@@ -150,10 +242,10 @@ main { position: relative; z-index: 1; }
   --w: 300px;
   width: var(--w); padding: calc(var(--w) * .032); border-radius: calc(var(--w) * .17);
   background: linear-gradient(145deg, #3a3d42, #16181b 40%, #2a2d31);
-  box-shadow: 0 0 0 1px #5b5f66 inset, 0 40px 80px -30px rgba(29, 32, 36, .55), 0 18px 36px -18px rgba(29, 32, 36, .35);
+  box-shadow: 0 0 0 1px #5b5f66 inset, 0 0 0 1px var(--frame-rim), 0 40px 80px -30px rgba(var(--shadow), .55), 0 18px 36px -18px rgba(var(--shadow), .35);
   position: relative;
 }
-.iphone img { width: 100%; border-radius: calc(var(--w) * .14); }
+.iphone img { width: 100%; border-radius: calc(var(--w) * .14); filter: var(--screen); }
 .iphone::after { /* the Dynamic Island */
   content: ""; position: absolute; left: 50%; top: calc(var(--w) * .062); transform: translateX(-50%);
   width: 31%; height: calc(var(--w) * .085); border-radius: 999px; background: #050505;
@@ -163,21 +255,22 @@ main { position: relative; z-index: 1; }
   --w: 560px;
   width: var(--w); padding: calc(var(--w) * .028); border-radius: calc(var(--w) * .058);
   background: linear-gradient(145deg, #3a3d42, #16181b 45%, #2a2d31);
-  box-shadow: 0 0 0 1px #5b5f66 inset, 0 40px 80px -30px rgba(29, 32, 36, .5);
+  box-shadow: 0 0 0 1px #5b5f66 inset, 0 0 0 1px var(--frame-rim), 0 40px 80px -30px rgba(var(--shadow), .5);
 }
-.ipad img { width: 100%; border-radius: calc(var(--w) * .033); }
+.ipad img { width: 100%; border-radius: calc(var(--w) * .033); filter: var(--screen); }
 
 .macbook { --w: 860px; width: var(--w); }
 .macbook .lid {
   padding: calc(var(--w) * .018) calc(var(--w) * .018) calc(var(--w) * .03); border-radius: calc(var(--w) * .022) calc(var(--w) * .022) 0 0;
-  background: #0d0e10; box-shadow: 0 0 0 1px #4a4d52 inset;
+  background: #0d0e10; box-shadow: 0 0 0 1px #4a4d52 inset, 0 0 0 1px var(--frame-rim);
 }
-.macbook .lid img { width: 100%; border-radius: 3px; }
+.macbook .lid img { width: 100%; border-radius: 3px; filter: var(--screen); }
 .macbook .base {
   position: relative; width: 112%; margin-left: -6%; height: calc(var(--w) * .026);
   border-radius: 0 0 calc(var(--w) * .03) calc(var(--w) * .03) / 0 0 calc(var(--w) * .016) calc(var(--w) * .016);
   background: linear-gradient(#e6e8eb, #c3c7cc 60%, #9ea3a9);
-  box-shadow: 0 30px 60px -24px rgba(29, 32, 36, .55);
+  box-shadow: 0 30px 60px -24px rgba(var(--shadow), .55);
+  filter: var(--metal);
 }
 .macbook .base::before { /* the opening notch */
   content: ""; position: absolute; left: 50%; top: 0; transform: translateX(-50%);
@@ -195,9 +288,9 @@ main { position: relative; z-index: 1; }
   display: inline-flex; vertical-align: -.18em; margin: 0 .12em;
 }
 .books img {
-  height: 1.05em; width: auto; border-radius: 2px; box-shadow: 0 6px 14px -6px rgba(29, 32, 36, .5);
+  height: 1.05em; width: auto; border-radius: 2px; box-shadow: 0 6px 14px -6px rgba(var(--shadow), .5);
   margin-left: -.22em; transform: rotate(var(--r, 0deg)); background: var(--raised);
-  border: 1px solid rgba(255, 255, 255, .8);
+  border: 1px solid var(--book-edge);
 }
 .books img:first-child { margin-left: 0; }
 
@@ -257,9 +350,12 @@ main { position: relative; z-index: 1; }
 .closing {
   position: relative; overflow: hidden; margin: 60px var(--gutter) var(--gutter); border-radius: 36px;
   padding: 88px var(--gutter) 40px; text-align: center; color: #F4F5F7;
+  /* A dark card in either appearance, so it keeps its own greys; in dark it's lifted a step off the page. */
+  --ink3: #A3A9B0;
   background:
     radial-gradient(70% 60% at 50% 120%, rgba(244, 245, 247, .16), rgba(244, 245, 247, 0) 70%),
-    linear-gradient(#24272c, #15171a);
+    linear-gradient(var(--closing-top), var(--closing-bottom));
+  box-shadow: 0 0 0 1px var(--closing-edge) inset;
 }
 .closing .icon { width: 76px; height: 76px; margin: 0 auto; border-radius: 18px; box-shadow: 0 16px 40px -12px rgba(0, 0, 0, .6); }
 .closing h2 { margin: 26px 0 0; font: 400 clamp(2.4rem, 6vw, 4rem)/1 var(--display); }
