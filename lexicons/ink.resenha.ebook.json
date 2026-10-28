@@ -63,7 +63,7 @@
           "book": {
             "type": "string",
             "format": "at-uri",
-            "description": "The account's buzz.bookhive.book record for the same book, when the reader connected the file to their library."
+            "description": "The account's record for the same book, when the reader connected the file to their library: a buzz.bookhive.book, or a social.popfeed.feed.listItem for a book they keep in Popfeed."
           },
           "createdAt": {
             "type": "string",

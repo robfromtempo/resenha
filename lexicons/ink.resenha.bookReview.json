@@ -24,7 +24,7 @@
           "book": {
             "type": "string",
             "format": "at-uri",
-            "description": "The reader's buzz.bookhive.book record for the book. Its review field holds the same review as plain text."
+            "description": "The reader's record for the book: a buzz.bookhive.book, whose review field holds the same review as plain text, or, for a book the reader keeps in Popfeed, a social.popfeed.feed.listItem, whose newest social.popfeed.feed.review holds it as plain text with a link to the formatted review."
           },
           "hiveId": {
             "type": "string",

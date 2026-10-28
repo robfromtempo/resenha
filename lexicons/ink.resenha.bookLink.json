@@ -1,0 +1,48 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.bookLink",
+  "description": "Which catalog book a book in the reader's library is, and which of the reader's records in each book app are that book. Resenha writes these when it matches a reader's Popfeed books to BookHive's catalog, so Popfeed's and BookHive's own records are never changed to hold the match.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "One per book. The record key is the book's BookHive ID (hiveId); a book with no match yet is keyed popfeed-<record key of its first listItem>.",
+      "key": "any",
+      "record": {
+        "type": "object",
+        "required": ["matchedBy", "updatedAt"],
+        "properties": {
+          "hiveId": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "The book's BookHive ID. Absent when no match was found."
+          },
+          "isbn13": {
+            "type": "string",
+            "maxLength": 13,
+            "description": "The edition the reader's records name, when they name one."
+          },
+          "bookhive": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "The reader's buzz.bookhive.book record for the book, when they have one."
+          },
+          "popfeed": {
+            "type": "array",
+            "maxLength": 20,
+            "items": { "type": "string", "format": "at-uri" },
+            "description": "The reader's social.popfeed.feed.listItem records for the book. A book can be on more than one list."
+          },
+          "matchedBy": {
+            "type": "string",
+            "knownValues": ["identifiers", "search", "reader", "none"],
+            "description": "identifiers: an ISBN or Goodreads number agreed, or the item named its BookHive ID. search: title and author agreed. reader: chosen by the reader, and never changed automatically. none: no match yet."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    }
+  }
+}
