@@ -54,6 +54,34 @@ function sign(payload, secret) {
   return createHmac("sha256", secret).update(payload).digest("base64url");
 }
 
+/// Accounts one device may create, counted in its two DeviceCheck bits (0 to 3).
+export const DEVICE_LIMIT = 3;
+/// After the limit, one more account once this many months have passed since the device's last.
+export const DEVICE_COOLDOWN_MONTHS = 6;
+/// More App Attest keys than this from one device in 30 days is refused. Each sign-up attempt makes one.
+export const RISK_LIMIT = 10;
+
+/** Whether a device whose bits read `value`, last changed in `lastUpdate` ("YYYY-MM", or null), may create an
+ *  account now, and the value to write once it has. */
+export function deviceAllowance(value, lastUpdate, now = new Date()) {
+  if (value < DEVICE_LIMIT) return { allowed: true, next: value + 1 };
+  const since = monthsSince(lastUpdate, now);
+  if (since !== null && since >= DEVICE_COOLDOWN_MONTHS) return { allowed: true, next: DEVICE_LIMIT };
+  return { allowed: false, next: value };
+}
+
+/** Whole months from "YYYY-MM" to now's month, in UTC; null when the month can't be read. */
+export function monthsSince(month, now = new Date()) {
+  const match = /^(\d{4})-(\d{2})$/.exec(month ?? "");
+  if (!match) return null;
+  return (now.getUTCFullYear() - Number(match[1])) * 12 + (now.getUTCMonth() + 1 - Number(match[2]));
+}
+
+/** The UTC day a sign-up counts toward, "YYYY-MM-DD". */
+export function dayOf(now = new Date()) {
+  return now.toISOString().slice(0, 10);
+}
+
 /** A refusal with the status and the code the app maps to a sentence. */
 export class SignupError extends Error {
   constructor(status, code, headers = {}) {

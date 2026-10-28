@@ -1,7 +1,9 @@
 // node --test netlify/functions/signup/core.test.mjs
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { validHandle, issueChallenge, readChallenge, CHALLENGE_SECONDS } from "./core.mjs";
+import {
+  validHandle, issueChallenge, readChallenge, deviceAllowance, monthsSince, dayOf, CHALLENGE_SECONDS,
+} from "./core.mjs";
 
 const SECRET = "test-secret";
 
@@ -46,4 +48,26 @@ test("an expired challenge is refused", () => {
   const token = issueChallenge("reader.resenha.ink", SECRET, issued);
   assert.throws(() => readChallenge(token, SECRET), { code: "expired_challenge" });
   assert.doesNotThrow(() => readChallenge(token, SECRET, issued + 1000));
+});
+
+test("a device makes three accounts, then waits six months for each more", () => {
+  const now = new Date(Date.UTC(2026, 9, 28));
+  assert.deepEqual(deviceAllowance(0, null, now), { allowed: true, next: 1 });
+  assert.deepEqual(deviceAllowance(1, "2026-10", now), { allowed: true, next: 2 });
+  assert.deepEqual(deviceAllowance(2, "2026-10", now), { allowed: true, next: 3 });
+  assert.deepEqual(deviceAllowance(3, "2026-10", now), { allowed: false, next: 3 });
+  assert.deepEqual(deviceAllowance(3, "2026-05", now), { allowed: false, next: 3 });
+  assert.deepEqual(deviceAllowance(3, "2026-04", now), { allowed: true, next: 3 });
+  assert.deepEqual(deviceAllowance(3, null, now), { allowed: false, next: 3 });
+  assert.deepEqual(deviceAllowance(3, "garbage", now), { allowed: false, next: 3 });
+});
+
+test("months count across a year", () => {
+  assert.equal(monthsSince("2025-11", new Date(Date.UTC(2026, 4, 1))), 6);
+  assert.equal(monthsSince("2026-05", new Date(Date.UTC(2026, 4, 31))), 0);
+  assert.equal(monthsSince("2026-5", new Date()), null);
+});
+
+test("days are UTC dates", () => {
+  assert.equal(dayOf(new Date("2026-10-28T23:59:59-05:00")), "2026-10-29");
 });

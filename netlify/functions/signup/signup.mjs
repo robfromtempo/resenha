@@ -5,13 +5,21 @@
 // it, this mints one single-use code through Protobase's Admin API. The app then creates the account on the server
 // itself, so passwords and emails never pass through here. See Notes/account-creation.md in the app's repository.
 //
-// Settings, in Netlify's environment: PROTOBASE_KEY, PROTOBASE_SERVER_ID, SIGNUP_SECRET, and
-// APP_ATTEST_ALLOW_DEVELOPMENT ("true" while testing from Xcode).
+// Against accounts made in bulk, each device may create three accounts, counted in Apple's DeviceCheck bits, and a
+// device that has made too many App Attest keys lately is refused. A daily cap bounds the whole server, and a switch
+// pauses it. See Notes/signup-abuse.md in the app's repository.
+//
+// Settings, in Netlify's environment: PROTOBASE_KEY, PROTOBASE_SERVER_ID, SIGNUP_SECRET, APPLE_KEY_ID and
+// APPLE_PRIVATE_KEY (the DeviceCheck key's .p8 file, base64), APP_ATTEST_ALLOW_DEVELOPMENT ("true" while testing
+// from Xcode), SIGNUP_DAILY_LIMIT (50 if unset), and SIGNUP_PAUSED ("true" to stop new accounts).
 
 import { createHmac } from "node:crypto";
 import { getStore } from "@netlify/blobs";
 import { verifyAttestation } from "node-app-attest";
-import { issueChallenge, readChallenge, validHandle, SignupError } from "./core.mjs";
+import { AppleUnavailable, privateKeyFrom, readDeviceBits, riskMetric, writeDeviceBits } from "./apple.mjs";
+import {
+  dayOf, deviceAllowance, issueChallenge, readChallenge, validHandle, RISK_LIMIT, SignupError,
+} from "./core.mjs";
 
 const BUNDLE_ID = "com.robertoramos.Resenha";
 const TEAM_ID = "24FX5MG467";
@@ -21,6 +29,7 @@ const HOURLY_LIMIT = 10;
 const HOUR_MS = 60 * 60 * 1000;
 /// How long a used challenge is remembered: past its own expiry, so it can't come back.
 const NONCE_MEMORY_MS = 15 * 60 * 1000;
+const DEFAULT_DAILY_LIMIT = 50;
 
 export const config = { path: ["/api/signup/challenge", "/api/signup/invite"] };
 
@@ -54,17 +63,21 @@ async function challenge(body, secret) {
 }
 
 async function invite(body, secret, context) {
-  const { challenge: token, keyId, attestation } = body;
+  const { challenge: token, keyId, attestation, deviceToken } = body;
   const read = readChallenge(token, secret);
-  if (typeof keyId !== "string" || typeof attestation !== "string" || attestation.length > 20000) {
+  if (typeof keyId !== "string" || typeof attestation !== "string" || attestation.length > 20000
+    || typeof deviceToken !== "string" || deviceToken.length === 0 || deviceToken.length > 10000) {
     throw new SignupError(400, "bad_request");
   }
+  if (process.env.SIGNUP_PAUSED === "true") throw new SignupError(503, "paused");
+  const apple = appleCredentials();
   await useNonce(read.nonce);
   await countAddress(context.ip, secret);
   await forgetOld();
 
+  let attested;
   try {
-    verifyAttestation({
+    attested = verifyAttestation({
       attestation: Buffer.from(attestation, "base64"),
       challenge: token,
       keyId,
@@ -76,8 +89,93 @@ async function invite(body, secret, context) {
     console.log(`signup: attestation refused (${error.message})`);
     throw new SignupError(401, "attestation_failed");
   }
+  const environment = attested.environment;
 
-  return { inviteCode: await mintCode(), handle: read.handle };
+  const day = await checkDay();
+  const device = await checkDevice(apple, environment, deviceToken);
+  await checkRisk(apple, environment, attested);
+
+  const inviteCode = await mintCode();
+  if (device) await chargeDevice(apple, environment, deviceToken, device);
+  await countDay(day);
+  return { inviteCode, handle: read.handle };
+}
+
+/** Apple's key for DeviceCheck, from Netlify's settings. */
+function appleCredentials() {
+  const keyId = process.env.APPLE_KEY_ID;
+  const privateKey = privateKeyFrom(process.env.APPLE_PRIVATE_KEY);
+  if (!keyId || !privateKey) {
+    console.error("signup: APPLE_KEY_ID or APPLE_PRIVATE_KEY is missing or unreadable");
+    throw new SignupError(503, "unavailable");
+  }
+  return { keyId, teamId: TEAM_ID, privateKey };
+}
+
+/** The server's new accounts today, refused past the daily limit. */
+async function checkDay() {
+  const limit = Number(process.env.SIGNUP_DAILY_LIMIT) || DEFAULT_DAILY_LIMIT;
+  const store = getStore({ name: "signup-days", consistency: "strong" });
+  const day = dayOf();
+  const count = (await store.get(day, { type: "json" }))?.count ?? 0;
+  if (count >= limit) {
+    const now = new Date();
+    const midnight = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1);
+    console.log(`signup: daily limit of ${limit} reached`);
+    throw new SignupError(503, "full", { "Retry-After": String(Math.max(Math.ceil((midnight - now) / 1000), 1)) });
+  }
+  return { store, day, count };
+}
+
+async function countDay({ store, day, count }) {
+  try {
+    await store.setJSON(day, { count: count + 1 });
+  } catch (error) {
+    console.log(`signup: couldn't count the day (${error.message})`);
+  }
+}
+
+/** The device's accounts so far, refused at the limit. Null when Apple can't say: the sign-up goes ahead
+ *  uncharged, and the daily cap still counts it. */
+async function checkDevice(apple, environment, deviceToken) {
+  let bits;
+  try {
+    bits = await readDeviceBits(apple, environment, deviceToken);
+  } catch (error) {
+    if (!(error instanceof AppleUnavailable)) throw error;
+    console.log(`signup: device not checked (${error.message})`);
+    return null;
+  }
+  const allowance = deviceAllowance(bits.value, bits.lastUpdate);
+  if (!allowance.allowed) {
+    console.log(`signup: device at its limit (${bits.value}, last ${bits.lastUpdate})`);
+    throw new SignupError(403, "device_limit");
+  }
+  return { from: bits.value, to: allowance.next };
+}
+
+/** Counts the account against the device. A failure here isn't the person's fault, so the code still goes out. */
+async function chargeDevice(apple, environment, deviceToken, { from, to }) {
+  try {
+    await writeDeviceBits(apple, environment, deviceToken, to);
+    console.log(`signup: device ${from} → ${to}`);
+  } catch (error) {
+    console.log(`signup: device not charged (${error.message})`);
+  }
+}
+
+/** Refuses a device that has made many App Attest keys lately. Logged each time, so the limit can be tuned. */
+async function checkRisk(apple, environment, attested) {
+  let metric;
+  try {
+    metric = await riskMetric(apple, environment, attested, `${TEAM_ID}.${BUNDLE_ID}`);
+  } catch (error) {
+    if (!(error instanceof AppleUnavailable)) throw error;
+    console.log(`signup: risk metric unavailable (${error.message})`);
+    return;
+  }
+  console.log(`signup: risk metric ${metric}`);
+  if (metric > RISK_LIMIT) throw new SignupError(403, "device_limit");
 }
 
 /** Each challenge opens one place. A second use within its life is refused. */
@@ -104,13 +202,19 @@ async function countAddress(ip, secret) {
   await store.setJSON(key, { count });
 }
 
-/** Blobs don't expire, so each sign-up deletes the counters from past hours and the challenges that can't come back. */
+/** Blobs don't expire, so each sign-up deletes the counters from past hours and days, and the challenges that
+ *  can't come back. */
 async function forgetOld() {
   try {
     const hour = Math.floor(Date.now() / HOUR_MS);
     const counters = getStore({ name: "signup-ip", consistency: "strong" });
     const { blobs: counted } = await counters.list();
     await Promise.all(counted.filter((b) => Number(b.key.split("/")[0]) < hour).map((b) => counters.delete(b.key)));
+
+    const today = dayOf();
+    const days = getStore({ name: "signup-days", consistency: "strong" });
+    const { blobs: countedDays } = await days.list();
+    await Promise.all(countedDays.filter((b) => b.key < today).map((b) => days.delete(b.key)));
 
     const nonces = getStore({ name: "signup-nonces", consistency: "strong" });
     const { blobs: used } = await nonces.list();
