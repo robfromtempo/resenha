@@ -8,6 +8,7 @@
 // Settings, in Netlify's environment: PROTOBASE_KEY, PROTOBASE_SERVER_ID, SIGNUP_SECRET, and
 // APP_ATTEST_ALLOW_DEVELOPMENT ("true" while testing from Xcode).
 
+import { createHmac } from "node:crypto";
 import { getStore } from "@netlify/blobs";
 import { verifyAttestation } from "node-app-attest";
 import { issueChallenge, readChallenge, validHandle, SignupError } from "./core.mjs";
@@ -59,7 +60,8 @@ async function invite(body, secret, context) {
     throw new SignupError(400, "bad_request");
   }
   await useNonce(read.nonce);
-  await countAddress(context.ip);
+  await countAddress(context.ip, secret);
+  await forgetOld();
 
   try {
     verifyAttestation({
@@ -86,20 +88,40 @@ async function useNonce(nonce) {
   await store.setJSON(nonce, { at: Date.now() });
 }
 
-/** Ten sign-ups an hour from one address. The address is kept only as the counter's key, with no handle beside it. */
-async function countAddress(ip) {
+/** Ten sign-ups an hour from one address. The address is never stored: only a keyed hash of it, in a bucket for
+ *  the current hour, with no handle or email beside it. Buckets are deleted once their hour has passed. */
+async function countAddress(ip, secret) {
   if (!ip) return;
   const store = getStore({ name: "signup-ip", consistency: "strong" });
   const now = Date.now();
-  const entry = await store.get(ip, { type: "json" });
-  const fresh = !entry || now - entry.start > HOUR_MS;
-  const count = fresh ? 1 : entry.count + 1;
-  const start = fresh ? now : entry.start;
+  const hour = Math.floor(now / HOUR_MS);
+  const key = `${hour}/${createHmac("sha256", secret).update(`ip:${ip}`).digest("base64url")}`;
+  const count = ((await store.get(key, { type: "json" }))?.count ?? 0) + 1;
   if (count > HOURLY_LIMIT) {
-    const wait = Math.ceil((start + HOUR_MS - now) / 1000);
+    const wait = Math.ceil(((hour + 1) * HOUR_MS - now) / 1000);
     throw new SignupError(429, "too_many", { "Retry-After": String(Math.max(wait, 1)) });
   }
-  await store.setJSON(ip, { start, count });
+  await store.setJSON(key, { count });
+}
+
+/** Blobs don't expire, so each sign-up deletes the counters from past hours and the challenges that can't come back. */
+async function forgetOld() {
+  try {
+    const hour = Math.floor(Date.now() / HOUR_MS);
+    const counters = getStore({ name: "signup-ip", consistency: "strong" });
+    const { blobs: counted } = await counters.list();
+    await Promise.all(counted.filter((b) => Number(b.key.split("/")[0]) < hour).map((b) => counters.delete(b.key)));
+
+    const nonces = getStore({ name: "signup-nonces", consistency: "strong" });
+    const { blobs: used } = await nonces.list();
+    await Promise.all(used.map(async (b) => {
+      const seen = await nonces.get(b.key, { type: "json" });
+      if (!seen || Date.now() - seen.at > NONCE_MEMORY_MS) await nonces.delete(b.key);
+    }));
+  } catch (error) {
+    // Tidying can wait for the next sign-up.
+    console.log(`signup: tidying failed (${error.message})`);
+  }
 }
 
 /** One code, good for one account. */

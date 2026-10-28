@@ -33,7 +33,18 @@
 <body>
   <main>
     <h1>Privacy</h1>
-    <p>Resenha does not have its own accounts, and it does not collect data about you. Its website, resenha.ink, shows published reviews by reading them from their writers’ public accounts when someone opens them. The only things it keeps are the language you choose on its home page and, if you pick one, its appearance, light or dark. Both are saved in your own browser, so the site opens the same way next time.</p>
+    <p>Resenha works with any Atmosphere account, and it can also create one for you on its own server. If you make your account there, Resenha’s server holds it, as described below. Otherwise your account and everything in it stay with your own host. The app sends usage analytics and crash reports, described under “Analytics and crash reports”. Its website, resenha.ink, shows published reviews by reading them from their writers’ public accounts when someone opens them. The only things the website keeps are the language you choose on its home page and, if you pick one, its appearance, light or dark. Both are saved in your own browser, so the site opens the same way next time.</p>
+
+    <h2>Accounts on Resenha’s server</h2>
+    <p>If you create your account on Resenha’s server, pds.resenha.ink, it stores your email address, a hash of your password (never the password itself), your handle, your account identifier, and everything you publish or add to the account: reviews, shelves, posts, likes, follows and files. Like any Atmosphere account, what you publish is public.</p>
+    <p>The server is run for Resenha by Protobase, as its hosting provider. Protobase keeps encrypted backups of the server for a limited time, at most 90 days, after which they are deleted. The server’s logs hold IP addresses for a short period, to keep it running and to stop abuse.</p>
+    <p>Your email is used only to confirm your address, reset your password, send the code that confirms deleting your account, and tell you about your account. Never for marketing.</p>
+    <p>When you sign up, Resenha checks that the request comes from a genuine copy of the app, using Apple’s App Attest. Apple confirms the app is genuine, and resenha.ink receives that confirmation. It keeps no identifier of your device. Your email and password go straight from the app to the server, never through resenha.ink. To prevent abuse, resenha.ink counts sign-ups from each internet address. It keeps only a scrambled form of the address, never with your handle or email, and deletes it after an hour.</p>
+    <p>Accounts are for people 16 or older.</p>
+    <p>You can delete your account in the app, from My Account. Deleting it removes it from Resenha’s server: your library, shelves, reviews, posts, files and email. Apps that copied your public posts and reviews, such as Bluesky or BookHive, may keep their copies, and your account identifier’s public history stays in the network’s directory, as the protocol requires. Backups expire on the schedule above.</p>
+
+    <h2>Accounts on Eurosky and Bluesky</h2>
+    <p>Resenha can also create your account on Eurosky or Bluesky. They ask everyone who signs up to pass a check on their own page, shown inside Resenha. Resenha doesn’t see what you do on that page. Your account then lives with that host, under its own privacy policy and terms, and Resenha keeps nothing of it.</p>
 
     <h2>On your devices</h2>
     <p>Signing in keeps a session in the keychain on that device, so you stay logged in. Signing out removes it.</p>
@@ -45,7 +56,7 @@
     <p>The review is saved twice. Formatted, as a Standard.site article, which resenha.ink and other reading apps show. And as plain text on the book’s BookHive record, so BookHive shows it without formatting marks. Resenha also saves a small record that links the review to its book, and a picture of the book’s cover for its link card. The review’s title, whether you marked it as having spoilers, and the languages it’s written in are saved with it. The first time you publish, you choose where the review goes: a Book Reviews publication Resenha creates for you, named after your profile and with Resenha’s icon, or one of your existing Standard.site publications. All of it is public, like the review.</p>
     <p>If “Post to the Atmosphere” is on, Resenha also posts from your account, with a link to the review. The post appears on Bluesky, Mu Social and other apps that read the Atmosphere. Replies to that post are the review’s comments, and a comment you write in Resenha is posted as a reply from your account. Unpublishing removes the review, its link and the Bluesky post that announced it from your account. Replies other people wrote stay in their own accounts.</p>
     <p>resenha.ink is hosted by Netlify, which, like any web host, handles the requests of the people who visit it.</p>
-    <p>Your password is entered on your account host’s page, such as Bluesky. It is never sent to Resenha.</p>
+    <p>To sign in, your password is entered on your account host’s page, such as Bluesky’s or Resenha’s server’s. When you create an account in the app, the password you choose goes straight to the host you picked. It never passes through resenha.ink.</p>
 
     <h2>Shelves</h2>
     <p>Shelves are saved to your own Atmosphere account, like reviews, in the format BookHive and Popfeed use, so they show in those apps too. They are public: anyone can see a shelf’s name and the books on it. Deleting a shelf removes it from your account.</p>
@@ -79,8 +90,12 @@
     <h2>Videos</h2>
     <p>Book pages search YouTube for reviews and interviews about the book. The search sends the book’s title and author to Google’s YouTube API, with nothing about you. Videos play in YouTube’s privacy-enhanced player, and Google’s privacy policy applies when you play one.</p>
 
+    <h2>Analytics and crash reports</h2>
+    <p>The app sends usage events and crash reports to PostHog, an analytics service, on its servers in the European Union, so we can see which features are used and fix what breaks. The events are: opening and leaving the app, the screens shown, publishing, updating or unpublishing a review, removing a book from your library, creating a shelf and adding a book to one, and starting and finishing a library import, with the number of books. Crash and error reports carry technical details of what went wrong. Each comes with your device’s model, its system version and Resenha’s version, and is linked to your account identifier and handle, so a problem can be traced to the account it happened in. PostHog doesn’t store your IP address.</p>
+    <p>None of it includes what you write or read: no review text, book titles, shelf names, files or highlights.</p>
+
     <h2>What we don’t do</h2>
-    <p>No ads. No tracking. No analytics. We don’t sell data, because we don’t hold any.</p>
+    <p>No ads. No tracking across other apps and websites. We don’t sell data, and we don’t share it with anyone beyond the services named here.</p>
 
     <h2>Sending feedback</h2>
     <p>Feedback you send from Resenha is posted from your account to Resenha’s public board on userinput.app, with any screenshots you add. Like a review, it is public, anyone can read it, and it stays in your account.</p>
