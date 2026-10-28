@@ -54,12 +54,15 @@ export async function readDeviceBits(credentials, environment, deviceToken) {
   });
   const text = await response.text();
   if (response.status !== 200) throw new AppleUnavailable(`DeviceCheck query answered ${response.status} ${text.slice(0, 80)}`);
-  if (text.trim() === "" || /bit state not found/i.test(text)) return { value: 0, lastUpdate: null };
   let bits;
   try {
     bits = JSON.parse(text);
   } catch {
-    throw new AppleUnavailable("DeviceCheck query answered something other than JSON");
+    // A device Apple has no bits for gets a sentence instead of JSON: "Bit State Not Found", Apple's documentation
+    // says, though the first real sign-up got something that didn't match that. Any sentence about the bit state
+    // counts as none; anything else is logged as it came, to learn its wording.
+    if (text.trim() === "" || /bit state/i.test(text)) return { value: 0, lastUpdate: null };
+    throw new AppleUnavailable(`DeviceCheck query answered "${text.slice(0, 60)}"`);
   }
   return { value: (bits.bit0 ? 1 : 0) + (bits.bit1 ? 2 : 0), lastUpdate: bits.last_update_time ?? null };
 }
