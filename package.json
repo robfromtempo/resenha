@@ -2,8 +2,18 @@
   "name": "resenha-site",
   "private": true,
   "type": "module",
-  "description": "resenha.ink: static pages, plus a function that serves Standard.site reviews from readers' own repositories.",
+  "description": "resenha.ink: static pages, plus functions that serve Standard.site reviews from readers' own repositories and open sign-ups on Resenha's account server.",
   "dependencies": {
-    "marked": "16.3.0"
+    "@netlify/blobs": "11.1.4",
+    "marked": "16.3.0",
+    "node-app-attest": "1.0.1"
+  },
+  "overrides": {
+    "@fastify/busboy": "3.2.3",
+    "@netlify/otel": "7.0.4",
+    "asn1js": "3.0.10",
+    "es-module-lexer": "3.0.3",
+    "import-in-the-middle": "3.5.2",
+    "pkijs": "3.4.1"
   }
 }
