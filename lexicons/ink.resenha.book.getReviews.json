@@ -1,0 +1,64 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.book.getReviews",
+  "description": "Reviews of a book from every source, newest first.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Readers the caller blocks are left out.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "hiveId": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "scope": {
+            "type": "string",
+            "knownValues": [
+              "all",
+              "resenha"
+            ],
+            "default": "all",
+            "description": "all: every book reader the server knows, on BookHive, Popfeed and Resenha. resenha: Resenha's readers only."
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Where the previous page ended."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 50
+          }
+        },
+        "required": [
+          "hiveId"
+        ]
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Where the previous page ended."
+            },
+            "reviews": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#reviewView"
+              }
+            }
+          },
+          "required": [
+            "reviews"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.discover.getReviews",
+  "description": "Recent reviews by Resenha's readers.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Signed in, the caller's own reviews, and those of accounts they follow or block, can be left out.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "language": {
+            "type": "string",
+            "format": "language",
+            "description": "Only reviews in this language."
+          },
+          "excludeFollowing": {
+            "type": "boolean",
+            "default": false
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Where the previous page ended."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 50
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Where the previous page ended."
+            },
+            "reviews": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#reviewView"
+              }
+            }
+          },
+          "required": [
+            "reviews"
+          ]
+        }
+      }
+    }
+  }
+}

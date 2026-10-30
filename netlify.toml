@@ -26,6 +26,13 @@
   [headers.values]
     Content-Type = "application/json"
 
+# Resenha's server's identity, did:web:resenha.ink. Account servers read it to forward the app's calls to the server.
+[[headers]]
+  for = "/.well-known/did.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Access-Control-Allow-Origin = "*"
+
 # Furifont, for Japanese review text. The file name carries its version, so it never changes and can be cached for good.
 [[headers]]
   for = "/fonts/FurifontSerifVF-*.woff2"

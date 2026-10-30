@@ -1,0 +1,86 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.book.getReaders",
+  "description": "How many readers have a book, by status.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Signed in, also which readers the caller follows have it.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "hiveId": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "scope": {
+            "type": "string",
+            "knownValues": [
+              "all",
+              "resenha"
+            ],
+            "default": "all",
+            "description": "all: every book reader the server knows, on BookHive, Popfeed and Resenha. resenha: Resenha's readers only."
+          }
+        },
+        "required": [
+          "hiveId"
+        ]
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "wantToRead": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "reading": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "read": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "following": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#followedReader"
+              }
+            }
+          },
+          "required": [
+            "wantToRead",
+            "reading",
+            "read"
+          ]
+        }
+      }
+    },
+    "followedReader": {
+      "type": "object",
+      "required": [
+        "did",
+        "status"
+      ],
+      "properties": {
+        "did": {
+          "type": "string",
+          "format": "did"
+        },
+        "status": {
+          "type": "string",
+          "knownValues": [
+            "wantToRead",
+            "reading",
+            "read",
+            "abandoned"
+          ]
+        }
+      }
+    }
+  }
+}

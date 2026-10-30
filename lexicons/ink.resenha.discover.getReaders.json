@@ -1,0 +1,57 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.discover.getReaders",
+  "description": "Resenha's readers who agreed to be suggested.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "similar needs the caller's service token, and ranks by books in common and agreeing ratings.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "sort": {
+            "type": "string",
+            "knownValues": [
+              "new",
+              "active",
+              "similar"
+            ],
+            "default": "active"
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Where the previous page ended."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 50
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Where the previous page ended."
+            },
+            "readers": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#readerView"
+              }
+            }
+          },
+          "required": [
+            "readers"
+          ]
+        }
+      }
+    }
+  }
+}

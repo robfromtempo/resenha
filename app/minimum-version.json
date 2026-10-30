@@ -1,0 +1,4 @@
+{
+  "about": "The oldest build of the Resenha app that still works with readers' accounts. Older builds ask to be updated. Raise it when a release changes data in a way older builds can't read, such as encrypted eBooks (Notes/ebooks.md in the app repository).",
+  "build": 1
+}

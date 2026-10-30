@@ -1,0 +1,191 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.defs",
+  "description": "Views shared by the calls Resenha's server answers.",
+  "defs": {
+    "bookView": {
+      "type": "object",
+      "description": "Enough of a book to show a row. Covers and details come from BookHive's catalog.",
+      "required": [
+        "hiveId"
+      ],
+      "properties": {
+        "hiveId": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "The book's BookHive ID."
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "authors": {
+          "type": "string",
+          "maxLength": 1024,
+          "description": "Authors as BookHive stores them, tab-separated."
+        },
+        "cover": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "description": "Something a reader did with a book.",
+      "required": [
+        "uri",
+        "kind",
+        "actor",
+        "book",
+        "date",
+        "source"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "The record it comes from."
+        },
+        "kind": {
+          "type": "string",
+          "knownValues": [
+            "started",
+            "finished",
+            "reviewed"
+          ]
+        },
+        "actor": {
+          "type": "string",
+          "format": "did"
+        },
+        "book": {
+          "type": "ref",
+          "ref": "#bookView"
+        },
+        "date": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "source": {
+          "type": "string",
+          "knownValues": [
+            "bookhive",
+            "popfeed",
+            "resenha"
+          ]
+        },
+        "stars": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "In half stars, 1 to 10, as BookHive keeps them."
+        },
+        "excerpt": {
+          "type": "string",
+          "maxGraphemes": 300,
+          "maxLength": 3000,
+          "description": "The start of the review, plain text."
+        }
+      }
+    },
+    "reviewView": {
+      "type": "object",
+      "required": [
+        "uri",
+        "author",
+        "book",
+        "createdAt",
+        "source"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "The review: a Standard.site document, a Popfeed review, or a BookHive book record with a review."
+        },
+        "author": {
+          "type": "string",
+          "format": "did"
+        },
+        "book": {
+          "type": "ref",
+          "ref": "#bookView"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "source": {
+          "type": "string",
+          "knownValues": [
+            "bookhive",
+            "popfeed",
+            "resenha"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "maxGraphemes": 300,
+          "maxLength": 3000
+        },
+        "excerpt": {
+          "type": "string",
+          "maxGraphemes": 300,
+          "maxLength": 3000
+        },
+        "stars": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "language"
+          },
+          "maxLength": 8
+        },
+        "hasSpoilers": {
+          "type": "boolean"
+        }
+      }
+    },
+    "readerView": {
+      "type": "object",
+      "required": [
+        "did"
+      ],
+      "properties": {
+        "did": {
+          "type": "string",
+          "format": "did"
+        },
+        "readingNow": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#bookView"
+          },
+          "maxLength": 5
+        },
+        "followedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When the caller followed them, for the caller's own list."
+        },
+        "joinedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When they started using Resenha."
+        },
+        "booksInCommon": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "With the caller, when sorted by similar."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.notification.registerPush",
+  "description": "Registers a device for push notifications.",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Requires the caller's service token. Registering a token again moves it to the caller.",
+      "input": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "token",
+            "platform",
+            "appId",
+            "environment"
+          ],
+          "properties": {
+            "token": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The device's push token, hex."
+            },
+            "platform": {
+              "type": "string",
+              "knownValues": [
+                "ios",
+                "macos"
+              ]
+            },
+            "appId": {
+              "type": "string",
+              "maxLength": 256,
+              "description": "The app's bundle identifier."
+            },
+            "environment": {
+              "type": "string",
+              "knownValues": [
+                "sandbox",
+                "production"
+              ],
+              "description": "sandbox for debug builds, production for TestFlight and the App Store."
+            }
+          }
+        }
+      }
+    }
+  }
+}

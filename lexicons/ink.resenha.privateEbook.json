@@ -1,0 +1,58 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.privateEbook",
+  "description": "A book file the account keeps for reading in Resenha, encrypted on the reader's devices before upload: an EPUB, a PDF or a comic archive. Only the reader's devices hold the key, so the file, its cover and its details can't be read from the account's server. Replaces an ink.resenha.ebook record with the same record key.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "One per file. Deleting the record lets the account's server delete the file and its cover.",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": [
+          "file",
+          "details",
+          "keyId",
+          "version",
+          "createdAt"
+        ],
+        "properties": {
+          "file": {
+            "type": "blob",
+            "accept": [
+              "application/octet-stream"
+            ],
+            "description": "The book, encrypted and padded."
+          },
+          "cover": {
+            "type": "blob",
+            "accept": [
+              "application/octet-stream"
+            ],
+            "maxSize": 2000000,
+            "description": "A cover image for showing the book in a list, encrypted and padded."
+          },
+          "details": {
+            "type": "bytes",
+            "maxLength": 32000,
+            "description": "The book's format, title, authors and library link, with what's needed to open the file and the cover, encrypted."
+          },
+          "keyId": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "Which of the reader's keys encrypted the file. Matches keyId in the account's ink.resenha.ebookKey record."
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The encryption format. 1 is AES-GCM in 64 KiB chunks, with keys derived by HKDF-SHA256."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.notification.unregisterPush",
+  "description": "Stops push notifications to a device.",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Requires the caller's service token.",
+      "input": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "token",
+            "platform",
+            "appId"
+          ],
+          "properties": {
+            "token": {
+              "type": "string",
+              "maxLength": 512,
+              "description": "The device's push token, hex."
+            },
+            "platform": {
+              "type": "string",
+              "knownValues": [
+                "ios",
+                "macos"
+              ]
+            },
+            "appId": {
+              "type": "string",
+              "maxLength": 256,
+              "description": "The app's bundle identifier."
+            }
+          }
+        }
+      }
+    }
+  }
+}

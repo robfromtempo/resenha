@@ -1,0 +1,39 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.actor.profile",
+  "description": "Marks an account as a Resenha reader. Resenha's server reads it to know who uses Resenha, and whether they agreed to be suggested to other readers.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "One per account, with the record key self. Written by the app after sign-in, and deleted when the reader leaves Resenha's directory.",
+      "key": "literal:self",
+      "record": {
+        "type": "object",
+        "required": [
+          "createdAt"
+        ],
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "When the reader started using Resenha."
+          },
+          "discoverable": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether the reader may be suggested to others: in Discover, the reader directory and Resenha's starter pack. Their public records are public either way."
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "language"
+            },
+            "maxLength": 8,
+            "description": "Languages the reader reads in, most used first, to rank what Discover suggests."
+          }
+        }
+      }
+    }
+  }
+}

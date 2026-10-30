@@ -1,0 +1,30 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.notification.getUnreadCount",
+  "description": "How many notifications the caller hasn't seen.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Likes on one review count once, as the app shows them.",
+      "parameters": {
+        "type": "params",
+        "properties": {}
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "count"
+          ]
+        }
+      }
+    }
+  }
+}

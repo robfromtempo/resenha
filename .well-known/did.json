@@ -1,0 +1,11 @@
+{
+  "@context": ["https://www.w3.org/ns/did/v1"],
+  "id": "did:web:resenha.ink",
+  "service": [
+    {
+      "id": "#resenha_appview",
+      "type": "ResenhaAppView",
+      "serviceEndpoint": "https://api.resenha.ink"
+    }
+  ]
+}

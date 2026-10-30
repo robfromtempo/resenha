@@ -1,0 +1,35 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.ebookKey",
+  "description": "Which key encrypts the account's ink.resenha.privateEbook files. The key itself stays on the reader's devices; this record only names it, and keeps a copy locked with a recovery key when the reader saved one.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "One per account. Written once, by the first device that makes a key, so two devices can't each make their own.",
+      "key": "literal:self",
+      "record": {
+        "type": "object",
+        "required": [
+          "keyId",
+          "createdAt"
+        ],
+        "properties": {
+          "keyId": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "A fingerprint of the key, derived from it, that can't be used to find the key."
+          },
+          "recovery": {
+            "type": "bytes",
+            "maxLength": 256,
+            "description": "The key, encrypted with a recovery key that only the reader holds. Absent until the reader saves a recovery key."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.notification.updateSeen",
+  "description": "Marks the caller's notifications seen up to a time.",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Requires the caller's service token.",
+      "input": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "seenAt"
+          ],
+          "properties": {
+            "seenAt": {
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      }
+    }
+  }
+}

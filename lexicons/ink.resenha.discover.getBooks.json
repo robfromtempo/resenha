@@ -1,0 +1,78 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.discover.getBooks",
+  "description": "The books Resenha's readers started, finished or reviewed most lately.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Ranked by how many readers did so in the window.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "window": {
+            "type": "string",
+            "knownValues": [
+              "week",
+              "month"
+            ],
+            "default": "week"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 50
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "books": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#bookCount"
+              }
+            }
+          },
+          "required": [
+            "books"
+          ]
+        }
+      }
+    },
+    "bookCount": {
+      "type": "object",
+      "required": [
+        "book",
+        "readers"
+      ],
+      "properties": {
+        "book": {
+          "type": "ref",
+          "ref": "ink.resenha.defs#bookView"
+        },
+        "readers": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Readers who started, finished or reviewed it in the window."
+        },
+        "started": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "finished": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reviewed": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}
