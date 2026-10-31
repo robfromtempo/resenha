@@ -68,6 +68,11 @@
           "createdAt": {
             "type": "string",
             "format": "datetime"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "When the reader moved the file to Resenha's trash. The file stays in the account, off the shelf, for 30 days from this moment, unless the reader restores it; then the record is deleted."
           }
         }
       }
