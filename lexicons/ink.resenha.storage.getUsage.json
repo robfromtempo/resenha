@@ -1,0 +1,63 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.storage.getUsage",
+  "description": "What the caller's account holds on Resenha's own server, pds.resenha.ink, as Resenha's server last measured it: every file and the database, as the host counts them, and the share taken by the caller's eBook and comic files, which is what Resenha's plan counts. Only the caller's own figures.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Requires the caller's service token. Measured once a day; a new account isn't measured until the next check.",
+      "parameters": {
+        "type": "params",
+        "properties": {}
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": ["checkedAt", "limitBytes", "blobBytes", "dbBytes", "overLimit"],
+          "properties": {
+            "checkedAt": {
+              "type": "integer",
+              "description": "When Resenha's server last checked, in seconds since 1970."
+            },
+            "measuredAt": {
+              "type": "string",
+              "format": "datetime",
+              "description": "When the host last measured the account, when it says."
+            },
+            "limitBytes": {
+              "type": "integer",
+              "description": "The room the caller's plan gives eBook and comic files."
+            },
+            "blobBytes": {
+              "type": "integer",
+              "description": "Every file in the account, whichever app saved it."
+            },
+            "dbBytes": {
+              "type": "integer",
+              "description": "The account's records: library, reviews, follows, and other apps' records."
+            },
+            "ebookBytes": {
+              "type": "integer",
+              "description": "The caller's eBook and comic files, from the sizes their records carry. Absent when the records couldn't be read."
+            },
+            "ebookFiles": {
+              "type": "integer"
+            },
+            "otherAppsBytes": {
+              "type": "integer",
+              "description": "Files other apps saved: blobBytes less ebookBytes. Absent with ebookBytes."
+            },
+            "overLimit": {
+              "type": "boolean",
+              "description": "The eBook and comic files are past the plan's room. Nothing is deleted or blocked for it."
+            }
+          }
+        }
+      },
+      "errors": [
+        { "name": "NotMeasured", "description": "The account hasn't been measured yet." }
+      ]
+    }
+  }
+}
