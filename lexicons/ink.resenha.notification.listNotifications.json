@@ -5,7 +5,7 @@
   "defs": {
     "main": {
       "type": "query",
-      "description": "Requires the caller's service token.",
+      "description": "Requires the caller's service token. Only the caller's own.",
       "parameters": {
         "type": "params",
         "properties": {
@@ -40,6 +40,10 @@
             "seenAt": {
               "type": "string",
               "format": "datetime"
+            },
+            "preferences": {
+              "type": "ref",
+              "ref": "#preferences"
             }
           },
           "required": [
@@ -73,7 +77,8 @@
             "reviewComment",
             "reply",
             "comicComment"
-          ]
+          ],
+          "description": "like and quote group under their review; reply is to a comment of the caller's, on Bluesky (with thread), Popfeed or BookHive."
         },
         "source": {
           "type": "string",
@@ -107,6 +112,28 @@
         "indexedAt": {
           "type": "string",
           "format": "datetime"
+        },
+        "thread": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "For a reply to the caller's comment: the post the thread hangs from, some reader's review."
+        }
+      }
+    },
+    "preferences": {
+      "type": "object",
+      "required": [
+        "likes"
+      ],
+      "properties": {
+        "likes": {
+          "type": "string",
+          "knownValues": [
+            "everyone",
+            "following",
+            "off"
+          ],
+          "description": "Whose likes and quotes are pushed to the caller's devices. They're always listed."
         }
       }
     }

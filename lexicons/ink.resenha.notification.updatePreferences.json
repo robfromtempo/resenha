@@ -1,0 +1,31 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.notification.updatePreferences",
+  "description": "Chooses whose likes and quotes are pushed to the caller's devices.",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Requires the caller's service token.",
+      "input": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "likes"
+          ],
+          "properties": {
+            "likes": {
+              "type": "string",
+              "knownValues": [
+                "everyone",
+                "following",
+                "off"
+              ],
+              "default": "everyone"
+            }
+          }
+        }
+      }
+    }
+  }
+}
