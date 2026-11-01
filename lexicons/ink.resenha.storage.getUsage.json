@@ -1,7 +1,7 @@
 {
   "lexicon": 1,
   "id": "ink.resenha.storage.getUsage",
-  "description": "What the caller's account holds on Resenha's own server, pds.resenha.ink, as Resenha's server last measured it: every file and the database, as the host counts them, and the share taken by the caller's eBook and comic files, which is what Resenha's plan counts. Only the caller's own figures.",
+  "description": "What the caller's account holds on Resenha's own server, pds.resenha.ink, as Resenha's server last measured it: every file, measured from the account's blobs; the database, when the host has measured it; and the share taken by the caller's eBook and comic files, which is what Resenha's plan counts. Only the caller's own figures.",
   "defs": {
     "main": {
       "type": "query",
@@ -14,7 +14,7 @@
         "encoding": "application/json",
         "schema": {
           "type": "object",
-          "required": ["checkedAt", "limitBytes", "blobBytes", "dbBytes", "overLimit"],
+          "required": ["checkedAt", "limitBytes", "blobBytes", "overLimit"],
           "properties": {
             "checkedAt": {
               "type": "integer",
@@ -31,11 +31,11 @@
             },
             "blobBytes": {
               "type": "integer",
-              "description": "Every file in the account, whichever app saved it."
+              "description": "Every file in the account, whichever app saved it, from the sizes of its blobs."
             },
             "dbBytes": {
               "type": "integer",
-              "description": "The account's records: library, reviews, follows, and other apps' records."
+              "description": "The account's records: library, reviews, follows, and other apps' records. Absent until the host has measured the account."
             },
             "ebookBytes": {
               "type": "integer",
