@@ -76,9 +76,11 @@
             "quote",
             "reviewComment",
             "reply",
-            "comicComment"
+            "comicComment",
+            "readingLike",
+            "readingComment"
           ],
-          "description": "like and quote group under their review; reply is to a comment of the caller's, on Bluesky (with thread), Popfeed or BookHive."
+          "description": "like and quote group under their review; readingLike groups under the book record it's on, and readingComment is a comment on the caller reading a book; reply is to a comment of the caller's, on Bluesky (with thread), Popfeed, BookHive or Resenha (with thread, the book record)."
         },
         "source": {
           "type": "string",
@@ -117,6 +119,18 @@
           "type": "string",
           "format": "at-uri",
           "description": "For a reply to the caller's comment: the post the thread hangs from, some reader's review."
+        },
+        "book": {
+          "type": "object",
+          "description": "For readingLike, readingComment and a Resenha reply: the caller's book.",
+          "properties": {
+            "hiveId": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          }
         }
       }
     },

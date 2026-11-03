@@ -1,0 +1,72 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.parlor.getThread",
+  "description": "The conversation about a reader reading a book: the Resenha comments and BookHive buzzes on their book record, with the likes count and whether the caller liked it.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Requires the caller's service token.",
+      "parameters": {
+        "type": "params",
+        "required": [
+          "subject"
+        ],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "The reader's book record."
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "subject",
+            "comments"
+          ],
+          "properties": {
+            "subject": {
+              "type": "string",
+              "format": "at-uri"
+            },
+            "cid": {
+              "type": "string",
+              "format": "cid",
+              "description": "The record's version as the server last saw it, for a like or comment to name."
+            },
+            "likeCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "commentCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "viewer": {
+              "type": "ref",
+              "ref": "ink.resenha.defs#viewerState"
+            },
+            "comments": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#commentView"
+              },
+              "description": "Oldest first, flat; parent names the comment each reply answers."
+            },
+            "profiles": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#profileView"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

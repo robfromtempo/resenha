@@ -1,0 +1,67 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.feed.comment",
+  "description": "A comment on a reader's book record, or a reply to such a comment: the conversation about a reader reading a book, for activities in Resenha's Feed that have no post to reply to. One subject per book per reader, so comments on their starting and finishing it are one thread. Written in the commenter's account; Resenha's server threads them and tells the reader.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": [
+          "subject",
+          "text",
+          "createdAt"
+        ],
+        "properties": {
+          "subject": {
+            "type": "ref",
+            "ref": "com.atproto.repo.strongRef",
+            "description": "The reader's book record the thread is about, for a reply too."
+          },
+          "text": {
+            "type": "string",
+            "maxGraphemes": 1000,
+            "maxLength": 10000
+          },
+          "reply": {
+            "type": "ref",
+            "ref": "#replyRef",
+            "description": "Present on a reply to another comment."
+          },
+          "langs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "language"
+            },
+            "maxLength": 3
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    },
+    "replyRef": {
+      "type": "object",
+      "required": [
+        "root",
+        "parent"
+      ],
+      "properties": {
+        "root": {
+          "type": "ref",
+          "ref": "com.atproto.repo.strongRef",
+          "description": "The first comment of the thread."
+        },
+        "parent": {
+          "type": "ref",
+          "ref": "com.atproto.repo.strongRef",
+          "description": "The comment being answered."
+        }
+      }
+    }
+  }
+}

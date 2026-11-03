@@ -1,0 +1,30 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.feed.like",
+  "description": "A like on a reader's book record (a BookHive book record or a Popfeed list item), for an activity in Resenha's Feed that has no post to like: started, finished, wants to read, abandoned, progress, or a review announced nowhere. Written in the liker's account. Resenha's server counts them for the Feed.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "description": "One per liker and subject.",
+      "record": {
+        "type": "object",
+        "required": [
+          "subject",
+          "createdAt"
+        ],
+        "properties": {
+          "subject": {
+            "type": "ref",
+            "ref": "com.atproto.repo.strongRef",
+            "description": "The reader's book record."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    }
+  }
+}

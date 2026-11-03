@@ -116,6 +116,25 @@
         "progress": {
           "type": "ref",
           "ref": "#progressView"
+        },
+        "cid": {
+          "type": "string",
+          "format": "cid",
+          "description": "The record's version as the server last saw it, for a like or comment to name."
+        },
+        "likeCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Resenha likes on the reader's book record."
+        },
+        "commentCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Comments in the thread about the reader reading this book: Resenha comments and BookHive buzzes."
+        },
+        "viewer": {
+          "type": "ref",
+          "ref": "#viewerState"
         }
       }
     },
@@ -425,6 +444,68 @@
         "updatedAt": {
           "type": "string",
           "format": "datetime"
+        }
+      }
+    },
+    "viewerState": {
+      "type": "object",
+      "description": "The caller's own reactions to a book record.",
+      "properties": {
+        "like": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "The caller's like, to take it back."
+        }
+      }
+    },
+    "commentView": {
+      "type": "object",
+      "description": "A comment in the thread about a reader reading a book.",
+      "required": [
+        "uri",
+        "author",
+        "text",
+        "createdAt",
+        "source"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "at-uri"
+        },
+        "cid": {
+          "type": "string",
+          "format": "cid"
+        },
+        "author": {
+          "type": "string",
+          "format": "did"
+        },
+        "text": {
+          "type": "string",
+          "maxGraphemes": 1000,
+          "maxLength": 10000
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "source": {
+          "type": "string",
+          "knownValues": [
+            "resenha",
+            "bookhive"
+          ],
+          "description": "A Resenha comment, or a BookHive buzz, which is read here but answered on BookHive."
+        },
+        "parent": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "The comment this one answers; absent at the top."
+        },
+        "root": {
+          "type": "string",
+          "format": "at-uri"
         }
       }
     }
