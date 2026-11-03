@@ -1,0 +1,50 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.moderation.resolveReport",
+  "description": "A maintainer's decision on a reported Resenha comment: remove it from every reader's thread, keep it, remove it and hide its author from suggestions and the pack, or put a removed comment back. The record stays in its author's account either way.",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Requires a maintainer's service token.",
+      "input": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "uri",
+            "action"
+          ],
+          "properties": {
+            "uri": {
+              "type": "string",
+              "format": "at-uri",
+              "description": "The comment."
+            },
+            "action": {
+              "type": "string",
+              "knownValues": [
+                "remove",
+                "keep",
+                "removeAndHide",
+                "restore"
+              ]
+            },
+            "note": {
+              "type": "string",
+              "maxGraphemes": 1000,
+              "maxLength": 10000,
+              "description": "For the maintainers' own record."
+            }
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    }
+  }
+}

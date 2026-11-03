@@ -1,0 +1,47 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.moderation.listRemoved",
+  "description": "The Resenha comments the maintainers removed, newest first, each with its words, so one can be put back.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Requires a maintainer's service token.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 100
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "removed"
+          ],
+          "properties": {
+            "removed": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#reportView"
+              }
+            },
+            "profiles": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#profileView"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -542,6 +542,75 @@
           "description": "Up to three of them, to name."
         }
       }
+    },
+    "reportView": {
+      "type": "object",
+      "description": "A reported, or removed, Resenha comment as the maintainers see it.",
+      "required": [
+        "uri"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "The comment."
+        },
+        "author": {
+          "type": "string",
+          "format": "did"
+        },
+        "text": {
+          "type": "string",
+          "description": "The comment's words, as the index keeps them."
+        },
+        "subject": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "The book record the thread is on."
+        },
+        "subjectTitle": {
+          "type": "string",
+          "description": "That book's title, when the index has it."
+        },
+        "subjectOwner": {
+          "type": "string",
+          "format": "did"
+        },
+        "reporter": {
+          "type": "string",
+          "format": "did"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "reportedAt": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "removed": {
+          "type": "boolean"
+        },
+        "removedAt": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "resolvedAt": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "resolution": {
+          "type": "string",
+          "knownValues": [
+            "remove",
+            "keep",
+            "removeAndHide",
+            "restore"
+          ]
+        }
+      }
     }
   }
 }

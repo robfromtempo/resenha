@@ -1,0 +1,30 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.moderation.getState",
+  "description": "Whether the caller is one of Resenha's maintainers, and how many reports await them. Cheap, for the Settings row and its badge.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Requires the caller's service token.",
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "maintainer"
+          ],
+          "properties": {
+            "maintainer": {
+              "type": "boolean"
+            },
+            "open": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Reports not yet resolved."
+            }
+          }
+        }
+      }
+    }
+  }
+}
