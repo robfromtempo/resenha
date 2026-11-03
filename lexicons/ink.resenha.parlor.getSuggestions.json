@@ -1,7 +1,7 @@
 {
   "lexicon": 1,
   "id": "ink.resenha.parlor.getSuggestions",
-  "description": "Readers for the caller to follow when their Parlor is empty: Resenha's active readers first, then BookHive's and Popfeed's active this month, then anyone reviewing this year; never the caller or anyone they follow. Ranked once an hour.",
+  "description": "Readers for the caller to follow when their Parlor is empty: Resenha's discoverable readers first, then BookHive's and Popfeed's active in the last six months, then anyone reviewing this year, by days active within a tier; never the caller or anyone they follow. Ranked once an hour.",
   "defs": {
     "main": {
       "type": "query",

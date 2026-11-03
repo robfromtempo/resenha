@@ -351,10 +351,10 @@
           "minimum": 0,
           "maximum": 2
         },
-        "activeThisMonth": {
+        "activeDays": {
           "type": "integer",
           "minimum": 0,
-          "description": "Books they started, finished, changed or progressed in over the last 30 days."
+          "description": "Days over the last six months on which they started, finished, changed, progressed in or reviewed a book, on any source."
         },
         "reviews": {
           "type": "integer",
