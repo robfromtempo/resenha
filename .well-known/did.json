@@ -1,10 +1,17 @@
 {
-  "@context": ["https://www.w3.org/ns/did/v1"],
+  "@context": [
+    "https://www.w3.org/ns/did/v1"
+  ],
   "id": "did:web:resenha.ink",
   "service": [
     {
       "id": "#resenha_appview",
       "type": "ResenhaAppView",
+      "serviceEndpoint": "https://api.resenha.ink"
+    },
+    {
+      "id": "#bsky_fg",
+      "type": "BskyFeedGenerator",
       "serviceEndpoint": "https://api.resenha.ink"
     }
   ]
