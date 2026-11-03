@@ -1,0 +1,56 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.parlor.getSuggestions",
+  "description": "Readers for the caller to follow when their Parlor is empty: Resenha's active readers first, then BookHive's and Popfeed's active this month, then anyone reviewing this year; never the caller or anyone they follow. Ranked once an hour.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Requires the caller's service token.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "languages": {
+            "type": "string",
+            "description": "The device's languages, comma-separated BCP 47 codes: readers writing in them come first within each tier."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 30
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "suggestions"
+          ],
+          "properties": {
+            "suggestions": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#suggestionView"
+              }
+            },
+            "onboardedAt": {
+              "type": "string",
+              "format": "datetime",
+              "description": "When the caller said Done to the list; absent while they haven't."
+            },
+            "profiles": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#profileView"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

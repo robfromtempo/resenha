@@ -324,6 +324,109 @@
           "maxLength": 3
         }
       }
+    },
+    "suggestionView": {
+      "type": "object",
+      "description": "A reader worth following, for an empty Parlor.",
+      "required": [
+        "did",
+        "source"
+      ],
+      "properties": {
+        "did": {
+          "type": "string",
+          "format": "did"
+        },
+        "source": {
+          "type": "string",
+          "knownValues": [
+            "resenha",
+            "bookhive",
+            "popfeed"
+          ],
+          "description": "Where they read: Resenha's readers come first, then BookHive's and Popfeed's."
+        },
+        "tier": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "activeThisMonth": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Books they started, finished, changed or progressed in over the last 30 days."
+        },
+        "reviews": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "books": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "language"
+          },
+          "description": "The languages they said their reviews are in."
+        },
+        "latestReview": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "format": "datetime"
+            },
+            "title": {
+              "type": "string"
+            },
+            "excerpt": {
+              "type": "string",
+              "maxGraphemes": 200
+            }
+          }
+        }
+      }
+    },
+    "starterPackView": {
+      "type": "object",
+      "description": "A starter pack the server keeps in the official account.",
+      "required": [
+        "uri",
+        "name",
+        "members"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "at-uri"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "list": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "The reference list the pack is built on."
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "did"
+          },
+          "maxLength": 150
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "datetime"
+        }
+      }
     }
   }
 }
