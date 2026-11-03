@@ -514,6 +514,10 @@
         "root": {
           "type": "string",
           "format": "at-uri"
+        },
+        "removed": {
+          "type": "boolean",
+          "description": "Removed by Resenha's maintainer but kept in place because replies hang from it: no words, no author."
         }
       }
     },
