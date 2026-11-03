@@ -406,6 +406,14 @@
               "maxGraphemes": 200
             }
           }
+        },
+        "followsYou": {
+          "type": "boolean",
+          "description": "They follow the caller already."
+        },
+        "knownFollowers": {
+          "type": "ref",
+          "ref": "#knownFollowers"
         }
       }
     },
@@ -506,6 +514,28 @@
         "root": {
           "type": "string",
           "format": "at-uri"
+        }
+      }
+    },
+    "knownFollowers": {
+      "type": "object",
+      "description": "Among the caller's follows, who follows a reader: social proof within Resenha's community, from the follows and followers the server keeps.",
+      "required": [
+        "count"
+      ],
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "followers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "did"
+          },
+          "maxLength": 3,
+          "description": "Up to three of them, to name."
         }
       }
     }

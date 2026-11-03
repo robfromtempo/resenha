@@ -1,0 +1,58 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.parlor.getRelationship",
+  "description": "How the caller and another reader stand to each other, as Resenha's server knows it: whether each follows the other, and which of the caller's follows follow them, for \"followed by people you follow\" on a profile.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Requires the caller's service token.",
+      "parameters": {
+        "type": "params",
+        "required": [
+          "actor"
+        ],
+        "properties": {
+          "actor": {
+            "type": "string",
+            "format": "did"
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "did"
+          ],
+          "properties": {
+            "did": {
+              "type": "string",
+              "format": "did"
+            },
+            "following": {
+              "type": "boolean",
+              "description": "The caller follows them."
+            },
+            "followsYou": {
+              "type": "boolean",
+              "description": "They follow the caller."
+            },
+            "knownFollowers": {
+              "type": "ref",
+              "ref": "ink.resenha.defs#knownFollowers"
+            },
+            "profiles": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#profileView"
+              },
+              "description": "The names and pictures of the known followers named."
+            }
+          }
+        }
+      }
+    }
+  }
+}
