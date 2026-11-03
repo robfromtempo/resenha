@@ -230,6 +230,10 @@
           "type": "string",
           "format": "datetime",
           "description": "When they last started, finished, changed or progressed in a book."
+        },
+        "followsYou": {
+          "type": "boolean",
+          "description": "Whether they follow the caller, as the server knows it."
         }
       }
     },
@@ -283,6 +287,41 @@
         "avatar": {
           "type": "string",
           "format": "uri"
+        }
+      }
+    },
+    "followerView": {
+      "type": "object",
+      "description": "Someone who follows the caller.",
+      "required": [
+        "did"
+      ],
+      "properties": {
+        "did": {
+          "type": "string",
+          "format": "did"
+        },
+        "followedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When they followed, when the server heard the follow itself; absent for follows older than its listening."
+        },
+        "follows": {
+          "type": "boolean",
+          "description": "Whether the caller follows them back."
+        },
+        "books": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "How many books they keep in the index; 0 for someone who isn't a reader."
+        },
+        "readingNow": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#bookView"
+          },
+          "maxLength": 3
         }
       }
     }
