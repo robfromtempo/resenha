@@ -1,7 +1,7 @@
 {
   "lexicon": 1,
   "id": "ink.resenha.parlor.getFollowing",
-  "description": "The readers among the caller's follows.",
+  "description": "The readers among the caller's follows: how many books they keep, what they're reading now, when the caller followed them and when they were last active; with their names and pictures as the server has them.",
   "defs": {
     "main": {
       "type": "query",
@@ -35,6 +35,13 @@
               "items": {
                 "type": "ref",
                 "ref": "ink.resenha.defs#readerView"
+              }
+            },
+            "profiles": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#profileView"
               }
             }
           },

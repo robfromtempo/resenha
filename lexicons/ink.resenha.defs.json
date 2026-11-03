@@ -5,7 +5,7 @@
   "defs": {
     "bookView": {
       "type": "object",
-      "description": "Enough of a book to show a row. Covers and details come from BookHive's catalog.",
+      "description": "Enough of a book to show a row. Cover and details come from BookHive's catalogue when the server has them; otherwise the app asks BookHive itself.",
       "required": [
         "hiveId"
       ],
@@ -27,6 +27,22 @@
         "cover": {
           "type": "string",
           "format": "uri"
+        },
+        "year": {
+          "type": "integer",
+          "description": "Year of publication, from BookHive's catalogue."
+        },
+        "pages": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "genres": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "maxLength": 32
         }
       }
     },
@@ -45,15 +61,19 @@
         "uri": {
           "type": "string",
           "format": "at-uri",
-          "description": "The record it comes from."
+          "description": "The record it comes from: the reader's BookHive book record."
         },
         "kind": {
           "type": "string",
           "knownValues": [
             "started",
             "finished",
-            "reviewed"
-          ]
+            "reviewed",
+            "wantsToRead",
+            "abandoned",
+            "progress"
+          ],
+          "description": "What they did. wantsToRead and abandoned are dated by when the server saw the status change, else by when the book was added; progress by the record."
         },
         "actor": {
           "type": "string",
@@ -86,6 +106,16 @@
           "maxGraphemes": 300,
           "maxLength": 3000,
           "description": "The start of the review, plain text."
+        },
+        "review": {
+          "type": "string",
+          "maxGraphemes": 100000,
+          "maxLength": 1000000,
+          "description": "The whole review, plain markdown, on reviewed events and on finished ones that carry the review."
+        },
+        "progress": {
+          "type": "ref",
+          "ref": "#progressView"
         }
       }
     },
@@ -149,6 +179,12 @@
         },
         "hasSpoilers": {
           "type": "boolean"
+        },
+        "text": {
+          "type": "string",
+          "maxGraphemes": 100000,
+          "maxLength": 1000000,
+          "description": "The whole review, when asked for with full."
         }
       }
     },
@@ -168,7 +204,7 @@
             "type": "ref",
             "ref": "#bookView"
           },
-          "maxLength": 5
+          "maxLength": 3
         },
         "followedAt": {
           "type": "string",
@@ -184,6 +220,69 @@
           "type": "integer",
           "minimum": 0,
           "description": "With the caller, when sorted by similar."
+        },
+        "books": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "How many books they keep on BookHive."
+        },
+        "lastActivity": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When they last started, finished, changed or progressed in a book."
+        }
+      }
+    },
+    "progressView": {
+      "type": "object",
+      "description": "How far through the book the reader is, as the record says.",
+      "required": [
+        "percent",
+        "updatedAt"
+      ],
+      "properties": {
+        "percent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "currentPage": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "totalPages": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "datetime"
+        }
+      }
+    },
+    "profileView": {
+      "type": "object",
+      "description": "Someone's name and picture, as Bluesky's AppView last gave them to the server; absent for a reader it hasn't fetched yet, whose name the app then finds itself.",
+      "required": [
+        "did"
+      ],
+      "properties": {
+        "did": {
+          "type": "string",
+          "format": "did"
+        },
+        "handle": {
+          "type": "string",
+          "format": "handle"
+        },
+        "displayName": {
+          "type": "string",
+          "maxGraphemes": 64,
+          "maxLength": 640
+        },
+        "avatar": {
+          "type": "string",
+          "format": "uri"
         }
       }
     }

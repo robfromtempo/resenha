@@ -1,0 +1,60 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.parlor.getReviews",
+  "description": "The reviews of the readers the caller follows, newest first: dated by when they were published from Resenha, else by when the book was finished or added.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Requires the caller's service token.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Where the previous page ended."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 50
+          },
+          "full": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether each review comes whole, in text, rather than as an excerpt."
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "reviews"
+          ],
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Where the previous page ended."
+            },
+            "reviews": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#reviewView"
+              }
+            },
+            "profiles": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#profileView"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
