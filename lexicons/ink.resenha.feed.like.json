@@ -22,6 +22,11 @@
           "createdAt": {
             "type": "string",
             "format": "datetime"
+          },
+          "book": {
+            "type": "ref",
+            "ref": "ink.resenha.defs#bookRef",
+            "description": "The book the liked reading is of, in every key anyone uses."
           }
         }
       }

@@ -40,6 +40,11 @@
           "createdAt": {
             "type": "string",
             "format": "datetime"
+          },
+          "book": {
+            "type": "ref",
+            "ref": "ink.resenha.defs#bookRef",
+            "description": "The book the thread is about, in every key anyone uses, beside the record the subject names."
           }
         }
       }

@@ -2,7 +2,7 @@
 // Two questions, nothing else: which catalogue book an ISBN is, and a book's details by its BookHive ID.
 //
 //   /.netlify/functions/catalog?isbn13=9780316568715   → { "hiveId": "bk_…" }, or 404 when BookHive's catalogue lacks it
-//   /.netlify/functions/catalog?id=bk_…                 → { title, authors, cover, year, pages, genres }, or 404
+//   /.netlify/functions/catalog?id=bk_…                 → { title, authors, cover, year, pages, genres, language, publisher, identifiers }, or 404
 //
 // Only lookups: nothing here makes BookHive add a book, so its catalogue grows from readers' own actions alone.
 // The server sends CATALOG_KEY in x-catalog-key; without a matching key nothing is answered, so the function's
@@ -35,6 +35,14 @@ export default async (request) => {
         year: book.publicationYear ?? null,
         pages: book.numPages ?? null,
         genres: (book.genres ?? []).filter((g) => typeof g === "string").slice(0, 6),
+        language: typeof book.language === "string" ? book.language : null,
+        publisher: typeof book.publisher === "string" ? book.publisher : null,
+        // The edition's numbers, for a book's other editions on Resenha's server.
+        identifiers: {
+          isbn13: typeof book.identifiers?.isbn13 === "string" ? book.identifiers.isbn13 : null,
+          isbn10: typeof book.identifiers?.isbn10 === "string" ? book.identifiers.isbn10 : null,
+          goodreadsId: typeof book.identifiers?.goodreadsId === "string" ? book.identifiers.goodreadsId : null,
+        },
       }, 200, 86400);
     }
     return answer({ error: "InvalidRequest", message: "isbn13 or id" }, 400, 0);

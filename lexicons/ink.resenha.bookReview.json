@@ -47,6 +47,11 @@
           "createdAt": {
             "type": "string",
             "format": "datetime"
+          },
+          "bookRef": {
+            "type": "ref",
+            "ref": "ink.resenha.defs#bookRef",
+            "description": "The book in every key anyone uses, so the review can be found for an edition no catalogue knows, by ISBN."
           }
         }
       }

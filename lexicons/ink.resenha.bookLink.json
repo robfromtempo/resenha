@@ -9,7 +9,10 @@
       "key": "any",
       "record": {
         "type": "object",
-        "required": ["matchedBy", "updatedAt"],
+        "required": [
+          "matchedBy",
+          "updatedAt"
+        ],
         "properties": {
           "hiveId": {
             "type": "string",
@@ -29,17 +32,30 @@
           "popfeed": {
             "type": "array",
             "maxLength": 20,
-            "items": { "type": "string", "format": "at-uri" },
+            "items": {
+              "type": "string",
+              "format": "at-uri"
+            },
             "description": "The reader's social.popfeed.feed.listItem records for the book. A book can be on more than one list."
           },
           "matchedBy": {
             "type": "string",
-            "knownValues": ["identifiers", "search", "reader", "none"],
+            "knownValues": [
+              "identifiers",
+              "search",
+              "reader",
+              "none"
+            ],
             "description": "identifiers: an ISBN or Goodreads number agreed, or the item named its BookHive ID. search: title and author agreed. reader: chosen by the reader, and never changed automatically. none: no match yet."
           },
           "updatedAt": {
             "type": "string",
             "format": "datetime"
+          },
+          "book": {
+            "type": "ref",
+            "ref": "ink.resenha.defs#bookRef",
+            "description": "The book in every key anyone uses: the link's own fields say which records are the book, this says which book."
           }
         }
       }

@@ -1,0 +1,103 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.book.resolve",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Every key Resenha's index knows for a book, and its other editions, from one key: a BookHive ID, an ISBN-13, an Amazon number or an Open Library work. Learned from BookHive's catalogue, readers' own links between their records in different apps, and Open Library. Public, no sign-in: any book app can fill the slots its records leave empty, such as Popfeed's hiveId or BookHive's ISBN. Answers come from the index alone; nothing is asked of any catalogue for them.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "hiveId": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "isbn13": {
+            "type": "string",
+            "maxLength": 13
+          },
+          "asin": {
+            "type": "string",
+            "maxLength": 16
+          },
+          "openLibraryWork": {
+            "type": "string",
+            "maxLength": 32
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "identifiers",
+            "editions"
+          ],
+          "properties": {
+            "identifiers": {
+              "type": "ref",
+              "ref": "ink.resenha.defs#bookIdentifiers",
+              "description": "The edition asked about, in every key known."
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 512
+            },
+            "authors": {
+              "type": "string",
+              "maxLength": 1024
+            },
+            "editions": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#edition"
+              },
+              "description": "Other editions of the same book, surest first."
+            }
+          }
+        }
+      }
+    },
+    "edition": {
+      "type": "object",
+      "required": [
+        "identifiers",
+        "confidence"
+      ],
+      "properties": {
+        "identifiers": {
+          "type": "ref",
+          "ref": "ink.resenha.defs#bookIdentifiers"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "confidence": {
+          "type": "string",
+          "knownValues": [
+            "sure",
+            "likely"
+          ],
+          "description": "sure: tied by BookHive's catalogue, a reader's link or Open Library's work. likely: the same title and first author after normalising."
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "knownValues": [
+              "catalogue",
+              "bookhive",
+              "reader",
+              "match",
+              "openlibrary",
+              "title"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

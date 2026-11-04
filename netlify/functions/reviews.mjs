@@ -89,7 +89,10 @@ async function reviewPage(did, rkey) {
   // The book comes from Resenha's link for the review, when there is one: BookHive's catalogue for the cover and details,
   // the reader's BookHive record for their rating.
   const [author, link] = await Promise.all([authorOf(did), linkFor(pds, did, record.uri)]);
-  const [book, stars] = link ? await Promise.all([bookHiveBook(link.hiveId), starsOf(pds, link.book)]) : [null, null];
+  // A book no catalogue holds has no BookHive page: the link's own reference names it, and the reader's
+  // Resenha reading record carries the rating.
+  const [found, stars] = link ? await Promise.all([bookHiveBook(link.hiveId), starsOf(pds, link.book)]) : [null, null];
+  const book = found ?? (link?.bookRef ? bookFromRef(link.bookRef) : null);
   const address = `${ORIGIN}/p/${did}/${rkey}`;
   // A review with spoilers never puts its opening in previews, whatever its description says.
   const summary = hasSpoilers(doc) ? "This review contains spoilers." : excerpt(doc.description || doc.textContent || plainTextOf(doc), 300);
@@ -253,7 +256,20 @@ async function linkFor(pds, did, documentURI) {
   const langs = Array.isArray(found.value.langs)
     ? found.value.langs.filter((code) => typeof code === "string" && /^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$/.test(code))
     : [];
-  return { hiveId, book: typeof found.value.book === "string" ? found.value.book : null, langs };
+  const bookRef = found.value.bookRef && typeof found.value.bookRef.title === "string" ? found.value.bookRef : null;
+  return { hiveId, book: typeof found.value.book === "string" ? found.value.book : null, langs, bookRef };
+}
+
+/** The book as the link itself names it, for one BookHive's catalogue doesn't have. */
+function bookFromRef(ref) {
+  return {
+    title: ref.title,
+    authors: String(ref.authors ?? "").split("\t").filter(Boolean).join(", "),
+    cover: null,
+    year: undefined,
+    pages: undefined,
+    genres: [],
+  };
 }
 
 /** The document's text when it carries none, from its blocks. */
@@ -298,11 +314,11 @@ async function bookHiveBook(hiveId) {
   };
 }
 
-/** The reader's rating on their BookHive record, 1 to 10. */
+/** The reader's rating on their BookHive record, or their Resenha reading record, 1 to 10. */
 async function starsOf(pds, bookURI) {
   const parts = typeof bookURI === "string" ? bookURI.split("/") : [];
-  if (parts.length !== 5 || parts[3] !== "buzz.bookhive.book") return null;
-  const record = await json(`${pds}/xrpc/com.atproto.repo.getRecord?repo=${parts[2]}&collection=buzz.bookhive.book&rkey=${encodeURIComponent(parts[4])}`);
+  if (parts.length !== 5 || !["buzz.bookhive.book", "ink.resenha.reading"].includes(parts[3])) return null;
+  const record = await json(`${pds}/xrpc/com.atproto.repo.getRecord?repo=${parts[2]}&collection=${parts[3]}&rkey=${encodeURIComponent(parts[4])}`);
   const stars = record?.value?.stars;
   return Number.isInteger(stars) && stars >= 1 && stars <= 10 ? stars : null;
 }

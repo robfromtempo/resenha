@@ -1,0 +1,293 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.book.getBook",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "A book's page from Resenha's index: an edition's readers with their readings, everyone's reviews of it, and its other editions with theirs. By BookHive ID or ISBN-13, so a book BookHive's catalogue doesn't know has one page shared by its readers. Readers the caller blocks are left out. Requires the caller's service token.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "hiveId": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "The book's BookHive ID. Not a stand-in beginning popfeed-, which names one reader's copy."
+          },
+          "isbn13": {
+            "type": "string",
+            "maxLength": 13,
+            "description": "The edition's ISBN-13, for a book without a BookHive ID."
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "book",
+            "counts",
+            "readings",
+            "reviews",
+            "editions"
+          ],
+          "properties": {
+            "book": {
+              "type": "ref",
+              "ref": "#edition"
+            },
+            "counts": {
+              "type": "ref",
+              "ref": "#counts"
+            },
+            "readings": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#reading"
+              },
+              "description": "Up to a hundred: the caller's follows first, then by the latest change."
+            },
+            "reviews": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#reviewView"
+              },
+              "description": "Every review of this edition the index holds, newest first, each with the whole text and where its likes and comments live (popfeedReview or post) and how many."
+            },
+            "editions": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#otherEdition"
+              },
+              "description": "Other editions of the book, surest first."
+            },
+            "profiles": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.defs#profileView"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edition": {
+      "type": "object",
+      "description": "One edition as the index knows it: BookHive's facts when it has the book, else what its readers' records say.",
+      "properties": {
+        "hiveId": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "isbn13": {
+          "type": "string",
+          "maxLength": 13
+        },
+        "isbns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 13
+          },
+          "maxLength": 16,
+          "description": "Every ISBN-13 known for the edition, when there is more than one."
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "authors": {
+          "type": "string",
+          "maxLength": 1024,
+          "description": "Tab-separated, as BookHive stores them."
+        },
+        "cover": {
+          "type": "string",
+          "format": "uri"
+        },
+        "covers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          },
+          "maxLength": 8
+        },
+        "year": {
+          "type": "integer"
+        },
+        "pages": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "genres": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "maxLength": 32
+        },
+        "language": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "publisher": {
+          "type": "string",
+          "maxLength": 256
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "wantToRead",
+        "reading",
+        "read",
+        "abandoned"
+      ],
+      "properties": {
+        "wantToRead": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reading": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "read": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "abandoned": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "reading": {
+      "type": "object",
+      "description": "One reader's record for the edition, with Resenha's likes and comments on it.",
+      "required": [
+        "uri",
+        "actor",
+        "source"
+      ],
+      "properties": {
+        "uri": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "The reader's BookHive book record or Popfeed list item."
+        },
+        "cid": {
+          "type": "string",
+          "format": "cid"
+        },
+        "actor": {
+          "type": "string",
+          "format": "did"
+        },
+        "status": {
+          "type": "string",
+          "knownValues": [
+            "wantToRead",
+            "reading",
+            "read",
+            "abandoned"
+          ]
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "finishedAt": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "progress": {
+          "type": "ref",
+          "ref": "ink.resenha.defs#progressView"
+        },
+        "stars": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "source": {
+          "type": "string",
+          "knownValues": [
+            "bookhive",
+            "popfeed"
+          ]
+        },
+        "hasReview": {
+          "type": "boolean"
+        },
+        "likeCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "commentCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "viewer": {
+          "type": "ref",
+          "ref": "ink.resenha.defs#viewerState"
+        }
+      }
+    },
+    "otherEdition": {
+      "type": "object",
+      "required": [
+        "book",
+        "confidence",
+        "readers",
+        "reviews"
+      ],
+      "properties": {
+        "book": {
+          "type": "ref",
+          "ref": "#edition"
+        },
+        "confidence": {
+          "type": "string",
+          "knownValues": [
+            "sure",
+            "likely"
+          ],
+          "description": "sure: tied by BookHive's catalogue, a reader's link or Open Library's work. likely: the same title and first author after normalising, which a reader can confirm."
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "knownValues": [
+              "catalogue",
+              "bookhive",
+              "reader",
+              "match",
+              "openlibrary",
+              "title"
+            ]
+          }
+        },
+        "readers": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reviews": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "ink.resenha.defs#reviewView"
+          }
+        }
+      }
+    }
+  }
+}

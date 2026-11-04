@@ -1,0 +1,93 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.reading",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "description": "A reader's reading of a book no catalogue they use holds: the home of last resort, so any book can be added to a library and reviewed. One per book. Status, dates, rating, review and progress live here as they do on a buzz.bookhive.book or a social.popfeed.feed.listItem; the book is named in every key anyone uses, so any app that recognises one of them can show the reading. When the book gains a page in a catalogue app the reader uses, Resenha offers to move the reading there.",
+      "record": {
+        "type": "object",
+        "required": [
+          "book",
+          "createdAt"
+        ],
+        "properties": {
+          "book": {
+            "type": "ref",
+            "ref": "ink.resenha.defs#bookRef"
+          },
+          "status": {
+            "type": "string",
+            "knownValues": [
+              "wantToRead",
+              "reading",
+              "finished",
+              "abandoned"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "finishedAt": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "stars": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "In half stars, 1 to 10, as BookHive and Popfeed keep them."
+          },
+          "review": {
+            "type": "string",
+            "maxGraphemes": 15000,
+            "maxLength": 150000,
+            "description": "The review as plain text. A formatted version, when there is one, is a site.standard.document the reader's ink.resenha.bookReview links to."
+          },
+          "bookProgress": {
+            "type": "ref",
+            "ref": "#progress"
+          },
+          "coverUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "The cover as the reader's app found it, for apps without a catalogue to ask."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    },
+    "progress": {
+      "type": "object",
+      "description": "How far through the book the reader is, as BookHive's bookProgress has it.",
+      "required": [
+        "percent",
+        "updatedAt"
+      ],
+      "properties": {
+        "percent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "currentPage": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "totalPages": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "datetime"
+        }
+      }
+    }
+  }
+}

@@ -15,6 +15,11 @@
           "maxLength": 64,
           "description": "The book's BookHive ID, or, for a Popfeed book BookHive's catalogue doesn't know, a stand-in beginning with popfeed- that no BookHive call takes."
         },
+        "isbn13": {
+          "type": "string",
+          "maxLength": 13,
+          "description": "The edition the reader's record names, when it names one. For a book BookHive's catalogue doesn't know, the key of the page its readers share (ink.resenha.book.getBook)."
+        },
         "title": {
           "type": "string",
           "maxLength": 512
@@ -27,7 +32,16 @@
         "cover": {
           "type": "string",
           "format": "uri",
-          "description": " For a Popfeed book, Popfeed's own cover."
+          "description": "For a Popfeed book, Popfeed's own cover, its surest address."
+        },
+        "covers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          },
+          "maxLength": 8,
+          "description": "For a Popfeed book, every address of its cover, surest first, when there is more than one: the poster blob's address on Bluesky's CDN, isbndb's, then the item's posterUrl. A reader tries the next when one fails."
         },
         "year": {
           "type": "integer",
@@ -126,12 +140,12 @@
         "likeCount": {
           "type": "integer",
           "minimum": 0,
-          "description": "Resenha likes on the reader's book record."
+          "description": "Likes in the event's home: Resenha likes on the reader's book record for a reading or a review kept on BookHive, Popfeed likes on a Popfeed review, Bluesky likes on the post that announced a review published from Resenha."
         },
         "commentCount": {
           "type": "integer",
           "minimum": 0,
-          "description": "Comments in the thread about the reader reading this book: Resenha comments and BookHive buzzes."
+          "description": "Comments in the event's home: the thread about the reader reading this book (Resenha comments and BookHive buzzes) for a reading or a review kept on BookHive, Popfeed's comments and replies on a Popfeed review, replies to the post of a review published from Resenha."
         },
         "viewer": {
           "type": "ref",
@@ -141,6 +155,11 @@
           "type": "string",
           "format": "at-uri",
           "description": "For a reviewed event from Popfeed: the social.popfeed.feed.review record, whose comments and likes are Popfeed's."
+        },
+        "post": {
+          "type": "ref",
+          "ref": "com.atproto.repo.strongRef",
+          "description": "For a reviewed event with source resenha: the Bluesky post that announced the review, whose likes and replies are the review's."
         }
       }
     },
@@ -615,6 +634,75 @@
             "removeAndHide",
             "restore"
           ]
+        }
+      }
+    },
+    "bookIdentifiers": {
+      "type": "object",
+      "description": "A book's numbers in every catalogue that has it. Any one of them finds the book; together they tie the catalogues to each other.",
+      "properties": {
+        "hiveId": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "BookHive's ID for the edition."
+        },
+        "isbn13": {
+          "type": "string",
+          "maxLength": 13
+        },
+        "isbn10": {
+          "type": "string",
+          "maxLength": 10
+        },
+        "asin": {
+          "type": "string",
+          "maxLength": 16,
+          "description": "Amazon's, as Popfeed keeps it."
+        },
+        "goodreadsId": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "openLibraryWork": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Open Library's work key, such as /works/OL45908582W: the book across its editions."
+        },
+        "openLibraryEdition": {
+          "type": "string",
+          "maxLength": 32,
+          "description": "Open Library's edition key, such as /books/OL62590811M."
+        }
+      }
+    },
+    "bookRef": {
+      "type": "object",
+      "description": "Which book a record is about, in every key anyone uses, so an app finds it with the one it has: by BookHive ID, ISBN, Open Library work, or the reader's own record in another app. Resenha's records carry it beside their own keys. Nothing is required but the title, so a book no catalogue knows can still be named.",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "authors": {
+          "type": "string",
+          "maxLength": 1024,
+          "description": "Tab-separated, as BookHive stores them."
+        },
+        "identifiers": {
+          "type": "ref",
+          "ref": "#bookIdentifiers"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "at-uri"
+          },
+          "maxLength": 20,
+          "description": "The reader's own records for the book in any app: their buzz.bookhive.book, their social.popfeed.feed.listItem records, a record in an app to come."
         }
       }
     }
