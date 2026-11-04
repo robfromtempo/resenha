@@ -18,6 +18,12 @@
             "minimum": 1,
             "maximum": 100,
             "default": 30
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "description": "How many of the ranking to skip, for the next page of readers to show."
           }
         }
       },
