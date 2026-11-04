@@ -6,6 +6,38 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# The repository is the published folder: its source files, tests and package manifests aren't pages. Answered as
+# missing, ahead of every other rule.
+[[redirects]]
+  from = "/netlify/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/src/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/node_modules/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/package.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/package-lock.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
 # resenha.ink is the app's sign-in identity, so its metadata names resenha.ink. GitHub Pages keeps serving the
 # older metadata at this same path for builds that still sign in as robfromtempo.github.io.
 [[redirects]]
@@ -40,7 +72,7 @@
     Cache-Control = "public, max-age=31536000, immutable"
     Access-Control-Allow-Origin = "*"
 
-# Comic posters and banners for the catalog, resized by Netlify's image CDN. Only account servers' blob endpoint
-# may be fetched, so this isn't a general proxy.
+# Comic posters and banners for the catalog, resized by Netlify's image CDN. Fetched only through resenha.ink's own
+# picture door, /img/<did>/<cid>, which checks the account's server and passes pictures alone: never a general proxy.
 [images]
-  remote_images = ["https://[^/]+/xrpc/com\\.atproto\\.sync\\.getBlob\\?.*"]
+  remote_images = ["https://resenha\\.ink/img/.*"]

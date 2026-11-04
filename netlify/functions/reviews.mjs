@@ -11,6 +11,7 @@
 
 import { Marked } from "marked";
 import { renderBlocks, blocksPlainText, BLOCK_STYLES, BLOCK_SCRIPT, frameMarkdownCode } from "./blocks.mjs";
+import { safeOrigin, safeFetchOptions, isPublicHost } from "../lib/safe.mjs";
 
 /** The site's appearance toggle, addressed by its contents: update the hash when assets/theme.js changes. */
 const THEME_SCRIPT = "/assets/theme.js?v=4ad6472390";
@@ -86,12 +87,18 @@ async function reviewPage(did, rkey) {
   const record = await json(`${pds}/xrpc/com.atproto.repo.getRecord?repo=${did}&collection=${DOCUMENT}&rkey=${encodeURIComponent(rkey)}`);
   const doc = record?.value;
   if (!doc?.title) return notFound();
+  // Only a review in the reader's Resenha publication: any other Standard.site writing of theirs isn't Resenha's
+  // to show under its name.
+  if (!(await isResenhaPublication(pds, did, doc.site))) return notFound();
   // The book comes from Resenha's link for the review, when there is one: BookHive's catalogue for the cover and details,
   // the reader's BookHive record for their rating.
   const [author, link] = await Promise.all([authorOf(did), linkFor(pds, did, record.uri)]);
   // A book no catalogue holds has no BookHive page: the link's own reference names it, and the reader's
   // Resenha reading record carries the rating.
-  const [found, stars] = link ? await Promise.all([bookHiveBook(link.hiveId), starsOf(pds, link.book)]) : [null, null];
+  // BookHive is asked only about its own IDs: a stand-in (isbn-, resenha-, popfeed-) is no book there.
+  const [found, stars] = link
+    ? await Promise.all([link.hiveId.startsWith("bk_") ? bookHiveBook(link.hiveId) : null, starsOf(pds, did, link.book)])
+    : [null, null];
   const book = found ?? (link?.bookRef ? bookFromRef(link.bookRef) : null);
   const address = `${ORIGIN}/p/${did}/${rkey}`;
   // A review with spoilers never puts its opening in previews, whatever its description says.
@@ -140,8 +147,9 @@ async function publicationPage(did) {
   const publication = await findPublication(did);
   if (!publication) return notFound();
   const pds = await pdsFor(did);
-  const author = await authorOf(did);
-  const docs = (await listAll(pds, did, DOCUMENT))
+  if (!pds) return notFound();
+  const [author, all] = await Promise.all([authorOf(did), listAll(pds, did, DOCUMENT)]);
+  const docs = all
     .filter((r) => r.value?.site === publication.uri)
     .sort((a, b) => String(b.value.publishedAt).localeCompare(String(a.value.publishedAt)));
   const items = docs.map((r) => {
@@ -219,29 +227,49 @@ function isDid(did) {
     && (/^did:plc:[a-z2-7]{24}$/.test(did) || /^did:web:[a-z0-9.-]+\.[a-z]{2,}$/i.test(did));
 }
 
+/** DID documents, kept an hour: a reader who moves server is found there afterwards. A failed read isn't kept. */
 const didDocuments = new Map();
 
 async function didDocument(did) {
-  if (didDocuments.has(did)) return didDocuments.get(did);
-  const address = did.startsWith("did:plc:")
-    ? `https://plc.directory/${did}`
-    : `https://${did.slice("did:web:".length)}/.well-known/did.json`;
-  const doc = await json(address);
-  didDocuments.set(did, doc);
+  const cached = didDocuments.get(did);
+  if (cached && Date.now() - cached.at < 3600_000) return cached.doc;
+  let address;
+  if (did.startsWith("did:plc:")) {
+    address = `https://plc.directory/${did}`;
+  } else {
+    const host = did.slice("did:web:".length).toLowerCase();
+    if (!(await isPublicHost(host))) return null;
+    address = `https://${host}/.well-known/did.json`;
+  }
+  const doc = await json(address, safeFetchOptions());
+  if (doc) didDocuments.set(did, { doc, at: Date.now() });
   return doc;
 }
 
+/** The reader's server, only when it's a public https host: a DID document can name any address. */
 async function pdsFor(did) {
   const doc = await didDocument(did);
   const service = doc?.service?.find((s) => s.id === "#atproto_pds" || s.id === `${did}#atproto_pds`);
   const endpoint = service?.serviceEndpoint;
-  return typeof endpoint === "string" && endpoint.startsWith("https://") ? endpoint.replace(/\/$/, "") : null;
+  if (typeof endpoint !== "string") return null;
+  const origin = await safeOrigin(endpoint);
+  return origin && endpoint.replace(/\/$/, "").startsWith(origin) ? endpoint.replace(/\/$/, "") : null;
 }
 
+/** The author's name, picture and handle. The handle only when verified: Bluesky's profile has it checked both ways;
+ *  without a profile, the DID document's claim is kept only if the handle resolves back to this DID. A DID document
+ *  alone can claim any handle. */
 async function authorOf(did) {
-  const doc = await didDocument(did);
-  const handle = doc?.alsoKnownAs?.find((a) => a.startsWith("at://"))?.slice(5) ?? null;
   const profile = await json(`${APPVIEW}/xrpc/app.bsky.actor.getProfile?actor=${encodeURIComponent(did)}`);
+  let handle = typeof profile?.handle === "string" && profile.handle !== "handle.invalid" ? profile.handle : null;
+  if (!profile) {
+    const doc = await didDocument(did);
+    const claimed = doc?.alsoKnownAs?.find((a) => a.startsWith("at://"))?.slice(5) ?? null;
+    if (claimed) {
+      const resolved = await json(`${APPVIEW}/xrpc/com.atproto.identity.resolveHandle?handle=${encodeURIComponent(claimed)}`);
+      if (resolved?.did === did) handle = claimed;
+    }
+  }
   const avatar = typeof profile?.avatar === "string" && profile.avatar.startsWith("https://") ? profile.avatar : null;
   return { handle, name: profile?.displayName || (handle ? `@${handle}` : did), avatar };
 }
@@ -277,18 +305,35 @@ function plainTextOf(doc) {
   return doc?.content?.$type === "pub.leaflet.content" ? blocksPlainText(doc.content) : "";
 }
 
+/** The picture types the proxy passes on. */
+const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/gif", "image/webp", "image/avif", "image/heic"]);
+
 /** A picture from an author's account, by its content address. Addresses never change, so it's cached for a year. */
 async function image(did, cid) {
   if (!isDid(did) || !/^[a-z2-7]{20,80}$/i.test(cid ?? "")) return notFound("text/plain");
   const pds = await pdsFor(did);
   if (!pds) return notFound("text/plain");
-  const upstream = await fetch(`${pds}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(cid)}`);
+  let upstream;
+  try {
+    upstream = await fetch(`${pds}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(cid)}`, safeFetchOptions());
+  } catch {
+    return notFound("text/plain");
+  }
   if (!upstream.ok) return notFound("text/plain");
-  const type = upstream.headers.get("content-type") || "application/octet-stream";
-  if (!type.startsWith("image/")) return notFound("text/plain");
+  // Pictures only, and never SVG: an SVG can carry script, and this answers from resenha.ink itself.
+  const type = (upstream.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
+  if (!IMAGE_TYPES.has(type)) return notFound("text/plain");
+  const length = Number(upstream.headers.get("content-length") || 0);
+  if (length > 15 * 1024 * 1024) return notFound("text/plain");
   return new Response(upstream.body, {
     status: 200,
-    headers: { "Content-Type": type, "Cache-Control": "public, max-age=31536000, immutable", "Netlify-CDN-Cache-Control": "public, durable, max-age=31536000, immutable" },
+    headers: {
+      "Content-Type": type,
+      "X-Content-Type-Options": "nosniff",
+      "Content-Security-Policy": "default-src 'none'; sandbox",
+      "Cache-Control": "public, max-age=31536000, immutable",
+      "Netlify-CDN-Cache-Control": "public, durable, max-age=31536000, immutable",
+    },
   });
 }
 
@@ -315,12 +360,24 @@ async function bookHiveBook(hiveId) {
 }
 
 /** The reader's rating on their BookHive record, or their Resenha reading record, 1 to 10. */
-async function starsOf(pds, bookURI) {
+async function starsOf(pds, did, bookURI) {
   const parts = typeof bookURI === "string" ? bookURI.split("/") : [];
   if (parts.length !== 5 || !["buzz.bookhive.book", "ink.resenha.reading"].includes(parts[3])) return null;
-  const record = await json(`${pds}/xrpc/com.atproto.repo.getRecord?repo=${parts[2]}&collection=${parts[3]}&rkey=${encodeURIComponent(parts[4])}`);
+  // Only the reviewer's own record: a link could name anyone's, and show their rating under this review.
+  if (parts[2] !== did) return null;
+  const record = await json(`${pds}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(did)}&collection=${parts[3]}&rkey=${encodeURIComponent(parts[4])}`);
   const stars = record?.value?.stars;
   return Number.isInteger(stars) && stars >= 1 && stars <= 10 ? stars : null;
+}
+
+/** Whether `site` (a document's publication) is the reader's publication on resenha.ink. */
+async function isResenhaPublication(pds, did, site) {
+  const prefix = `at://${did}/${PUBLICATION}/`;
+  if (typeof site !== "string" || !site.startsWith(prefix)) return false;
+  const rkey = site.slice(prefix.length);
+  if (!/^[A-Za-z0-9._:~-]{1,512}$/.test(rkey)) return false;
+  const publication = await json(`${pds}/xrpc/com.atproto.repo.getRecord?repo=${did}&collection=${PUBLICATION}&rkey=${encodeURIComponent(rkey)}`);
+  return String(publication?.value?.url ?? "").replace(/\/$/, "") === `${ORIGIN}/p/${did}`;
 }
 
 /** The reader's publication on resenha.ink: the one whose address is this site's page for their DID. */
@@ -353,10 +410,16 @@ function blueskyPostURL(uri, handle) {
   return `https://bsky.app/profile/${handle || repo}/post/${rkey}`;
 }
 
-async function json(address) {
-  const response = await fetch(address, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(8000) });
-  if (!response.ok) return null;
-  return response.json();
+/** JSON from an address, or null when it can't be had: most addresses here are readers' own servers, so no redirect
+ *  is followed (it could lead anywhere), and a slow or broken one is a missing answer, never a failed page. */
+async function json(address, options = {}) {
+  try {
+    const response = await fetch(address, { headers: { Accept: "application/json" }, ...safeFetchOptions(), ...options });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch {
+    return null;
+  }
 }
 
 // MARK: - Rendering
@@ -411,8 +474,12 @@ function escape(value) {
 /** The book beside the review, as the app's book column shows it. On narrow screens it becomes a compact row. */
 function bookColumn(book) {
   const facts = [book.year, book.pages ? `${book.pages} pages` : null].filter(Boolean).join(" · ");
+  // A book without a cover gets a plain one with its title, as the app draws one, rather than nothing.
+  const cover = book.cover
+    ? `<img class="cover" src="${escape(book.cover)}" alt="Cover of ${escape(book.title)}">`
+    : `<div class="cover cover-drawn" aria-hidden="true"><span>${escape(book.title)}</span></div>`;
   return `<aside class="book">
-      ${book.cover ? `<img class="cover" src="${escape(book.cover)}" alt="Cover of ${escape(book.title)}">` : ""}
+      ${cover}
       <div class="book-text">
         <h2 class="book-title">${escape(book.title)}</h2>
         ${book.authors ? `<p class="book-author">${escape(book.authors)}</p>` : ""}
@@ -501,7 +568,7 @@ function page({ title, description = "", canonical, image, type = "website", hea
         color-scheme: dark;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--interface); -webkit-font-smoothing: antialiased; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--interface); -webkit-font-smoothing: antialiased; overflow-x: clip; }
     main { max-width: ${wide ? "68rem" : "44rem"}; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
     a { color: inherit; }
     .eyebrow { font: 600 .75rem/1.2 var(--interface); text-transform: uppercase; letter-spacing: .1em; color: var(--ink2); margin: 0 0 .6rem; }
@@ -511,6 +578,10 @@ function page({ title, description = "", canonical, image, type = "website", hea
     .book { position: sticky; top: 2rem; }
     .book .cover { width: 100%; max-width: 15rem; display: block; margin: 0 auto 1.2rem; border-radius: 6px;
                    box-shadow: 0 4px 16px var(--cover-shadow); border: .5px solid var(--cover-edge); }
+    .book .cover-drawn { aspect-ratio: 2 / 3; background: var(--raised); display: grid; place-items: center; padding: 1rem;
+                         box-sizing: border-box; overflow: hidden; }
+    .book .cover-drawn span { font: 400 1.4rem/1.15 var(--display); color: var(--ink2); text-align: center;
+                              display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
     .book-title { font: 400 1.75rem/1.15 var(--display); margin: 0 0 .35rem; text-align: center; }
     .review-title { font: 400 2.4rem/1.1 var(--display); margin: 1rem 0 .5rem; text-wrap: balance; }
     .book-author { margin: 0 0 1rem; text-align: center; color: var(--ink2); font-size: .9rem; text-decoration: underline; text-underline-offset: 2px; }
@@ -596,7 +667,9 @@ ${BLOCK_STYLES}
       /* The book shrinks to a compact row above the review, as on iPhone. */
       .book { position: static; display: flex; align-items: center; gap: .9rem; padding: .7rem; background: var(--raised);
               border: 1px solid var(--rule); border-radius: 16px; }
-      .book .cover { width: 52px; margin: 0; border-radius: 4px; box-shadow: 0 2px 6px var(--cover-shadow); }
+      .book .cover { width: 52px; margin: 0; border-radius: 4px; box-shadow: 0 2px 6px var(--cover-shadow); flex: none; }
+      .book .cover-drawn { padding: .3rem; }
+      .book .cover-drawn span { font-size: .55rem; -webkit-line-clamp: 4; }
       .book-title { font: 600 1.05rem/1.25 var(--reading); text-align: left; margin: 0 0 .15rem; }
       .book-author { text-align: left; margin: 0; }
       .book-facts, .book-genres { display: none; }

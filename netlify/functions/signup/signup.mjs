@@ -91,13 +91,19 @@ async function invite(body, secret, context) {
   }
   const environment = attested.environment;
 
-  const day = await checkDay();
   const device = await checkDevice(apple, environment, deviceToken);
   await checkRisk(apple, environment, attested);
-
-  const inviteCode = await mintCode();
+  // The day's place is taken before the code is minted, atomically: two sign-ups at once can't both slip in at the
+  // limit. Given back if minting fails.
+  const day = await takeDay();
+  let inviteCode;
+  try {
+    inviteCode = await mintCode();
+  } catch (error) {
+    await giveBackDay(day);
+    throw error;
+  }
   if (device) await chargeDevice(apple, environment, deviceToken, device);
-  await countDay(day);
   return { inviteCode, handle: read.handle };
 }
 
@@ -112,26 +118,39 @@ function appleCredentials() {
   return { keyId, teamId: TEAM_ID, privateKey };
 }
 
-/** The server's new accounts today, refused past the daily limit. */
-async function checkDay() {
+/** Adds `by` to a counter unless it would pass `limit`, as one compare-and-set: a write only lands on the version
+ *  that was read, so requests arriving together can't both take the last place. Returns whether it was counted. */
+async function bump(store, key, limit, by = 1) {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const current = await store.getWithMetadata(key, { type: "json" });
+    const count = current?.data?.count ?? 0;
+    if (by > 0 && count + by > limit) return false;
+    const next = { count: Math.max(count + by, 0) };
+    const result = current ? await store.setJSON(key, next, { onlyIfMatch: current.etag }) : await store.setJSON(key, next, { onlyIfNew: true });
+    if (result.modified) return true;
+  }
+  throw new SignupError(503, "unavailable");
+}
+
+/** A place among the server's new accounts today, refused past the daily limit. */
+async function takeDay() {
   const limit = Number(process.env.SIGNUP_DAILY_LIMIT) || DEFAULT_DAILY_LIMIT;
   const store = getStore({ name: "signup-days", consistency: "strong" });
   const day = dayOf();
-  const count = (await store.get(day, { type: "json" }))?.count ?? 0;
-  if (count >= limit) {
+  if (!(await bump(store, day, limit))) {
     const now = new Date();
     const midnight = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1);
     console.log(`signup: daily limit of ${limit} reached`);
     throw new SignupError(503, "full", { "Retry-After": String(Math.max(Math.ceil((midnight - now) / 1000), 1)) });
   }
-  return { store, day, count };
+  return { store, day };
 }
 
-async function countDay({ store, day, count }) {
+async function giveBackDay({ store, day }) {
   try {
-    await store.setJSON(day, { count: count + 1 });
+    await bump(store, day, Infinity, -1);
   } catch (error) {
-    console.log(`signup: couldn't count the day (${error.message})`);
+    console.log(`signup: couldn't give the day's place back (${error.message})`);
   }
 }
 
@@ -181,9 +200,13 @@ async function checkRisk(apple, environment, attested) {
 /** Each challenge opens one place. A second use within its life is refused. */
 async function useNonce(nonce) {
   const store = getStore({ name: "signup-nonces", consistency: "strong" });
-  const seen = await store.get(nonce, { type: "json" });
-  if (seen && Date.now() - seen.at < NONCE_MEMORY_MS) throw new SignupError(409, "used_challenge");
-  await store.setJSON(nonce, { at: Date.now() });
+  // Kept under the window it was used in, so old ones are found by name alone. A challenge lives no longer than a
+  // window, so the window before is the only other place it could have been used.
+  const bucket = Math.floor(Date.now() / NONCE_MEMORY_MS);
+  if (await store.get(`${bucket - 1}/${nonce}`)) throw new SignupError(409, "used_challenge");
+  // Written only if new: of the same challenge sent several times at once, one write lands and the rest are refused.
+  const { modified } = await store.setJSON(`${bucket}/${nonce}`, { at: Date.now() }, { onlyIfNew: true });
+  if (!modified) throw new SignupError(409, "used_challenge");
 }
 
 /** Ten sign-ups an hour from one address. The address is never stored: only a keyed hash of it, in a bucket for
@@ -194,12 +217,10 @@ async function countAddress(ip, secret) {
   const now = Date.now();
   const hour = Math.floor(now / HOUR_MS);
   const key = `${hour}/${createHmac("sha256", secret).update(`ip:${ip}`).digest("base64url")}`;
-  const count = ((await store.get(key, { type: "json" }))?.count ?? 0) + 1;
-  if (count > HOURLY_LIMIT) {
+  if (!(await bump(store, key, HOURLY_LIMIT))) {
     const wait = Math.ceil(((hour + 1) * HOUR_MS - now) / 1000);
     throw new SignupError(429, "too_many", { "Retry-After": String(Math.max(wait, 1)) });
   }
-  await store.setJSON(key, { count });
 }
 
 /** Blobs don't expire, so each sign-up deletes the counters from past hours and days, and the challenges that
@@ -216,12 +237,14 @@ async function forgetOld() {
     const { blobs: countedDays } = await days.list();
     await Promise.all(countedDays.filter((b) => b.key < today).map((b) => days.delete(b.key)));
 
+    // Challenges from before the last two windows, by their names; keys from before buckets carry no "/" and go too.
     const nonces = getStore({ name: "signup-nonces", consistency: "strong" });
     const { blobs: used } = await nonces.list();
-    await Promise.all(used.map(async (b) => {
-      const seen = await nonces.get(b.key, { type: "json" });
-      if (!seen || Date.now() - seen.at > NONCE_MEMORY_MS) await nonces.delete(b.key);
-    }));
+    const current = Math.floor(Date.now() / NONCE_MEMORY_MS);
+    await Promise.all(used.filter((b) => {
+      const bucket = Number(b.key.split("/")[0]);
+      return !b.key.includes("/") || !(bucket >= current - 1);
+    }).map((b) => nonces.delete(b.key)));
   } catch (error) {
     // Tidying can wait for the next sign-up.
     console.log(`signup: tidying failed (${error.message})`);

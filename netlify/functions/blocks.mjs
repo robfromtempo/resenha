@@ -38,8 +38,12 @@ async function pagesOf(content, pds, did) {
   const ref = content?.blobPages?.ref?.$link;
   if (ref && pds && did) {
     try {
-      const res = await fetch(`${pds}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(ref)}`);
-      if (res.ok) {
+      // The reader's server, checked by the caller; no redirects, a time limit, and nothing over 5 MB parsed.
+      const res = await fetch(`${pds}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(ref)}`, {
+        redirect: "error",
+        signal: AbortSignal.timeout(8000),
+      });
+      if (res.ok && Number(res.headers.get("content-length") || 0) <= 5 * 1024 * 1024) {
         const pages = await res.json();
         if (Array.isArray(pages)) return pages;
       }
@@ -179,6 +183,11 @@ function player(block) {
   const host = hostOf(href);
   const known = provider(href);
   const youtube = youtubeID(href);
+  // Only known players load in a frame on resenha.ink; any other address is a link out, never a frame of a page the
+  // writer chose.
+  if (!known) {
+    return `<p class="embed-link"><a href="${escapeAttr(href)}" rel="nofollow ugc noopener">Open on ${escape(host)}</a></p>`;
+  }
   const thumb = youtube ? `<img src="https://i.ytimg.com/vi/${encodeURIComponent(youtube)}/hqdefault.jpg" alt="" loading="lazy">` : "";
   return `<div class="embed" data-src="${escapeAttr(href)}" style="${frameSize(block)}">${thumb}<button type="button" class="embed-load"><span class="embed-play" aria-hidden="true"></span><span>Load from ${escape(known || host)}</span></button><a class="embed-open" href="${escapeAttr(href)}" rel="nofollow ugc noopener">Open on ${escape(known || host)}</a></div>`;
 }
@@ -621,6 +630,8 @@ export const BLOCK_SCRIPT = `
     frame.allow = "autoplay; encrypted-media; fullscreen; picture-in-picture";
     frame.setAttribute("allowfullscreen", "");
     frame.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    // A player needs its scripts and its own origin, and nothing of this page's.
+    frame.setAttribute("sandbox", "allow-scripts allow-same-origin allow-presentation allow-popups");
     frame.setAttribute("loading", "lazy");
     card.replaceChildren(frame);
   });

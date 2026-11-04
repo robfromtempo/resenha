@@ -7,12 +7,14 @@
 // Only lookups: nothing here makes BookHive add a book, so its catalogue grows from readers' own actions alone.
 // The server sends CATALOG_KEY in x-catalog-key; without a matching key nothing is answered, so the function's
 // quota serves Resenha alone. Answers are cached by the CDN: a match for a day, a miss for an hour.
+import { createHash, timingSafeEqual } from "node:crypto";
+
 const BOOKHIVE = "https://bookhive.buzz/xrpc";
 
 export default async (request) => {
   const key = process.env.CATALOG_KEY;
   if (!key) return answer({ error: "NotConfigured" }, 503, 0);
-  if (request.headers.get("x-catalog-key") !== key) return answer({ error: "Forbidden" }, 403, 0);
+  if (!sameSecret(request.headers.get("x-catalog-key") ?? "", key)) return answer({ error: "Forbidden" }, 403, 0);
   const url = new URL(request.url);
   const isbn13 = (url.searchParams.get("isbn13") ?? "").replace(/[^0-9Xx]/g, "");
   const id = url.searchParams.get("id") ?? "";
@@ -48,21 +50,30 @@ export default async (request) => {
     return answer({ error: "InvalidRequest", message: "isbn13 or id" }, 400, 0);
   } catch (error) {
     console.error(error);
-    return answer({ error: "Upstream", message: String(error?.message ?? error) }, 502, 0);
+    return answer({ error: "Upstream" }, 502, 0);
   }
 };
 
 async function json(url) {
-  const response = await fetch(url, { headers: { accept: "application/json" } });
+  const response = await fetch(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(10000) });
   if (response.status === 404 || response.status === 400) return null;
   if (!response.ok) throw new Error(`BookHive ${response.status}`);
   return response.json();
+}
+
+/** The key compared by digest in constant time, so neither its length nor its bytes show in the time taken. */
+function sameSecret(given, expected) {
+  const a = createHash("sha256").update(given).digest();
+  const b = createHash("sha256").update(expected).digest();
+  return timingSafeEqual(a, b);
 }
 
 function answer(body, status, seconds) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
+      // Cached per key: without it, a cached answer would be served to anyone asking the same address.
+      "Netlify-Vary": "header=x-catalog-key",
       "content-type": "application/json; charset=utf-8",
       "cache-control": seconds ? `public, max-age=0, s-maxage=${seconds}` : "no-store",
     },

@@ -4,6 +4,8 @@
 // hold series records, and each account's server has its records. This function reads them all, once an hour, and
 // Resenha downloads the result in one request. If an AppView appears, this is the one place to switch to it.
 
+import { safeOrigin, isPublicHost } from "../lib/safe.mjs";
+
 const RELAY = "https://relay1.us-east.bsky.network/xrpc";
 const APPVIEW = "https://public.api.bsky.app/xrpc";
 const SERIES = "work.sequential.series";
@@ -125,11 +127,12 @@ function seriesEntry(record, did, pds, chapters) {
   };
 }
 
-/** A blob resized by Netlify's image CDN, which netlify.toml lets fetch from account servers' getBlob only. */
+/** A blob resized by Netlify's image CDN, read through resenha.ink's own picture door (`/img/<did>/<cid>`, which
+ *  checks the host and passes pictures only); netlify.toml lets the CDN fetch from that door and nowhere else. */
 function thumbnail(pds, did, value, width) {
   const cid = value?.ref?.$link;
-  if (typeof cid !== "string") return null;
-  const source = `${pds}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${encodeURIComponent(cid)}`;
+  if (typeof cid !== "string" || !/^[a-z2-7]{20,80}$/i.test(cid)) return null;
+  const source = `https://resenha.ink/img/${encodeURIComponent(did)}/${encodeURIComponent(cid)}`;
   return `https://resenha.ink/.netlify/images?url=${encodeURIComponent(source)}&w=${width}&q=75`;
 }
 
@@ -182,14 +185,19 @@ const didDocuments = new Map();
 async function pdsFor(did) {
   let cached = didDocuments.get(did);
   if (!cached || Date.now() - cached.at > 3600_000) {
-    const doc = await json(did.startsWith("did:plc:") ? `https://plc.directory/${did}` : `https://${did.slice("did:web:".length)}/.well-known/did.json`);
+    const host = did.slice("did:web:".length).toLowerCase();
+    if (!did.startsWith("did:plc:") && !(await isPublicHost(host))) return null;
+    const doc = await json(did.startsWith("did:plc:") ? `https://plc.directory/${did}` : `https://${host}/.well-known/did.json`);
     if (!doc) return undefined;
     cached = { doc, at: Date.now() };
     didDocuments.set(did, cached);
   }
   const service = cached.doc?.service?.find((s) => s.id === "#atproto_pds" || s.id === `${did}#atproto_pds`);
   const endpoint = service?.serviceEndpoint;
-  return typeof endpoint === "string" && endpoint.startsWith("https://") ? endpoint.replace(/\/$/, "") : null;
+  if (typeof endpoint !== "string") return null;
+  // Only a public https host: a DID document can name any address.
+  const origin = await safeOrigin(endpoint);
+  return origin && endpoint.replace(/\/$/, "").startsWith(origin) ? endpoint.replace(/\/$/, "") : null;
 }
 
 /** Every record of a collection, or null when a page couldn't be read, so a slow server isn't taken for an empty one. */
@@ -208,7 +216,7 @@ async function listAll(pds, did, collection) {
 
 async function json(address) {
   try {
-    const response = await fetch(address, { headers: { Accept: "application/json" }, signal: AbortSignal.timeout(6000) });
+    const response = await fetch(address, { headers: { Accept: "application/json" }, redirect: "error", signal: AbortSignal.timeout(6000) });
     if (!response.ok) return null;
     return await response.json();
   } catch {
