@@ -13,7 +13,7 @@
         "hiveId": {
           "type": "string",
           "maxLength": 64,
-          "description": "The book's BookHive ID."
+          "description": "The book's BookHive ID, or, for a Popfeed book BookHive's catalogue doesn't know, a stand-in beginning with popfeed- that no BookHive call takes."
         },
         "title": {
           "type": "string",
@@ -26,7 +26,8 @@
         },
         "cover": {
           "type": "string",
-          "format": "uri"
+          "format": "uri",
+          "description": " For a Popfeed book, Popfeed's own cover."
         },
         "year": {
           "type": "integer",
@@ -61,7 +62,7 @@
         "uri": {
           "type": "string",
           "format": "at-uri",
-          "description": "The record it comes from: the reader's BookHive book record."
+          "description": "The record it comes from: the reader's BookHive book record, or their Popfeed list item (or review, for a book reviewed but on no list)."
         },
         "kind": {
           "type": "string",
@@ -135,6 +136,11 @@
         "viewer": {
           "type": "ref",
           "ref": "#viewerState"
+        },
+        "popfeedReview": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "For a reviewed event from Popfeed: the social.popfeed.feed.review record, whose comments and likes are Popfeed's."
         }
       }
     },
