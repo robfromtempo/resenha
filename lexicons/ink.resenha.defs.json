@@ -703,6 +703,12 @@
           },
           "maxLength": 20,
           "description": "The reader's own records for the book in any app: their buzz.bookhive.book, their social.popfeed.feed.listItem records, a record in an app to come."
+        },
+        "cover": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 1000,
+          "description": "A cover the writer's app showed for the book, downloaded and found to be a real cover rather than a catalogue's stand-in picture. Resenha's server keeps it as a fallback for the book's cover, after the catalogue's and Open Library's."
         }
       }
     }

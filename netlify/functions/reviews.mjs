@@ -92,7 +92,7 @@ async function reviewPage(did, rkey) {
   if (!(await isResenhaPublication(pds, did, doc.site))) return notFound();
   // The book comes from Resenha's link for the review, when there is one: BookHive's catalogue for the cover and details,
   // the reader's BookHive record for their rating.
-  const [author, link] = await Promise.all([authorOf(did), linkFor(pds, did, record.uri)]);
+  const [author, link] = await Promise.all([authorOf(did), linkFor(pds, did, record.uri, doc)]);
   // A book no catalogue holds has no BookHive page: the link's own reference names it, and the reader's
   // Resenha reading record carries the rating.
   // BookHive is asked only about its own IDs: a stand-in (isbn-, resenha-, popfeed-) is no book there.
@@ -274,10 +274,20 @@ async function authorOf(did) {
   return { handle, name: profile?.displayName || (handle ? `@${handle}` : did), avatar };
 }
 
-/** Resenha's link from a review to its book: the book's BookHive ID and the reader's BookHive record. */
-async function linkFor(pds, did, documentURI) {
-  const links = await listAll(pds, did, LINK);
-  const found = links.find((r) => r.value?.document === documentURI);
+/** Resenha's link from a review to its book: the book's BookHive ID and the reader's BookHive record. The document
+ * names its link (ink.resenha.bookReview), so one read finds it; a document without the field, or whose link has
+ * moved to another key since, is found by listing the reader's links. */
+async function linkFor(pds, did, documentURI, doc) {
+  let found = null;
+  const named = typeof doc?.[LINK] === "string" ? doc[LINK].split("/") : [];
+  if (named.length === 5 && named[2] === did && named[3] === LINK && /^[A-Za-z0-9._:~-]{1,512}$/.test(named[4])) {
+    const record = await json(`${pds}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(did)}&collection=${LINK}&rkey=${encodeURIComponent(named[4])}`);
+    if (record?.value?.document === documentURI) found = record;
+  }
+  if (!found) {
+    const links = await listAll(pds, did, LINK);
+    found = links.find((r) => r.value?.document === documentURI);
+  }
   const hiveId = found?.value?.hiveId;
   if (typeof hiveId !== "string" || !/^[A-Za-z0-9_-]{1,64}$/.test(hiveId)) return null;
   // The languages the writer said the review is in, as BCP-47 codes, for the text's lang attribute.
