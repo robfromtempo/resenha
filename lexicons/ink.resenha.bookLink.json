@@ -29,6 +29,11 @@
             "format": "at-uri",
             "description": "The reader's buzz.bookhive.book record for the book, when they have one."
           },
+          "reading": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "The reader's ink.resenha.reading record for the book, when that's where they keep it. A reading and the reader's Popfeed items named here are one book."
+          },
           "popfeed": {
             "type": "array",
             "maxLength": 20,
