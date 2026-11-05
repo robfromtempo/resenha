@@ -52,6 +52,14 @@
     Access-Control-Allow-Origin = "*"
     Content-Type = "application/json"
 
+# The Popfeed migration's writes switch, which the app reads before every book it moves. Never cached, so turning it
+# off stops every device within about a minute.
+[[headers]]
+  for = "/app/migration.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Cache-Control = "no-store, max-age=0"
+
 # Tells Apple devices that resenha.ink review links open in Resenha. Served as JSON, at its exact path, with no redirect.
 [[headers]]
   for = "/.well-known/apple-app-site-association"
