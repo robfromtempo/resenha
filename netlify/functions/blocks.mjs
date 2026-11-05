@@ -6,18 +6,33 @@
 
 const APPVIEW = "https://public.api.bsky.app";
 
-/** HTML for the document's content. `images(cid)` gives the address a blob of the author's is served from. */
-export async function renderBlocks(content, { images, pds, did }) {
+/** HTML for the document's content. `images(cid)` gives the address a blob of the author's is served from.
+ *  `galleryImages` is the review link's layout for images in galleries (ink.resenha.bookReview). */
+export async function renderBlocks(content, { images, pds, did, galleryImages }) {
   const pages = await pagesOf(content, pds, did);
-  const ctx = { images, posts: await fetchPosts(collectPostURIs(pages)) };
+  const ctx = { images, posts: await fetchPosts(collectPostURIs(pages)), galleryLayout: galleryLayoutOf(galleryImages) };
   const out = [];
+  // Positions count every top-level block across the pages, from 0, as the app counts them.
+  let position = 0;
   for (const page of pages) {
     for (const wrapper of page?.blocks ?? []) {
-      const html = renderBlock(wrapper?.block, ctx);
+      if (wrapper === null || typeof wrapper !== "object" || wrapper.block === undefined) continue;
+      const html = renderBlock(wrapper.block, ctx, position++);
       if (html) out.push(html);
     }
   }
   return out.join("\n");
+}
+
+/** The link's gallery layout keyed "block:image"; entries it can't read are skipped. */
+function galleryLayoutOf(entries) {
+  const layout = new Map();
+  if (!Array.isArray(entries)) return layout;
+  for (const item of entries.slice(0, 200)) {
+    if (!Number.isInteger(item?.block) || item.block < 0 || !Number.isInteger(item?.image) || item.image < 0) continue;
+    layout.set(`${item.block}:${item.image}`, { width: Number.isInteger(item.width) && item.width > 0 ? item.width : undefined, fullBleed: item.fullBleed === true });
+  }
+  return layout;
 }
 
 /** The plain text of the content, for excerpts, when the document carries no textContent. */
@@ -56,7 +71,7 @@ async function pagesOf(content, pds, did) {
 
 // MARK: - Blocks
 
-function renderBlock(block, ctx) {
+function renderBlock(block, ctx, position) {
   const type = typeof block?.$type === "string" ? block.$type.split(".").pop() : "";
   switch (type) {
     case "text":
@@ -81,7 +96,7 @@ function renderBlock(block, ctx) {
     case "image":
       return figure(block, ctx);
     case "imageGallery":
-      return `<div class="gallery">${(block.images ?? []).map((image) => figure(image, ctx, true)).join("")}</div>`;
+      return `<div class="gallery">${(block.images ?? []).map((image, index) => figure(galleryImage(image, ctx, position, index), ctx, true)).join("")}</div>`;
     case "website":
       return websiteCard(block, ctx);
     case "bskyPost":
@@ -123,6 +138,12 @@ function list(block, ordered) {
 }
 // Items in a list hold text, headings or images, none of which need the post or image context mid-list.
 const listCtx = { images: () => "", posts: new Map() };
+
+/** A gallery's image with the layout the link gives it; old documents keep the layout in the image. Nested galleries have no position. */
+function galleryImage(image, ctx, position, index) {
+  const stored = position === undefined ? undefined : ctx.galleryLayout?.get(`${position}:${index}`);
+  return stored && image && typeof image === "object" ? { ...image, width: stored.width, fullBleed: stored.fullBleed } : image;
+}
 
 function figure(image, ctx, inGallery = false) {
   const cid = image?.image?.ref?.$link;

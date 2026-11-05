@@ -110,7 +110,7 @@ async function reviewPage(did, rkey) {
   const spacing = lineHeightFor(link, doc);
   const gap = paragraphGapFor(link, doc);
   const styles = [spacing ? `--review-line: ${spacing}` : null, gap ? `--review-gap: ${gap}` : null].filter(Boolean).join("; ");
-  const markdown = `<div class="markdown"${lang ? ` lang="${escape(lang)}"` : ""}${styles ? ` style="${styles}"` : ""}>${await render(doc, pds, did)}</div>`;
+  const markdown = `<div class="markdown"${lang ? ` lang="${escape(lang)}"` : ""}${styles ? ` style="${styles}"` : ""}>${await render(doc, pds, did, link)}</div>`;
   const body = `
     <div class="review-layout">
       ${book ? bookColumn(book) : card ? `<img class="card-image" src="${escape(card)}" alt="">` : ""}
@@ -464,13 +464,13 @@ const markdown = new Marked({
   },
 });
 
-async function render(doc, pds, did) {
+async function render(doc, pds, did, link) {
   const content = doc.content;
   if (content?.$type === "at.markpub.markdown" && typeof content.text?.markdown === "string") {
     return frameMarkdownCode(markdown.parse(content.text.markdown));
   }
   if (content?.$type === "pub.leaflet.content") {
-    return await renderBlocks(content, { pds, did, images: (cid) => `/img/${did}/${cid}` });
+    return await renderBlocks(content, { pds, did, images: (cid) => `/img/${did}/${cid}`, galleryImages: Array.isArray(link?.galleryImages) ? link.galleryImages : undefined });
   }
   return (doc.textContent ?? "").split(/\n{2,}/).map((p) => `<p>${escape(p).replace(/\n/g, "<br>")}</p>`).join("");
 }
