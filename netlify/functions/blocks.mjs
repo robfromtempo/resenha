@@ -192,23 +192,25 @@ function player(block) {
   return `<div class="embed" data-src="${escapeAttr(href)}" style="${frameSize(block)}">${thumb}<button type="button" class="embed-load"><span class="embed-play" aria-hidden="true"></span><span>Load from ${escape(known || host)}</span></button><a class="embed-open" href="${escapeAttr(href)}" rel="nofollow ugc noopener">Open on ${escape(known || host)}</a></div>`;
 }
 
+/** The player a link's host belongs to: the provider's own host or one under it, never a host that merely ends in its
+ *  name (notyoutube.com) or carries it as a prefix (youtube.com.example). Null for any other host. */
 function provider(href) {
   const h = hostOf(href);
-  if (/youtube(-nocookie)?\.com$|youtu\.be$/.test(h)) return "YouTube";
-  if (/vimeo\.com$/.test(h)) return "Vimeo";
-  if (/bilibili\.com$/.test(h)) return "Bilibili";
-  if (/spotify\.com$/.test(h)) return "Spotify";
-  if (/music\.apple\.com$/.test(h)) return "Apple Music";
-  if (/soundcloud\.com$/.test(h)) return "SoundCloud";
-  if (/bandcamp\.com$/.test(h)) return "Bandcamp";
+  if (/(^|\.)youtube(-nocookie)?\.com$|(^|\.)youtu\.be$/.test(h)) return "YouTube";
+  if (/(^|\.)vimeo\.com$/.test(h)) return "Vimeo";
+  if (/(^|\.)bilibili\.com$/.test(h)) return "Bilibili";
+  if (/(^|\.)spotify\.com$/.test(h)) return "Spotify";
+  if (/(^|\.)music\.apple\.com$/.test(h)) return "Apple Music";
+  if (/(^|\.)soundcloud\.com$/.test(h)) return "SoundCloud";
+  if (/(^|\.)bandcamp\.com$/.test(h)) return "Bandcamp";
   return null;
 }
 
 function youtubeID(href) {
   try {
     const u = new URL(href);
-    if (/youtu\.be$/.test(u.hostname)) return u.pathname.slice(1).split("/")[0] || null;
-    if (/youtube(-nocookie)?\.com$/.test(u.hostname)) {
+    if (/(^|\.)youtu\.be$/.test(u.hostname)) return u.pathname.slice(1).split("/")[0] || null;
+    if (/(^|\.)youtube(-nocookie)?\.com$/.test(u.hostname)) {
       const embedded = u.pathname.match(/^\/embed\/([\w-]{6,})/);
       if (embedded) return embedded[1];
       return u.searchParams.get("v");

@@ -1,0 +1,160 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.migrationChoice",
+  "description": "What a reader chose while Resenha moves their Popfeed books to BookHive and Resenha readings: their changes to the proposed plan, the plan they confirmed, and which device is writing. These records are public, like every record in the reader's repository. Resenha deletes each book's choice when it writes that book, and the rest when the move finishes.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "One of three kinds, named by kind. A book record is keyed item-<record key> or review-<record key>, after the book's anchor: its oldest social.popfeed.feed.listItem, or its oldest social.popfeed.feed.review for a book with only reviews. The plan record is keyed plan, with further parts plan-1, plan-2, … when the confirmed digests don't fit one record. The writer record is keyed writer.",
+      "key": "any",
+      "record": {
+        "type": "object",
+        "required": [
+          "kind",
+          "createdAt"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "knownValues": [
+              "book",
+              "plan",
+              "writer"
+            ],
+            "description": "book: what the reader changed for one book, which also requires anchor and sources. plan: the choices for every book, and the confirmation, or one part of the confirmed digests. writer: the device moving the books, which also requires device and seenAt."
+          },
+          "anchor": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "For a book: the record that names the book in the move, its oldest Popfeed list item, or its oldest review for a book with only reviews."
+          },
+          "sources": {
+            "type": "array",
+            "maxLength": 2000,
+            "items": {
+              "type": "ref",
+              "ref": "com.atproto.repo.strongRef"
+            },
+            "description": "For a book: the records, at the versions the reader saw, that the choice was made against. A choice whose records have changed since is asked about again."
+          },
+          "side": {
+            "type": "string",
+            "knownValues": [
+              "bookhive",
+              "popfeed",
+              "reading"
+            ],
+            "description": "For a book in both apps whose details disagree: the record whose details the reader kept."
+          },
+          "hiveId": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "For a book: the BookHive book the reader picked as its match."
+          },
+          "review": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "For a book with more than one review: the review the reader chose to keep."
+          },
+          "status": {
+            "type": "string",
+            "maxLength": 128,
+            "description": "For a book: the reading status the reader set, as the book's new record will carry it: a buzz.bookhive.defs token (#wantToRead, #reading, #finished, #abandoned)."
+          },
+          "merge": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "For a book: a record Resenha proposed merging the book into, which the reader confirmed."
+          },
+          "bulk": {
+            "type": "ref",
+            "ref": "#bulk",
+            "description": "For the plan: the reader's changes to the defaults for every book."
+          },
+          "confirmedAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "For the plan: when the reader confirmed it. Set last, after every part of the digests is written; no book is moved before it."
+          },
+          "counts": {
+            "type": "ref",
+            "ref": "#counts",
+            "description": "For the plan: how many books each outcome had when the reader confirmed it."
+          },
+          "part": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "For a further part of the plan (plan-1, plan-2, …): its number."
+          },
+          "digests": {
+            "type": "unknown",
+            "description": "For the plan or one of its parts: an object from each confirmed book's anchor key (item-<record key> or review-<record key>) to its digest, a string. The digest is a hash of the versions of every record the book's move deletes or overwrites, its outcome, and its catalogue ID; a book whose digest no longer matches is not moved, and is asked about again."
+          },
+          "device": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "For the writer: the name of the device moving the books, as shown on the reader's other devices."
+          },
+          "seenAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "For the writer: when that device last said it was writing. It says so every 5 minutes; another device waits while this is less than 10 minutes old, unless the reader takes over there."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    },
+    "bulk": {
+      "type": "object",
+      "description": "Changes to the defaults that apply to every book without a choice of its own.",
+      "properties": {
+        "side": {
+          "type": "string",
+          "knownValues": [
+            "bookhive",
+            "popfeed"
+          ],
+          "description": "The record whose details are kept for a book in both apps whose details disagree."
+        },
+        "reviewOnlyStatus": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "The reading status given to a book with only reviews, as a buzz.bookhive.defs token; buzz.bookhive.defs#finished unless changed."
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "bookhive": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "New books moving to BookHive."
+        },
+        "reading": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "New books moving to Resenha readings, for want of a certain catalogue match."
+        },
+        "held": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Books the reader already holds in BookHive or as a reading, which the move merges into or upgrades."
+        },
+        "pending": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Books waiting to be looked up in the catalogue, which aren't part of this run."
+        },
+        "skipped": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Books left out of this run."
+        }
+      }
+    }
+  }
+}

@@ -107,8 +107,8 @@ async function reviewPage(did, rkey) {
   const published = doc.publishedAt ? new Date(doc.publishedAt) : null;
   const spoilers = hasSpoilers(doc);
   const lang = link?.langs?.[0];
-  const spacing = lineHeightFor(doc);
-  const gap = paragraphGapFor(doc);
+  const spacing = lineHeightFor(link, doc);
+  const gap = paragraphGapFor(link, doc);
   const styles = [spacing ? `--review-line: ${spacing}` : null, gap ? `--review-gap: ${gap}` : null].filter(Boolean).join("; ");
   const markdown = `<div class="markdown"${lang ? ` lang="${escape(lang)}"` : ""}${styles ? ` style="${styles}"` : ""}>${await render(doc, pds, did)}</div>`;
   const body = `
@@ -202,21 +202,30 @@ async function friendPage(did) {
   }), 200, 600);
 }
 
-/** The line height a review was written with in Resenha, from its document's ink.resenha.lineSpacing: a percentage of
- *  the font's own line height (100, 115, 150 or 200), as word processors count spacing. The app measures from a line
- *  height of about 1.2, so the web does too. Null for reviews without one, which keep the page's usual spacing. */
-function lineHeightFor(doc) {
-  const percent = doc?.["ink.resenha.lineSpacing"];
-  if (![100, 115, 150, 200].includes(percent)) return null;
+/** The line height a review was written with in Resenha: a percentage of the font's own line height (100, 115, 150 or
+ *  200), as word processors count spacing. The app measures from a line height of about 1.2, so the web does too. Null
+ *  for reviews without one, which keep the page's usual spacing. */
+function lineHeightFor(link, doc) {
+  const percent = spacingOf(link?.lineSpacing, doc?.["ink.resenha.lineSpacing"], [100, 115, 150, 200]);
+  if (percent === null) return null;
   return (1.2 * percent / 100).toFixed(2);
 }
 
-/** The gap between a review's paragraphs, from its document's ink.resenha.paragraphSpacing: a percentage of the
- *  text size (40, 90 or 150). Null for reviews without one, which keep the page's usual gap. */
-function paragraphGapFor(doc) {
-  const percent = doc?.["ink.resenha.paragraphSpacing"];
-  if (![40, 90, 150].includes(percent)) return null;
+/** The gap between a review's paragraphs: a percentage of the text size (40, 90 or 150). Null for reviews without
+ *  one, which keep the page's usual gap. */
+function paragraphGapFor(link, doc) {
+  const percent = spacingOf(link?.paragraphSpacing, doc?.["ink.resenha.paragraphSpacing"], [40, 90, 150]);
+  if (percent === null) return null;
   return (percent / 100).toFixed(2) + "em";
+}
+
+/** A spacing from the review's link (ink.resenha.bookReview), where Resenha keeps it; else from the document's own
+ *  ink.resenha.* field, which only the reviews written before the link held it carry. The fallback stays: those
+ *  documents are never rewritten. Null when neither is one of the known values. */
+function spacingOf(fromLink, fromDocument, known) {
+  if (known.includes(fromLink)) return fromLink;
+  if (known.includes(fromDocument)) return fromDocument;
+  return null;
 }
 
 // MARK: - The AT Protocol
@@ -274,9 +283,10 @@ async function authorOf(did) {
   return { handle, name: profile?.displayName || (handle ? `@${handle}` : did), avatar };
 }
 
-/** Resenha's link from a review to its book: the book's BookHive ID and the reader's BookHive record. The document
- * names its link (ink.resenha.bookReview), so one read finds it; a document without the field, or whose link has
- * moved to another key since, is found by listing the reader's links. */
+/** Resenha's link from a review to its book: the book's BookHive ID, the reader's BookHive record, and the review's
+ * spacing. Documents written from 1.6.10 carry no ink.resenha.* fields, so their link is found by listing the
+ * reader's links for the one whose document is this one. A document that still names its link (ink.resenha.bookReview)
+ * is read in one getRecord, falling back to the listing when the link has moved to another key since. */
 async function linkFor(pds, did, documentURI, doc) {
   let found = null;
   const named = typeof doc?.[LINK] === "string" ? doc[LINK].split("/") : [];
@@ -295,7 +305,9 @@ async function linkFor(pds, did, documentURI, doc) {
     ? found.value.langs.filter((code) => typeof code === "string" && /^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$/.test(code))
     : [];
   const bookRef = found.value.bookRef && typeof found.value.bookRef.title === "string" ? found.value.bookRef : null;
-  return { hiveId, book: typeof found.value.book === "string" ? found.value.book : null, langs, bookRef };
+  // The review's spacing as the writer chose it; checked against the known values where it's used.
+  const { lineSpacing, paragraphSpacing } = found.value;
+  return { hiveId, book: typeof found.value.book === "string" ? found.value.book : null, langs, bookRef, lineSpacing, paragraphSpacing };
 }
 
 /** The book as the link itself names it, for one BookHive's catalogue doesn't have. */

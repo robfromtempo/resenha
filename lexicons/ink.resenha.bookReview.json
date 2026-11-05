@@ -5,7 +5,7 @@
   "defs": {
     "main": {
       "type": "record",
-      "description": "One per reviewed book. The record key is the book's BookHive ID (hiveId), so a reader's review of a book can be found with a single getRecord.",
+      "description": "One per reviewed book. The record key is the book's BookHive ID (hiveId), so a reader's review of a book can be found with a single getRecord. A book BookHive doesn't hold is keyed by a stand-in instead (isbn-…, resenha-… or popfeed-…), which is also its hiveId.",
       "key": "any",
       "record": {
         "type": "object",
@@ -24,12 +24,12 @@
           "book": {
             "type": "string",
             "format": "at-uri",
-            "description": "The reader's record for the book: a buzz.bookhive.book, whose review field holds the same review as plain text, or, for a book the reader keeps in Popfeed, a social.popfeed.feed.listItem, whose newest social.popfeed.feed.review holds it as plain text with a link to the formatted review."
+            "description": "The reader's record for the book: a buzz.bookhive.book or an ink.resenha.reading, whose review field holds the same review as plain text, or, for a book the reader keeps in Popfeed, a social.popfeed.feed.listItem, whose newest social.popfeed.feed.review holds it as plain text with a link to the formatted review."
           },
           "hiveId": {
             "type": "string",
             "maxLength": 64,
-            "description": "The book's BookHive ID. Also the record key."
+            "description": "The book's BookHive ID, or the stand-in the record is keyed by for a book BookHive doesn't hold. Also the record key."
           },
           "spoiler": {
             "type": "boolean",
@@ -52,7 +52,106 @@
             "type": "ref",
             "ref": "ink.resenha.defs#bookRef",
             "description": "The book in every key anyone uses, so the review can be found for an edition no catalogue knows, by ISBN."
+          },
+          "lineSpacing": {
+            "type": "integer",
+            "minimum": 50,
+            "maximum": 400,
+            "description": "The line spacing the writer chose, as a percentage of the font's own line height, as word processors count it. Known values: 100, 115, 150, 200. Absent for the usual spacing."
+          },
+          "paragraphSpacing": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 400,
+            "description": "The gap between paragraphs the writer chose, as a percentage of the text size. Known values: 40, 90, 150. Absent for the usual gap."
+          },
+          "drawings": {
+            "type": "array",
+            "maxLength": 50,
+            "items": {
+              "type": "ref",
+              "ref": "#drawing"
+            },
+            "description": "How Resenha drew the document's drawing blocks: the sheet behind each and its ruled lines, which the blocks themselves hold as ordinary fills and strokes. One entry per drawing with a background."
+          },
+          "galleryImages": {
+            "type": "array",
+            "maxLength": 200,
+            "items": {
+              "type": "ref",
+              "ref": "#galleryImage"
+            },
+            "description": "The layout the writer gave images inside the document's gallery blocks, which a gallery's images don't hold themselves. A single image block keeps its width and fullBleed in the block."
           }
+        }
+      }
+    },
+    "drawing": {
+      "type": "object",
+      "required": [
+        "block",
+        "background"
+      ],
+      "properties": {
+        "block": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The drawing block's position in the document's content, counting from 0."
+        },
+        "background": {
+          "type": "string",
+          "knownValues": [
+            "paper",
+            "notebook"
+          ],
+          "maxLength": 64,
+          "description": "The sheet the drawing is on."
+        },
+        "guideFills": {
+          "type": "array",
+          "maxLength": 1000,
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "description": "The positions, from 0, of the block's fills that are the sheet rather than the writer's drawing."
+        },
+        "guideStrokes": {
+          "type": "array",
+          "maxLength": 1000,
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "description": "The positions, from 0, of the block's strokes that are ruled lines rather than the writer's drawing."
+        }
+      }
+    },
+    "galleryImage": {
+      "type": "object",
+      "required": [
+        "block",
+        "image"
+      ],
+      "properties": {
+        "block": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The gallery block's position in the document's content, counting from 0."
+        },
+        "image": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The image's position in the gallery, counting from 0."
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "The width the writer gave the image, in points, as a single image block's width."
+        },
+        "fullBleed": {
+          "type": "boolean",
+          "description": "The image runs to the page's edges, as a single image block's fullBleed."
         }
       }
     }

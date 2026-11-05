@@ -53,7 +53,24 @@
           "coverUrl": {
             "type": "string",
             "format": "uri",
-            "description": "The cover as the reader's app found it, for apps without a catalogue to ask."
+            "description": "The cover as the reader's app found it, for apps without a catalogue to ask. Kept for Resenha before 1.6.10, which reads only this; newer builds also write covers."
+          },
+          "covers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            },
+            "maxLength": 8,
+            "description": "Every address of the cover the reader's app knew, surest first. A reader tries the next when one fails."
+          },
+          "coverImage": {
+            "type": "blob",
+            "accept": [
+              "image/*"
+            ],
+            "maxSize": 2000000,
+            "description": "The cover itself, kept in the reader's repository, for a book whose cover has no lasting address elsewhere."
           },
           "createdAt": {
             "type": "string",
