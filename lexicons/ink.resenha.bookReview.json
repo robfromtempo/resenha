@@ -5,7 +5,7 @@
   "defs": {
     "main": {
       "type": "record",
-      "description": "One per reviewed book. The record key is the book's BookHive ID (hiveId), so a reader's review of a book can be found with a single getRecord. A book BookHive doesn't hold is keyed by a stand-in instead (isbn-…, resenha-… or popfeed-…), which is also its hiveId.",
+      "description": "One per reviewed book. The record key is the book's BookHive ID (hiveId), so a reader's review of a book can be found with a single getRecord. A book BookHive doesn't hold is keyed by a stand-in instead, which is also its hiveId: isbn-… and the edition's ISBN-13, or resenha-… and the ink.resenha.reading's record key for a book with no ISBN. Records written before Resenha 1.6.10 may also be keyed popfeed-…, for a book the reader kept in Popfeed.",
       "key": "any",
       "record": {
         "type": "object",
@@ -24,7 +24,7 @@
           "book": {
             "type": "string",
             "format": "at-uri",
-            "description": "The reader's record for the book: a buzz.bookhive.book or an ink.resenha.reading, whose review field holds the same review as plain text, or, for a book the reader keeps in Popfeed, a social.popfeed.feed.listItem, whose newest social.popfeed.feed.review holds it as plain text with a link to the formatted review."
+            "description": "The reader's record for the book: a buzz.bookhive.book or an ink.resenha.reading, whose review field holds the same review as plain text. A review published before Resenha 1.6.10 may still name a social.popfeed.feed.listItem, for a book the reader kept in Popfeed then. That record may since have been deleted, when the book moved to BookHive or a reading."
           },
           "hiveId": {
             "type": "string",

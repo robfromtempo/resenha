@@ -5,7 +5,7 @@
     "main": {
       "type": "record",
       "key": "tid",
-      "description": "A reader's reading of a book no catalogue they use holds: the home of last resort, so any book can be added to a library and reviewed. One per book. Status, dates, rating, review and progress live here as they do on a buzz.bookhive.book or a social.popfeed.feed.listItem; the book is named in every key anyone uses, so any app that recognises one of them can show the reading. When the book gains a page in a catalogue app the reader uses, Resenha offers to move the reading there.",
+      "description": "A reader's reading of a book BookHive's catalogue doesn't hold, or can't be matched to for certain: the home of last resort, so any book can be added to a library and reviewed. One per book. Status, dates, rating, review and progress live here as they do on a buzz.bookhive.book; the book is named in every key anyone uses, so any app that recognises one of them can show the reading. When BookHive's catalogue has the book, Resenha moves the reading there: it writes a buzz.bookhive.book with everything the reading held, or fills in the one the reader already has, and deletes the reading in the same commit. It does this when BookHive answers for the reading's ISBN, or when the reader picks the book in BookHive's catalogue.",
       "record": {
         "type": "object",
         "required": [
