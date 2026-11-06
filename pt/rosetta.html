@@ -30,7 +30,7 @@
   <meta property="og:description" content="O que acontece com cada registro do Popfeed quando o Resenha transfere seus livros para o BookHive ou para leituras do Resenha: como os livros são identificados, no que cada campo se transforma e o que nunca é tocado.">
   <meta property="og:url" content="https://resenha.ink/pt/rosetta">
   <link rel="stylesheet" href="/assets/landing/landing.css?v=59228ede45">
-  <link rel="stylesheet" href="/assets/rosetta/rosetta.css?v=216e30890b">
+  <link rel="stylesheet" href="/assets/rosetta/rosetta.css?v=2cbf25e3fb">
 </head>
 <body class="rosetta">
   <div class="glow" aria-hidden="true"></div>
@@ -49,58 +49,113 @@
     <a class="pill" href="https://apps.apple.com/app/id6821354481"><span class="long" data-get-app>Baixar o app</span><span class="short">Baixar o app</span></a>
   </header>
 
-  <main class="page">
-    <header class="intro">
+  <main class="rosetta-main">
+    <section class="hero intro">
       <p class="eyebrow">Transferindo livros do Popfeed</p>
       <h1>Rosetta</h1>
-      <p>Rosetta é como o Resenha 1.6.10 transfere seus livros do Popfeed. Cada livro vira um registro do BookHive quando o catálogo do BookHive tem o livro com certeza, e uma leitura do Resenha quando não tem. Depois, os registros dele no Popfeed são apagados.</p>
-      <p>Mover dados de livros entre apps tem fama de errar o palpite e perder coisas pelo caminho. Aqui está exatamente o que acontece com cada livro, campo por campo. Nada é gravado antes de você confirmar.</p>
-    </header>
+      <p class="lede">Rosetta é como o Resenha 1.6.10 transfere seus livros do Popfeed. Cada livro vira um registro do BookHive quando o catálogo do BookHive tem o livro com certeza, e uma leitura do Resenha quando não tem. Depois, os registros dele no Popfeed são apagados.</p>
+      <p class="lede">Mover dados de livros entre apps tem fama de errar o palpite e perder coisas pelo caminho. Aqui está exatamente o que acontece com cada livro, campo por campo. Nada é gravado antes de você confirmar.</p>
+    </section>
 
-    <div class="explorer">
-      <div class="switcher" data-switcher hidden>
-        <fieldset class="segments">
-          <legend>Como achamos seu livro</legend>
-          <div class="options four"><input type="radio" name="match" id="match-isbn" value="isbn" checked><label for="match-isbn">Pelo ISBN</label><input type="radio" name="match" id="match-goodreads" value="goodreads"><label for="match-goodreads">ID do Goodreads</label><input type="radio" name="match" id="match-title" value="title"><label for="match-title">Só pelo título</label><input type="radio" name="match" id="match-none" value="none"><label for="match-none">Fora do BookHive</label></div>
-        </fieldset>
-        <fieldset class="segments">
-          <legend>Já está na sua biblioteca?</legend>
-          <div class="options three"><input type="radio" name="held" id="held-no" value="no" checked><label for="held-no">Não</label><input type="radio" name="held" id="held-bookhive" value="bookhive"><label for="held-bookhive">No BookHive</label><input type="radio" name="held" id="held-reading" value="reading"><label for="held-reading">Como leitura do Resenha</label></div>
-        </fieldset>
+    <section class="explorer" aria-labelledby="explorer-h">
+      <h2 class="visually-hidden" id="explorer-h">Informação da transferência</h2>
+      <div class="explain">
+        <p class="eyebrow">Vira</p>
+      <div class="case" data-match="isbn" data-held="no">
+        <p class="becomes"><span class="becomes-dest">Um novo registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">O catálogo do BookHive respondeu ao ISBN do livro com exatamente um livro, então a correspondência é certa.</p>
       </div>
-      <noscript><p class="noscript">Mostrado: um livro achado pelo ISBN, que ainda não está na sua biblioteca.</p></noscript>
-      <p class="visually-hidden" aria-live="polite" data-live></p>
-
+      <div class="case" data-match="isbn" data-held="bookhive" hidden>
+        <p class="becomes"><span class="becomes-dest">Seu registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">O catálogo do BookHive respondeu ao ISBN do livro com exatamente um livro, então a correspondência é certa. Você já tem o livro no BookHive, então esse registro é atualizado: o Popfeed completa o que falta, e onde são diferentes, você escolhe.</p>
+      </div>
+      <div class="case" data-match="isbn" data-held="reading" hidden>
+        <p class="becomes"><span class="becomes-dest">Um novo registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">O catálogo do BookHive respondeu ao ISBN do livro com exatamente um livro, então a correspondência é certa. Você já tem o livro como leitura do Resenha. Com uma correspondência certa, ele passa para o BookHive; sem ela, a leitura é atualizada.</p>
+      </div>
+      <div class="case" data-match="goodreads" data-held="no" hidden>
+        <p class="becomes"><span class="becomes-dest">Um novo registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">O livro tem um ID do Goodreads, mas não tem ISBN. Quando você toca em “Buscar estes”, um resultado do BookHive com o mesmo ID do Goodreads conta como certo.</p>
+      </div>
+      <div class="case" data-match="goodreads" data-held="bookhive" hidden>
+        <p class="becomes"><span class="becomes-dest">Seu registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">O livro tem um ID do Goodreads, mas não tem ISBN. Quando você toca em “Buscar estes”, um resultado do BookHive com o mesmo ID do Goodreads conta como certo. Você já tem o livro no BookHive, então esse registro é atualizado: o Popfeed completa o que falta, e onde são diferentes, você escolhe.</p>
+      </div>
+      <div class="case" data-match="goodreads" data-held="reading" hidden>
+        <p class="becomes"><span class="becomes-dest">Um novo registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">O livro tem um ID do Goodreads, mas não tem ISBN. Quando você toca em “Buscar estes”, um resultado do BookHive com o mesmo ID do Goodreads conta como certo. Você já tem o livro como leitura do Resenha. Com uma correspondência certa, ele passa para o BookHive; sem ela, a leitura é atualizada.</p>
+      </div>
+      <div class="case" data-match="title" data-held="no" hidden>
+        <p class="becomes"><span class="becomes-if">Se você confirmar</span><span class="becomes-dest">Um novo registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="becomes"><span class="becomes-if">Se não</span><span class="becomes-dest">Uma nova leitura do Resenha</span> <code>ink.resenha.reading</code></p>
+        <p class="case-text">Só o título e o autor batem. O Resenha oferece o livro do BookHive que encontrou, e nada é usado antes de você confirmar.</p>
+      </div>
+      <div class="case" data-match="title" data-held="bookhive" hidden>
+        <p class="becomes"><span class="becomes-if">Se você confirmar</span><span class="becomes-dest">Seu registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="becomes"><span class="becomes-if">Se não</span><span class="becomes-dest">Seu registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">Só o título e o autor batem. O Resenha oferece o livro do BookHive que encontrou, e nada é usado antes de você confirmar. Você já tem o livro no BookHive, então esse registro é atualizado: o Popfeed completa o que falta, e onde são diferentes, você escolhe.</p>
+      </div>
+      <div class="case" data-match="title" data-held="reading" hidden>
+        <p class="becomes"><span class="becomes-if">Se você confirmar</span><span class="becomes-dest">Um novo registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="becomes"><span class="becomes-if">Se não</span><span class="becomes-dest">Sua leitura do Resenha</span> <code>ink.resenha.reading</code></p>
+        <p class="case-text">Só o título e o autor batem. O Resenha oferece o livro do BookHive que encontrou, e nada é usado antes de você confirmar. Você já tem o livro como leitura do Resenha. Com uma correspondência certa, ele passa para o BookHive; sem ela, a leitura é atualizada.</p>
+      </div>
+      <div class="case" data-match="none" data-held="no" hidden>
+        <p class="becomes"><span class="becomes-dest">Uma nova leitura do Resenha</span> <code>ink.resenha.reading</code></p>
+        <p class="case-text">O catálogo do BookHive não tem o livro com certeza, e nenhuma correspondência de título foi confirmada.</p>
+      </div>
+      <div class="case" data-match="none" data-held="bookhive" hidden>
+        <p class="becomes"><span class="becomes-dest">Seu registro do BookHive</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">O catálogo do BookHive não tem o livro com certeza, e nenhuma correspondência de título foi confirmada. Você já tem o livro no BookHive, então esse registro é atualizado: o Popfeed completa o que falta, e onde são diferentes, você escolhe.</p>
+      </div>
+      <div class="case" data-match="none" data-held="reading" hidden>
+        <p class="becomes"><span class="becomes-dest">Sua leitura do Resenha</span> <code>ink.resenha.reading</code></p>
+        <p class="case-text">O catálogo do BookHive não tem o livro com certeza, e nenhuma correspondência de título foi confirmada. Você já tem o livro como leitura do Resenha. Com uma correspondência certa, ele passa para o BookHive; sem ela, a leitura é atualizada.</p>
+      </div>
+        <div class="switcher" data-switcher hidden>
+        <fieldset class="switch">
+          <legend>Como achamos seu livro</legend>
+          <div class="track" data-track><div class="rail"><span class="lens" aria-hidden="true"></span><input type="radio" name="match" id="match-isbn" value="isbn" checked><label for="match-isbn">Pelo ISBN</label><input type="radio" name="match" id="match-goodreads" value="goodreads"><label for="match-goodreads">ID do Goodreads</label><input type="radio" name="match" id="match-title" value="title"><label for="match-title">Só pelo título</label><input type="radio" name="match" id="match-none" value="none"><label for="match-none">Fora do BookHive</label></div></div>
+        </fieldset>
+        <fieldset class="switch">
+          <legend>Já está na sua biblioteca?</legend>
+          <div class="track" data-track><div class="rail"><span class="lens" aria-hidden="true"></span><input type="radio" name="held" id="held-no" value="no" checked><label for="held-no">Não</label><input type="radio" name="held" id="held-bookhive" value="bookhive"><label for="held-bookhive">No BookHive</label><input type="radio" name="held" id="held-reading" value="reading"><label for="held-reading">Como leitura do Resenha</label></div></div>
+        </fieldset>
+        </div>
+        <noscript><p class="noscript">Mostrado: um livro achado pelo ISBN, que ainda não está na sua biblioteca.</p></noscript>
+      </div>
+      <div class="labels">
+        <p class="visually-hidden" aria-live="polite" data-live></p>
       <section class="facts" id="facts-isbn-no" data-match="isbn" data-held="no" data-summary="um novo registro do BookHive (buzz.bookhive.book)" aria-labelledby="facts-isbn-no-h">
-        <h2 class="facts-title" id="facts-isbn-no-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-isbn-no-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">um novo registro do BookHive</span></td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">um novo registro do BookHive</span></td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="1">1</td></tr>
+          <tr data-row="updated"><th scope="row">Registros de livro atualizados</th><td colspan="1">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">O que acontece</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td colspan="1">Do catálogo do BookHive</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="1">Mantido</td></tr><tr class="sub"><td colspan="2">Lido, Lendo e Quero ler mantêm o sentido, e Abandonado continua Abandonado. Um livro que só tem uma resenha chega como Lido, a menos que você escolha outro status.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Mantido</td></tr><tr class="sub"><td colspan="2">Tiradas dos registros do Popfeed. Nunca viram a data de hoje.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="2">Meios pontos são arredondados para cima: 7,5 vira 8. Nota 0 significa sem nota.</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="1">Mantida, como texto simples</td></tr><tr class="sub"><td colspan="2">Links e menções viram texto simples. A linha do resenha.ink que o Resenha acrescentava às próprias cópias é removida. Se um livro tem várias resenhas, fica a mais recente com texto, a menos que você escolha outra.</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub"><td colspan="2">Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente é mantido</td></tr><tr class="sub"><td colspan="2">Os registros de progresso mais antigos são apagados e ficam no backup. Uma página ou capítulo 0 é deixado de fora.</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Do catálogo do BookHive</td></tr>
-          <tr><th scope="row">Capa</th><td colspan="1">A capa do catálogo do BookHive</td></tr><tr class="sub"><td colspan="2">Os endereços de capa do Popfeed não são mantidos.</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td colspan="1">Do catálogo do BookHive</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="1">Mantido</td></tr><tr class="sub" data-row="status"><td colspan="2">Lido, Lendo e Quero ler mantêm o sentido, e Abandonado continua Abandonado. Um livro que só tem uma resenha chega como Lido, a menos que você escolha outro status.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Mantido</td></tr><tr class="sub" data-row="dates"><td colspan="2">Tiradas dos registros do Popfeed. Nunca viram a data de hoje.</td></tr>
+          <tr data-row="rating" class="has-sub"><th scope="row">Nota</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub" data-row="rating"><td colspan="2">Meios pontos são arredondados para cima: 7,5 vira 8. Nota 0 significa sem nota.</td></tr>
+          <tr data-row="review" class="has-sub"><th scope="row">Resenha</th><td colspan="1">Mantida, como texto simples</td></tr><tr class="sub" data-row="review"><td colspan="2">Links e menções viram texto simples. A linha do resenha.ink que o Resenha acrescentava às próprias cópias é removida. Se um livro tem várias resenhas, fica a mais recente com texto, a menos que você escolha outra.</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress" class="has-sub"><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente é mantido</td></tr><tr class="sub" data-row="progress"><td colspan="2">Os registros de progresso mais antigos são apagados e ficam no backup. Uma página ou capítulo 0 é deixado de fora.</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Do catálogo do BookHive</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Capa</th><td colspan="1">A capa do catálogo do BookHive</td></tr><tr class="sub" data-row="cover"><td colspan="2">Os endereços de capa do Popfeed não são mantidos.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> o ISBN-13 do livro (um ISBN-10 é convertido), consultado no catálogo do BookHive. Só é certo quando exatamente um livro do catálogo responde; se os ISBNs do livro levam a dois, você escolhe. Um livro sobre o qual não dá para perguntar ao BookHive espera uma próxima vez: nunca vira leitura por falta de resposta. Não usados: IDs de catálogo salvos em itens do Popfeed.</p>
@@ -108,35 +163,35 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-isbn-bookhive" data-match="isbn" data-held="bookhive" data-summary="seu registro do BookHive (buzz.bookhive.book)" aria-labelledby="facts-isbn-bookhive-h" hidden>
-        <h2 class="facts-title" id="facts-isbn-bookhive-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-isbn-bookhive-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">seu registro do BookHive</span></td></tr><tr class="sub"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Ele é atualizado no mesmo commit que apaga os registros do Popfeed.</td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="1">0 ou 1</td></tr><tr class="sub"><td colspan="2">0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">seu registro do BookHive</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Ele é atualizado no mesmo commit que apaga os registros do Popfeed.</td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="1">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Registros de livro atualizados</th><td colspan="1">0 ou 1</td></tr><tr class="sub" data-row="updated"><td colspan="2">0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">O que acontece</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td colspan="1">Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="2">O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="2">Seu registro mantém a data de inclusão.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="1">Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="1">Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Capa</th><td colspan="1">Sem mudança</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td colspan="1">Os seus, sem mudança</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub" data-row="status"><td colspan="2">O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub" data-row="dates"><td colspan="2">Seu registro mantém a data de inclusão.</td></tr>
+          <tr data-row="rating"><th scope="row">Nota</th><td colspan="1">Completado, ou você escolhe</td></tr>
+          <tr data-row="review"><th scope="row">Resenha</th><td colspan="1">Completado, ou você escolhe</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress"><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Os seus, sem mudança</td></tr>
+          <tr data-row="cover"><th scope="row">Capa</th><td colspan="1">Sem mudança</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> o ISBN-13 do livro (um ISBN-10 é convertido), consultado no catálogo do BookHive. Só é certo quando exatamente um livro do catálogo responde; se os ISBNs do livro levam a dois, você escolhe. Um livro sobre o qual não dá para perguntar ao BookHive espera uma próxima vez: nunca vira leitura por falta de resposta. Não usados: IDs de catálogo salvos em itens do Popfeed.</p>
@@ -144,35 +199,35 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-isbn-reading" data-match="isbn" data-held="reading" data-summary="um novo registro do BookHive (buzz.bookhive.book)" aria-labelledby="facts-isbn-reading-h" hidden>
-        <h2 class="facts-title" id="facts-isbn-reading-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-isbn-reading-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">um novo registro do BookHive</span></td></tr><tr class="sub"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Sua leitura é passada adiante: o novo registro e a exclusão da leitura estão no mesmo commit, e o link da resenha longa dela vai junto.</td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">um novo registro do BookHive</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Sua leitura é passada adiante: o novo registro e a exclusão da leitura estão no mesmo commit, e o link da resenha longa dela vai junto.</td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="1">1</td></tr>
+          <tr data-row="updated"><th scope="row">Registros de livro atualizados</th><td colspan="1">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="1">1</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">O que acontece</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td colspan="1">Do catálogo do BookHive</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr><tr class="sub"><td colspan="2">Onde sua leitura tem um valor, ele fica; o Popfeed completa o que falta. As diferenças não são mostradas.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr><tr class="sub"><td colspan="2">Fica a mais antiga das duas datas de inclusão.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Do catálogo do BookHive</td></tr>
-          <tr><th scope="row">Capa</th><td colspan="1">A capa do catálogo do BookHive</td></tr><tr class="sub"><td colspan="2">Os endereços de capa do Popfeed não são mantidos.</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td colspan="1">Do catálogo do BookHive</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr><tr class="sub" data-row="status"><td colspan="2">Onde sua leitura tem um valor, ele fica; o Popfeed completa o que falta. As diferenças não são mostradas.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr><tr class="sub" data-row="dates"><td colspan="2">Fica a mais antiga das duas datas de inclusão.</td></tr>
+          <tr data-row="rating"><th scope="row">Nota</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr>
+          <tr data-row="review"><th scope="row">Resenha</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress"><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Do catálogo do BookHive</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Capa</th><td colspan="1">A capa do catálogo do BookHive</td></tr><tr class="sub" data-row="cover"><td colspan="2">Os endereços de capa do Popfeed não são mantidos.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> o ISBN-13 do livro (um ISBN-10 é convertido), consultado no catálogo do BookHive. Só é certo quando exatamente um livro do catálogo responde; se os ISBNs do livro levam a dois, você escolhe. Um livro sobre o qual não dá para perguntar ao BookHive espera uma próxima vez: nunca vira leitura por falta de resposta. Não usados: IDs de catálogo salvos em itens do Popfeed.</p>
@@ -180,35 +235,35 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-goodreads-no" data-match="goodreads" data-held="no" data-summary="um novo registro do BookHive (buzz.bookhive.book)" aria-labelledby="facts-goodreads-no-h" hidden>
-        <h2 class="facts-title" id="facts-goodreads-no-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-goodreads-no-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">um novo registro do BookHive</span></td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">um novo registro do BookHive</span></td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="1">1</td></tr>
+          <tr data-row="updated"><th scope="row">Registros de livro atualizados</th><td colspan="1">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">O que acontece</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td colspan="1">Do catálogo do BookHive</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="1">Mantido</td></tr><tr class="sub"><td colspan="2">Lido, Lendo e Quero ler mantêm o sentido, e Abandonado continua Abandonado. Um livro que só tem uma resenha chega como Lido, a menos que você escolha outro status.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Mantido</td></tr><tr class="sub"><td colspan="2">Tiradas dos registros do Popfeed. Nunca viram a data de hoje.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="2">Meios pontos são arredondados para cima: 7,5 vira 8. Nota 0 significa sem nota.</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="1">Mantida, como texto simples</td></tr><tr class="sub"><td colspan="2">Links e menções viram texto simples. A linha do resenha.ink que o Resenha acrescentava às próprias cópias é removida. Se um livro tem várias resenhas, fica a mais recente com texto, a menos que você escolha outra.</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub"><td colspan="2">Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente é mantido</td></tr><tr class="sub"><td colspan="2">Os registros de progresso mais antigos são apagados e ficam no backup. Uma página ou capítulo 0 é deixado de fora.</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Do catálogo do BookHive</td></tr>
-          <tr><th scope="row">Capa</th><td colspan="1">A capa do catálogo do BookHive</td></tr><tr class="sub"><td colspan="2">Os endereços de capa do Popfeed não são mantidos.</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td colspan="1">Do catálogo do BookHive</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="1">Mantido</td></tr><tr class="sub" data-row="status"><td colspan="2">Lido, Lendo e Quero ler mantêm o sentido, e Abandonado continua Abandonado. Um livro que só tem uma resenha chega como Lido, a menos que você escolha outro status.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Mantido</td></tr><tr class="sub" data-row="dates"><td colspan="2">Tiradas dos registros do Popfeed. Nunca viram a data de hoje.</td></tr>
+          <tr data-row="rating" class="has-sub"><th scope="row">Nota</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub" data-row="rating"><td colspan="2">Meios pontos são arredondados para cima: 7,5 vira 8. Nota 0 significa sem nota.</td></tr>
+          <tr data-row="review" class="has-sub"><th scope="row">Resenha</th><td colspan="1">Mantida, como texto simples</td></tr><tr class="sub" data-row="review"><td colspan="2">Links e menções viram texto simples. A linha do resenha.ink que o Resenha acrescentava às próprias cópias é removida. Se um livro tem várias resenhas, fica a mais recente com texto, a menos que você escolha outra.</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress" class="has-sub"><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente é mantido</td></tr><tr class="sub" data-row="progress"><td colspan="2">Os registros de progresso mais antigos são apagados e ficam no backup. Uma página ou capítulo 0 é deixado de fora.</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Do catálogo do BookHive</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Capa</th><td colspan="1">A capa do catálogo do BookHive</td></tr><tr class="sub" data-row="cover"><td colspan="2">Os endereços de capa do Popfeed não são mantidos.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> o ID do Goodreads do livro, para um livro sem ISBN. Esses livros esperam em “Livros para buscar” até você tocar em “Buscar estes”, uma busca no BookHive por título e autor que você mesmo inicia. Um resultado com o mesmo ID do Goodreads é certo. Qualquer outro resultado é só oferecido, como correspondência de título. Não usados: IDs de catálogo salvos em itens do Popfeed.</p>
@@ -216,35 +271,35 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-goodreads-bookhive" data-match="goodreads" data-held="bookhive" data-summary="seu registro do BookHive (buzz.bookhive.book)" aria-labelledby="facts-goodreads-bookhive-h" hidden>
-        <h2 class="facts-title" id="facts-goodreads-bookhive-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-goodreads-bookhive-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">seu registro do BookHive</span></td></tr><tr class="sub"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Ele é atualizado no mesmo commit que apaga os registros do Popfeed.</td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="1">0 ou 1</td></tr><tr class="sub"><td colspan="2">0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">seu registro do BookHive</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Ele é atualizado no mesmo commit que apaga os registros do Popfeed.</td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="1">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Registros de livro atualizados</th><td colspan="1">0 ou 1</td></tr><tr class="sub" data-row="updated"><td colspan="2">0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">O que acontece</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td colspan="1">Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="2">O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="2">Seu registro mantém a data de inclusão.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="1">Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="1">Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Capa</th><td colspan="1">Sem mudança</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td colspan="1">Os seus, sem mudança</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub" data-row="status"><td colspan="2">O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub" data-row="dates"><td colspan="2">Seu registro mantém a data de inclusão.</td></tr>
+          <tr data-row="rating"><th scope="row">Nota</th><td colspan="1">Completado, ou você escolhe</td></tr>
+          <tr data-row="review"><th scope="row">Resenha</th><td colspan="1">Completado, ou você escolhe</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress"><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Os seus, sem mudança</td></tr>
+          <tr data-row="cover"><th scope="row">Capa</th><td colspan="1">Sem mudança</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> o ID do Goodreads do livro, para um livro sem ISBN. Esses livros esperam em “Livros para buscar” até você tocar em “Buscar estes”, uma busca no BookHive por título e autor que você mesmo inicia. Um resultado com o mesmo ID do Goodreads é certo. Qualquer outro resultado é só oferecido, como correspondência de título. Não usados: IDs de catálogo salvos em itens do Popfeed.</p>
@@ -252,35 +307,35 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-goodreads-reading" data-match="goodreads" data-held="reading" data-summary="um novo registro do BookHive (buzz.bookhive.book)" aria-labelledby="facts-goodreads-reading-h" hidden>
-        <h2 class="facts-title" id="facts-goodreads-reading-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-goodreads-reading-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">um novo registro do BookHive</span></td></tr><tr class="sub"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Sua leitura é passada adiante: o novo registro e a exclusão da leitura estão no mesmo commit, e o link da resenha longa dela vai junto.</td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">um novo registro do BookHive</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Sua leitura é passada adiante: o novo registro e a exclusão da leitura estão no mesmo commit, e o link da resenha longa dela vai junto.</td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="1">1</td></tr>
+          <tr data-row="updated"><th scope="row">Registros de livro atualizados</th><td colspan="1">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="1">1</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">O que acontece</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td colspan="1">Do catálogo do BookHive</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr><tr class="sub"><td colspan="2">Onde sua leitura tem um valor, ele fica; o Popfeed completa o que falta. As diferenças não são mostradas.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr><tr class="sub"><td colspan="2">Fica a mais antiga das duas datas de inclusão.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Do catálogo do BookHive</td></tr>
-          <tr><th scope="row">Capa</th><td colspan="1">A capa do catálogo do BookHive</td></tr><tr class="sub"><td colspan="2">Os endereços de capa do Popfeed não são mantidos.</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td colspan="1">Do catálogo do BookHive</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr><tr class="sub" data-row="status"><td colspan="2">Onde sua leitura tem um valor, ele fica; o Popfeed completa o que falta. As diferenças não são mostradas.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr><tr class="sub" data-row="dates"><td colspan="2">Fica a mais antiga das duas datas de inclusão.</td></tr>
+          <tr data-row="rating"><th scope="row">Nota</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr>
+          <tr data-row="review"><th scope="row">Resenha</th><td colspan="1">Da sua leitura, lacunas completadas</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress"><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Do catálogo do BookHive</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Capa</th><td colspan="1">A capa do catálogo do BookHive</td></tr><tr class="sub" data-row="cover"><td colspan="2">Os endereços de capa do Popfeed não são mantidos.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> o ID do Goodreads do livro, para um livro sem ISBN. Esses livros esperam em “Livros para buscar” até você tocar em “Buscar estes”, uma busca no BookHive por título e autor que você mesmo inicia. Um resultado com o mesmo ID do Goodreads é certo. Qualquer outro resultado é só oferecido, como correspondência de título. Não usados: IDs de catálogo salvos em itens do Popfeed.</p>
@@ -288,35 +343,35 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-title-no" data-match="title" data-held="no" data-summary="Se você confirmar: um novo registro do BookHive (buzz.bookhive.book); Se não: uma nova leitura do Resenha (ink.resenha.reading)" aria-labelledby="facts-title-no-h" hidden>
-        <h2 class="facts-title" id="facts-title-no-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-title-no-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           <tr class="cols"><td></td><th scope="col">Se você confirmar</th><th scope="col">Se não</th></tr>
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td><code>buzz.bookhive.book</code><span class="dest-words">um novo registro do BookHive</span></td><td><code>ink.resenha.reading</code><span class="dest-words">uma nova leitura do Resenha</span></td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="2">1</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="2">0</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="2">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="2">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="2">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="2">Sim</td></tr><tr class="sub"><td colspan="3">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">Vira</span></th><td><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">um novo registro do BookHive</span></td><td><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">uma nova leitura do Resenha</span></td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="2">1</td></tr>
+          <tr data-row="updated"><th scope="row">Registros de livro atualizados</th><td colspan="2">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="2">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="2">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="2">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="2">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="3">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">Se você confirmar</th><th scope="col">Se não</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td>Do catálogo do BookHive</td><td>Como no Popfeed</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="2">Mantido</td></tr><tr class="sub"><td colspan="3">Lido, Lendo e Quero ler mantêm o sentido, e Abandonado continua Abandonado. Um livro que só tem uma resenha chega como Lido, a menos que você escolha outro status.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="2">Mantido</td></tr><tr class="sub"><td colspan="3">Tiradas dos registros do Popfeed. Nunca viram a data de hoje.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="2">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="3">Meios pontos são arredondados para cima: 7,5 vira 8. Nota 0 significa sem nota.</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="2">Mantida, como texto simples</td></tr><tr class="sub"><td colspan="3">Links e menções viram texto simples. A linha do resenha.ink que o Resenha acrescentava às próprias cópias é removida. Se um livro tem várias resenhas, fica a mais recente com texto, a menos que você escolha outra.</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="2">Também uma resenha longa</td></tr><tr class="sub"><td colspan="3">Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="2">O mais recente é mantido</td></tr><tr class="sub"><td colspan="3">Os registros de progresso mais antigos são apagados e ficam no backup. Uma página ou capítulo 0 é deixado de fora.</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td>Do catálogo do BookHive</td><td>Mantidos, de uma edição</td></tr><tr class="sub"><td colspan="3"><b>Se não:</b> Nenhum ID do BookHive é acrescentado a uma leitura.</td></tr>
-          <tr><th scope="row">Capa</th><td>A capa do catálogo do BookHive</td><td>Mantida, com uma cópia</td></tr><tr class="sub"><td colspan="3"><b>Se você confirmar:</b> Os endereços de capa do Popfeed não são mantidos. <b>Se não:</b> Todos os endereços de capa dos registros do Popfeed, e uma cópia da imagem salva na sua conta, para a imagem sobreviver à exclusão.</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="2">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="2">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="2">Perdidos</td></tr><tr class="sub"><td colspan="3">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td>Do catálogo do BookHive</td><td>Como no Popfeed</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="2">Mantido</td></tr><tr class="sub" data-row="status"><td colspan="3">Lido, Lendo e Quero ler mantêm o sentido, e Abandonado continua Abandonado. Um livro que só tem uma resenha chega como Lido, a menos que você escolha outro status.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="2">Mantido</td></tr><tr class="sub" data-row="dates"><td colspan="3">Tiradas dos registros do Popfeed. Nunca viram a data de hoje.</td></tr>
+          <tr data-row="rating" class="has-sub"><th scope="row">Nota</th><td colspan="2">1–10 → <code>stars</code></td></tr><tr class="sub" data-row="rating"><td colspan="3">Meios pontos são arredondados para cima: 7,5 vira 8. Nota 0 significa sem nota.</td></tr>
+          <tr data-row="review" class="has-sub"><th scope="row">Resenha</th><td colspan="2">Mantida, como texto simples</td></tr><tr class="sub" data-row="review"><td colspan="3">Links e menções viram texto simples. A linha do resenha.ink que o Resenha acrescentava às próprias cópias é removida. Se um livro tem várias resenhas, fica a mais recente com texto, a menos que você escolha outra.</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="2">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="3">Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress" class="has-sub"><th scope="row">Progresso de leitura</th><td colspan="2">O mais recente é mantido</td></tr><tr class="sub" data-row="progress"><td colspan="3">Os registros de progresso mais antigos são apagados e ficam no backup. Uma página ou capítulo 0 é deixado de fora.</td></tr>
+          <tr data-row="ids" class="has-sub"><th scope="row">ISBN e ID do Goodreads</th><td>Do catálogo do BookHive</td><td>Mantidos, de uma edição</td></tr><tr class="sub" data-row="ids"><td colspan="3"><b>Se não:</b> Nenhum ID do BookHive é acrescentado a uma leitura.</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Capa</th><td>A capa do catálogo do BookHive</td><td>Mantida, com uma cópia</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>Se você confirmar:</b> Os endereços de capa do Popfeed não são mantidos. <b>Se não:</b> Todos os endereços de capa dos registros do Popfeed, e uma cópia da imagem salva na sua conta, para a imagem sobreviver à exclusão.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="2">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="2">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="2">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="3">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> o título e o sobrenome do primeiro autor. Quando você abre “Correspondências de título”, o Resenha busca no BookHive e guarda até três resultados com o mesmo título e autor. Isso também vale para livros cujo ISBN o BookHive não conhece. Nenhum é usado antes de você confirmar, com um toque em cada um ou com “Confirmar todas as correspondências de título”.</p>
@@ -324,35 +379,35 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-title-bookhive" data-match="title" data-held="bookhive" data-summary="Se você confirmar: seu registro do BookHive (buzz.bookhive.book); Se não: seu registro do BookHive (buzz.bookhive.book)" aria-labelledby="facts-title-bookhive-h" hidden>
-        <h2 class="facts-title" id="facts-title-bookhive-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-title-bookhive-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           <tr class="cols"><td></td><th scope="col">Se você confirmar</th><th scope="col">Se não</th></tr>
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="2"><code>buzz.bookhive.book</code><span class="dest-words">seu registro do BookHive</span></td></tr><tr class="sub"><td colspan="3">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Ele é atualizado no mesmo commit que apaga os registros do Popfeed.</td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="2">0</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="2">0 ou 1</td></tr><tr class="sub"><td colspan="3">0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="2">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="2">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="2">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="2">Sim</td></tr><tr class="sub"><td colspan="3">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Vira</span></th><td colspan="2"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">seu registro do BookHive</span></td></tr><tr class="sub" data-row="dest"><td colspan="3">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Ele é atualizado no mesmo commit que apaga os registros do Popfeed.</td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="2">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Registros de livro atualizados</th><td colspan="2">0 ou 1</td></tr><tr class="sub" data-row="updated"><td colspan="3">0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="2">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="2">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="2">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="2">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="3">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">Se você confirmar</th><th scope="col">Se não</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td colspan="2">Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="2">Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="3">O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="2">Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="3">Seu registro mantém a data de inclusão.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="2">Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="2">Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="2">Também uma resenha longa</td></tr><tr class="sub"><td colspan="3">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="2">O mais recente dos dois</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td colspan="2">Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Capa</th><td colspan="2">Sem mudança</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="2">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="2">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="2">Perdidos</td></tr><tr class="sub"><td colspan="3">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td colspan="2">Os seus, sem mudança</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="2">Completado, ou você escolhe</td></tr><tr class="sub" data-row="status"><td colspan="3">O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="2">Completado, ou você escolhe</td></tr><tr class="sub" data-row="dates"><td colspan="3">Seu registro mantém a data de inclusão.</td></tr>
+          <tr data-row="rating"><th scope="row">Nota</th><td colspan="2">Completado, ou você escolhe</td></tr>
+          <tr data-row="review"><th scope="row">Resenha</th><td colspan="2">Completado, ou você escolhe</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="2">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="3">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress"><th scope="row">Progresso de leitura</th><td colspan="2">O mais recente dos dois</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN e ID do Goodreads</th><td colspan="2">Os seus, sem mudança</td></tr>
+          <tr data-row="cover"><th scope="row">Capa</th><td colspan="2">Sem mudança</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="2">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="2">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="2">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="3">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> o título e o sobrenome do primeiro autor. Quando você abre “Correspondências de título”, o Resenha busca no BookHive e guarda até três resultados com o mesmo título e autor. Isso também vale para livros cujo ISBN o BookHive não conhece. Nenhum é usado antes de você confirmar, com um toque em cada um ou com “Confirmar todas as correspondências de título”.</p>
@@ -360,35 +415,35 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-title-reading" data-match="title" data-held="reading" data-summary="Se você confirmar: um novo registro do BookHive (buzz.bookhive.book); Se não: sua leitura do Resenha (ink.resenha.reading)" aria-labelledby="facts-title-reading-h" hidden>
-        <h2 class="facts-title" id="facts-title-reading-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-title-reading-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           <tr class="cols"><td></td><th scope="col">Se você confirmar</th><th scope="col">Se não</th></tr>
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td><code>buzz.bookhive.book</code><span class="dest-words">um novo registro do BookHive</span></td><td><code>ink.resenha.reading</code><span class="dest-words">sua leitura do Resenha</span></td></tr><tr class="sub"><td colspan="3">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. <b>Se você confirmar:</b> Sua leitura é passada adiante: o novo registro e a exclusão da leitura estão no mesmo commit, e o link da resenha longa dela vai junto. <b>Se não:</b> Ela é atualizada no mesmo commit que apaga os registros do Popfeed.</td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td>1</td><td>0</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td>0</td><td>0 ou 1</td></tr><tr class="sub"><td colspan="3"><b>Se não:</b> 0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="2">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td>1</td><td>0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="2">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="2">Sim</td></tr><tr class="sub"><td colspan="3">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Vira</span></th><td><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">um novo registro do BookHive</span></td><td><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">sua leitura do Resenha</span></td></tr><tr class="sub" data-row="dest"><td colspan="3">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. <b>Se você confirmar:</b> Sua leitura é passada adiante: o novo registro e a exclusão da leitura estão no mesmo commit, e o link da resenha longa dela vai junto. <b>Se não:</b> Ela é atualizada no mesmo commit que apaga os registros do Popfeed.</td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td>1</td><td>0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Registros de livro atualizados</th><td>0</td><td>0 ou 1</td></tr><tr class="sub" data-row="updated"><td colspan="3"><b>Se não:</b> 0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="2">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td>1</td><td>0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="2">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="2">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="3">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">Se você confirmar</th><th scope="col">Se não</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td>Do catálogo do BookHive</td><td>Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Status de leitura</th><td>Da sua leitura, lacunas completadas</td><td>Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="3"><b>Se você confirmar:</b> Onde sua leitura tem um valor, ele fica; o Popfeed completa o que falta. As diferenças não são mostradas. <b>Se não:</b> O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td>Da sua leitura, lacunas completadas</td><td>Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="3"><b>Se você confirmar:</b> Fica a mais antiga das duas datas de inclusão. <b>Se não:</b> Seu registro mantém a data de inclusão.</td></tr>
-          <tr><th scope="row">Nota</th><td>Da sua leitura, lacunas completadas</td><td>Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha</th><td>Da sua leitura, lacunas completadas</td><td>Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="2">Também uma resenha longa</td></tr><tr class="sub"><td colspan="3">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="2">O mais recente dos dois</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td>Do catálogo do BookHive</td><td>Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Capa</th><td>A capa do catálogo do BookHive</td><td>Completada se faltar</td></tr><tr class="sub"><td colspan="3"><b>Se você confirmar:</b> Os endereços de capa do Popfeed não são mantidos.</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="2">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="2">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="2">Perdidos</td></tr><tr class="sub"><td colspan="3">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td>Do catálogo do BookHive</td><td>Os seus, sem mudança</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td>Da sua leitura, lacunas completadas</td><td>Completado, ou você escolhe</td></tr><tr class="sub" data-row="status"><td colspan="3"><b>Se você confirmar:</b> Onde sua leitura tem um valor, ele fica; o Popfeed completa o que falta. As diferenças não são mostradas. <b>Se não:</b> O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td>Da sua leitura, lacunas completadas</td><td>Completado, ou você escolhe</td></tr><tr class="sub" data-row="dates"><td colspan="3"><b>Se você confirmar:</b> Fica a mais antiga das duas datas de inclusão. <b>Se não:</b> Seu registro mantém a data de inclusão.</td></tr>
+          <tr data-row="rating"><th scope="row">Nota</th><td>Da sua leitura, lacunas completadas</td><td>Completado, ou você escolhe</td></tr>
+          <tr data-row="review"><th scope="row">Resenha</th><td>Da sua leitura, lacunas completadas</td><td>Completado, ou você escolhe</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="2">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="3">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress"><th scope="row">Progresso de leitura</th><td colspan="2">O mais recente dos dois</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN e ID do Goodreads</th><td>Do catálogo do BookHive</td><td>Os seus, sem mudança</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Capa</th><td>A capa do catálogo do BookHive</td><td>Completada se faltar</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>Se você confirmar:</b> Os endereços de capa do Popfeed não são mantidos.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="2">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="2">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="2">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="3">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> o título e o sobrenome do primeiro autor. Quando você abre “Correspondências de título”, o Resenha busca no BookHive e guarda até três resultados com o mesmo título e autor. Isso também vale para livros cujo ISBN o BookHive não conhece. Nenhum é usado antes de você confirmar, com um toque em cada um ou com “Confirmar todas as correspondências de título”.</p>
@@ -396,35 +451,35 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-none-no" data-match="none" data-held="no" data-summary="uma nova leitura do Resenha (ink.resenha.reading)" aria-labelledby="facts-none-no-h" hidden>
-        <h2 class="facts-title" id="facts-none-no-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-none-no-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>ink.resenha.reading</code><span class="dest-words">uma nova leitura do Resenha</span></td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">uma nova leitura do Resenha</span></td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="1">1</td></tr>
+          <tr data-row="updated"><th scope="row">Registros de livro atualizados</th><td colspan="1">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">O que acontece</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td colspan="1">Como no Popfeed</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="1">Mantido</td></tr><tr class="sub"><td colspan="2">Lido, Lendo e Quero ler mantêm o sentido, e Abandonado continua Abandonado. Um livro que só tem uma resenha chega como Lido, a menos que você escolha outro status.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Mantido</td></tr><tr class="sub"><td colspan="2">Tiradas dos registros do Popfeed. Nunca viram a data de hoje.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="2">Meios pontos são arredondados para cima: 7,5 vira 8. Nota 0 significa sem nota.</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="1">Mantida, como texto simples</td></tr><tr class="sub"><td colspan="2">Links e menções viram texto simples. A linha do resenha.ink que o Resenha acrescentava às próprias cópias é removida. Se um livro tem várias resenhas, fica a mais recente com texto, a menos que você escolha outra.</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub"><td colspan="2">Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente é mantido</td></tr><tr class="sub"><td colspan="2">Os registros de progresso mais antigos são apagados e ficam no backup. Uma página ou capítulo 0 é deixado de fora.</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Mantidos, de uma edição</td></tr><tr class="sub"><td colspan="2">Nenhum ID do BookHive é acrescentado a uma leitura.</td></tr>
-          <tr><th scope="row">Capa</th><td colspan="1">Mantida, com uma cópia</td></tr><tr class="sub"><td colspan="2">Todos os endereços de capa dos registros do Popfeed, e uma cópia da imagem salva na sua conta, para a imagem sobreviver à exclusão.</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td colspan="1">Como no Popfeed</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="1">Mantido</td></tr><tr class="sub" data-row="status"><td colspan="2">Lido, Lendo e Quero ler mantêm o sentido, e Abandonado continua Abandonado. Um livro que só tem uma resenha chega como Lido, a menos que você escolha outro status.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Mantido</td></tr><tr class="sub" data-row="dates"><td colspan="2">Tiradas dos registros do Popfeed. Nunca viram a data de hoje.</td></tr>
+          <tr data-row="rating" class="has-sub"><th scope="row">Nota</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub" data-row="rating"><td colspan="2">Meios pontos são arredondados para cima: 7,5 vira 8. Nota 0 significa sem nota.</td></tr>
+          <tr data-row="review" class="has-sub"><th scope="row">Resenha</th><td colspan="1">Mantida, como texto simples</td></tr><tr class="sub" data-row="review"><td colspan="2">Links e menções viram texto simples. A linha do resenha.ink que o Resenha acrescentava às próprias cópias é removida. Se um livro tem várias resenhas, fica a mais recente com texto, a menos que você escolha outra.</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress" class="has-sub"><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente é mantido</td></tr><tr class="sub" data-row="progress"><td colspan="2">Os registros de progresso mais antigos são apagados e ficam no backup. Uma página ou capítulo 0 é deixado de fora.</td></tr>
+          <tr data-row="ids" class="has-sub"><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Mantidos, de uma edição</td></tr><tr class="sub" data-row="ids"><td colspan="2">Nenhum ID do BookHive é acrescentado a uma leitura.</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Capa</th><td colspan="1">Mantida, com uma cópia</td></tr><tr class="sub" data-row="cover"><td colspan="2">Todos os endereços de capa dos registros do Popfeed, e uma cópia da imagem salva na sua conta, para a imagem sobreviver à exclusão.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> nenhum que o BookHive reconheça: nenhum ISBN que o catálogo conheça, nenhum resultado com o ID do Goodreads e nenhuma correspondência de título que você confirmou. O livro mantém os próprios dados numa leitura do Resenha.</p>
@@ -432,35 +487,35 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-none-bookhive" data-match="none" data-held="bookhive" data-summary="seu registro do BookHive (buzz.bookhive.book)" aria-labelledby="facts-none-bookhive-h" hidden>
-        <h2 class="facts-title" id="facts-none-bookhive-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-none-bookhive-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">seu registro do BookHive</span></td></tr><tr class="sub"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Ele é atualizado no mesmo commit que apaga os registros do Popfeed.</td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="1">0 ou 1</td></tr><tr class="sub"><td colspan="2">0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">seu registro do BookHive</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Ele é atualizado no mesmo commit que apaga os registros do Popfeed.</td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="1">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Registros de livro atualizados</th><td colspan="1">0 ou 1</td></tr><tr class="sub" data-row="updated"><td colspan="2">0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">O que acontece</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td colspan="1">Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="2">O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="2">Seu registro mantém a data de inclusão.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="1">Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="1">Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Capa</th><td colspan="1">Sem mudança</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td colspan="1">Os seus, sem mudança</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub" data-row="status"><td colspan="2">O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub" data-row="dates"><td colspan="2">Seu registro mantém a data de inclusão.</td></tr>
+          <tr data-row="rating"><th scope="row">Nota</th><td colspan="1">Completado, ou você escolhe</td></tr>
+          <tr data-row="review"><th scope="row">Resenha</th><td colspan="1">Completado, ou você escolhe</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress"><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Os seus, sem mudança</td></tr>
+          <tr data-row="cover"><th scope="row">Capa</th><td colspan="1">Sem mudança</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> nenhum que o BookHive reconheça: nenhum ISBN que o catálogo conheça, nenhum resultado com o ID do Goodreads e nenhuma correspondência de título que você confirmou. O livro mantém os próprios dados numa leitura do Resenha.</p>
@@ -468,48 +523,54 @@
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
       <section class="facts" id="facts-none-reading" data-match="none" data-held="reading" data-summary="sua leitura do Resenha (ink.resenha.reading)" aria-labelledby="facts-none-reading-h" hidden>
-        <h2 class="facts-title" id="facts-none-reading-h">Informação da transferência</h2>
+        <h3 class="facts-title" id="facts-none-reading-h">Informação da transferência</h3>
         <p class="serving"><span>Porção</span> <span>1 livro</span></p>
         <p class="serving-note">Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso</p>
         <table class="amounts">
           <caption>Quantidade por livro</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>ink.resenha.reading</code><span class="dest-words">sua leitura do Resenha</span></td></tr><tr class="sub"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Ela é atualizada no mesmo commit que apaga os registros do Popfeed.</td></tr>
-          <tr><th scope="row">Registros de livro criados</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Registros de livro atualizados</th><td colspan="1">0 ou 1</td></tr><tr class="sub"><td colspan="2">0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
-          <tr><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
-          <tr><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Vira</span></th><td colspan="1"><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">sua leitura do Resenha</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro. Ela é atualizada no mesmo commit que apaga os registros do Popfeed.</td></tr>
+          <tr data-row="created"><th scope="row">Registros de livro criados</th><td colspan="1">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Registros de livro atualizados</th><td colspan="1">0 ou 1</td></tr><tr class="sub" data-row="updated"><td colspan="2">0 quando seu registro já diz tudo o que o Popfeed diz.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Registros do Popfeed apagados</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Leituras apagadas</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, tudo ou nada</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Conferido com o que você confirmou</th><td colspan="1">Sim</td></tr><tr class="sub" data-row="checked"><td colspan="2">Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Campo</th><th scope="col">O que acontece</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Título e autores</th><td colspan="1">Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Status de leitura</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="2">O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
-          <tr><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub"><td colspan="2">Seu registro mantém a data de inclusão.</td></tr>
-          <tr><th scope="row">Nota</th><td colspan="1">Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha</th><td colspan="1">Completado, ou você escolhe</td></tr>
-          <tr><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
-          <tr><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
-          <tr><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Os seus, sem mudança</td></tr>
-          <tr><th scope="row">Capa</th><td colspan="1">Completada se faltar</td></tr>
-          <tr><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
-          <tr><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
-          <tr><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
+          <tr data-row="title"><th scope="row">Título e autores</th><td colspan="1">Os seus, sem mudança</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Status de leitura</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub" data-row="status"><td colspan="2">O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Datas de inclusão, início e fim</th><td colspan="1">Completado, ou você escolhe</td></tr><tr class="sub" data-row="dates"><td colspan="2">Seu registro mantém a data de inclusão.</td></tr>
+          <tr data-row="rating"><th scope="row">Nota</th><td colspan="1">Completado, ou você escolhe</td></tr>
+          <tr data-row="review"><th scope="row">Resenha</th><td colspan="1">Completado, ou você escolhe</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Resenha marcada com spoilers</th><td colspan="1">Também uma resenha longa</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Só quando seu registro termina com o texto desta resenha. Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.</td></tr>
+          <tr data-row="progress"><th scope="row">Progresso de leitura</th><td colspan="1">O mais recente dos dois</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN e ID do Goodreads</th><td colspan="1">Os seus, sem mudança</td></tr>
+          <tr data-row="cover"><th scope="row">Capa</th><td colspan="1">Completada se faltar</td></tr>
+          <tr data-row="leftovers"><th scope="row">Outras resenhas, progresso antigo</th><td colspan="1">Apagados; ficam no backup</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, posição na lista</th><td colspan="1">Não transferidos; ficam no backup</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Curtidas e comentários de outras pessoas nas suas resenhas</th><td colspan="1">Perdidos</td></tr><tr class="sub" data-row="likes"><td colspan="2">Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Ingredientes:</b> nenhum que o BookHive reconheça: nenhum ISBN que o catálogo conheça, nenhum resultado com o ID do Goodreads e nenhuma correspondência de título que você confirmou. O livro mantém os próprios dados numa leitura do Resenha.</p>
         <p class="contains"><b>Não contém palpites.</b> Uma correspondência só pelo título nunca é aplicada sem o seu toque.</p>
         <p class="footnote">* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida.</p>
       </section>
-    </div>
+      </div>
+    </section>
 
-    <div class="excluded">
+    <section class="feature flip excluded-section" aria-labelledby="excluded-copy-h">
+      <div class="copy">
+        <h2 id="excluded-copy-h">Nunca gravado nem apagado</h2>
+        <p>Um registro do Popfeed só é apagado quando o Resenha o identificou como um dos seus próprios itens de lista de leitura, resenhas ou registros de progresso, e só no commit que grava o livro dele.</p>
+      </div>
+      <div class="device">
       <section class="facts small" aria-labelledby="excluded-h">
-        <h2 class="facts-title" id="excluded-h">Não incluído</h2>
+        <h3 class="facts-title" id="excluded-h">Não incluído</h3>
         <table class="fields">
-          <thead><tr><th scope="col">Nunca gravado nem apagado</th><th scope="col">Mudanças</th></tr></thead>
+          <thead><tr><th scope="col"><span class="visually-hidden">Nunca gravado nem apagado</span></th><th scope="col">Mudanças</th></tr></thead>
           <tbody>
           <tr><th scope="row">Estantes, e os livros nelas<span class="row-note">Elas também são as estantes do BookHive.</span></th><td>0</td></tr>
           <tr><th scope="row">Filmes, séries, jogos e tudo o que não for livro, com as resenhas</th><td>0</td></tr>
@@ -523,23 +584,24 @@
           <tr><th scope="row">Posts no Bluesky</th><td>0</td></tr>
           </tbody>
         </table>
-        <p class="footnote">Um registro do Popfeed só é apagado quando o Resenha o identificou como um dos seus próprios itens de lista de leitura, resenhas ou registros de progresso, e só no commit que grava o livro dele.</p>
       </section>
-    </div>
+      </div>
+    </section>
 
-    <section class="steps-section" aria-labelledby="steps-h">
+    <section class="moves-section" aria-labelledby="steps-h">
       <h2 id="steps-h">Como um livro é transferido</h2>
-      <ol class="steps moves">
-        <li><strong>Backup.</strong> Quando você confirma, o Resenha primeiro salva um arquivo com cada registro que a transferência vai apagar ou mudar, exatamente como está na sua conta. Ele vai para a pasta do Resenha no iCloud Drive, que você pode abrir no app Arquivos, ou fica no aparelho quando o iCloud Drive está desligado. O Resenha ainda não consegue restaurar a partir dele; ele guarda seus dados.</li>
-        <li><strong>Identificação.</strong> Cada livro é identificado pelos números dele, o ISBN ou o ID do Goodreads. Títulos só sugerem. Você vê o plano inteiro, muda o que quiser e confirma uma vez. Até lá, só suas escolhas são gravadas, para elas irem com você para seus outros aparelhos.</li>
-        <li><strong>Um commit por livro.</strong> O novo registro de um livro e a exclusão dos registros dele no Popfeed vão num único commit, que sua conta aplica inteiro ou não aplica, então um livro nunca fica transferido pela metade. Logo antes, o Resenha lê de novo os registros do livro; se algo mudou, o livro é pulado e oferecido de novo no fim. Um novo registro tira a chave do registro mais antigo do livro no Popfeed, então uma nova tentativa encontra a primeira em vez de criar uma cópia.</li>
-        <li><strong>No ritmo certo.</strong> O Resenha usa no máximo 70% do limite de gravação por hora e por dia da sua conta, pelos limites publicados pelo Bluesky, e espera antes de chegar neles, para seus próprios posts continuarem funcionando. Se você fechar o app, a transferência continua de onde parou na próxima vez que você abrir.</li>
+      <ol class="moves">
+        <li class="move"><span class="num" aria-hidden="true">1</span><h3>Backup</h3><p>Quando você confirma, o Resenha primeiro salva um arquivo com cada registro que a transferência vai apagar ou mudar, exatamente como está na sua conta. Ele vai para a pasta do Resenha no iCloud Drive, que você pode abrir no app Arquivos, ou fica no aparelho quando o iCloud Drive está desligado. O Resenha ainda não consegue restaurar a partir dele; ele guarda seus dados.</p></li>
+        <li class="move"><span class="num" aria-hidden="true">2</span><h3>Identificação</h3><p>Cada livro é identificado pelos números dele, o ISBN ou o ID do Goodreads. Títulos só sugerem. Você vê o plano inteiro, muda o que quiser e confirma uma vez. Até lá, só suas escolhas são gravadas, para elas irem com você para seus outros aparelhos.</p></li>
+        <li class="move"><span class="num" aria-hidden="true">3</span><h3>Um commit por livro</h3><p>O novo registro de um livro e a exclusão dos registros dele no Popfeed vão num único commit, que sua conta aplica inteiro ou não aplica, então um livro nunca fica transferido pela metade. Logo antes, o Resenha lê de novo os registros do livro; se algo mudou, o livro é pulado e oferecido de novo no fim. Um novo registro tira a chave do registro mais antigo do livro no Popfeed, então uma nova tentativa encontra a primeira em vez de criar uma cópia.</p></li>
+        <li class="move"><span class="num" aria-hidden="true">4</span><h3>No ritmo certo</h3><p>O Resenha usa no máximo 70% do limite de gravação por hora e por dia da sua conta, pelos limites publicados pelo Bluesky, e espera antes de chegar neles, para seus próprios posts continuarem funcionando. Se você fechar o app, a transferência continua de onde parou na próxima vez que você abrir.</p></li>
       </ol>
       <p class="aside">O BookHive mostra os livros transferidos como atividade recente. No Resenha, eles mantêm as próprias datas.</p>
     </section>
   </main>
 
-  <footer class="closing slim">
+  <footer class="closing">
+    <img class="icon" src="/icon.png" alt="">
     <nav>
       <a href="/privacy.html">Privacidade</a>
       <a href="/terms.html">Termos</a>
@@ -554,6 +616,6 @@
   <script type="application/json" id="rosetta-strings">{"getApp":"Baixar o app","getFor":"Baixar o Resenha para {device}","live":"{match}. {heldLegend} {held}. {goesTo}: {summary}.","match":{"isbn":"Pelo ISBN","goodreads":"ID do Goodreads","title":"Só pelo título","none":"Fora do BookHive"},"held":{"no":"Não","bookhive":"No BookHive","reading":"Como leitura do Resenha"},"heldLegend":"Já está na sua biblioteca?","goesTo":"Vira"}</script>
   <script src="/assets/theme.js?v=4ad6472390" defer></script>
   <script src="/assets/landing/landing.js?v=d6c45e37b4" defer></script>
-  <script src="/assets/rosetta/rosetta.js?v=0d901c738a" defer></script>
+  <script src="/assets/rosetta/rosetta.js?v=90d26f6547" defer></script>
 </body>
 </html>

@@ -4,7 +4,10 @@
     "title": "Rosetta — Come Resenha trasferisce i tuoi libri di Popfeed",
     "description": "Cosa succede a ogni record di Popfeed quando Resenha trasferisce i tuoi libri su BookHive o in letture di Resenha: come vengono riconosciuti i libri, cosa diventa ogni campo e cosa non viene mai toccato."
   },
-  "theme": { "toDark": "Passa all’aspetto scuro", "toLight": "Passa all’aspetto chiaro" },
+  "theme": {
+    "toDark": "Passa all’aspetto scuro",
+    "toLight": "Passa all’aspetto chiaro"
+  },
   "intro": {
     "eyebrow": "Trasferire i libri da Popfeed",
     "title": "Rosetta",
@@ -24,6 +27,14 @@
     "heldBookhive": "Su BookHive",
     "heldReading": "Come lettura di Resenha",
     "noscript": "Mostrato: un libro trovato tramite ISBN, non ancora nella tua libreria."
+  },
+  "explain": {
+    "isbn": "Il catalogo di BookHive ha risposto all’ISBN del libro con esattamente un libro, quindi la corrispondenza è certa.",
+    "goodreads": "Il libro ha un ID di Goodreads ma nessun ISBN. Quando tocchi «Cercali», un risultato di BookHive con lo stesso ID di Goodreads conta come certo.",
+    "title": "Corrispondono solo titolo e autore. Resenha ti propone il libro di BookHive che ha trovato, e non viene usato nulla finché non confermi.",
+    "none": "Il catalogo di BookHive non ha il libro con certezza, e nessuna corrispondenza di titolo è stata confermata.",
+    "bookhive": "Ce l’hai già su BookHive, quindi quel record viene aggiornato: Popfeed completa ciò che manca, e dove differiscono scegli tu.",
+    "reading": "Ce l’hai già come lettura di Resenha. Con una corrispondenza certa passa su BookHive; senza, la lettura viene aggiornata."
   },
   "label": {
     "heading": "Valori del trasferimento",
@@ -131,29 +142,73 @@
     "subheading": "Mai scritto né eliminato",
     "header": "Modifiche",
     "rows": [
-      ["Gli scaffali, e i libri che contengono", "Sono anche gli scaffali di BookHive."],
-      ["Film, serie, giochi e tutto ciò che non è un libro, con le loro recensioni", ""],
-      ["I record di Popfeed che Resenha non sa classificare", ""],
-      ["Gli elementi ponte di libri che hai già su BookHive", ""],
-      ["I record di avanzamento di nessun libro che hai o che trasferisci", ""],
-      ["I libri che aspettano ancora una ricerca", "Restano su Popfeed per un passaggio successivo."],
-      ["I tuoi Mi piace e commenti su Popfeed", ""],
-      ["I record di altre persone", ""],
-      ["I libri che hai già e che non sono su Popfeed", ""],
-      ["I post su Bluesky", ""]
+      [
+        "Gli scaffali, e i libri che contengono",
+        "Sono anche gli scaffali di BookHive."
+      ],
+      [
+        "Film, serie, giochi e tutto ciò che non è un libro, con le loro recensioni",
+        ""
+      ],
+      [
+        "I record di Popfeed che Resenha non sa classificare",
+        ""
+      ],
+      [
+        "Gli elementi ponte di libri che hai già su BookHive",
+        ""
+      ],
+      [
+        "I record di avanzamento di nessun libro che hai o che trasferisci",
+        ""
+      ],
+      [
+        "I libri che aspettano ancora una ricerca",
+        "Restano su Popfeed per un passaggio successivo."
+      ],
+      [
+        "I tuoi Mi piace e commenti su Popfeed",
+        ""
+      ],
+      [
+        "I record di altre persone",
+        ""
+      ],
+      [
+        "I libri che hai già e che non sono su Popfeed",
+        ""
+      ],
+      [
+        "I post su Bluesky",
+        ""
+      ]
     ],
     "footer": "Un record di Popfeed viene eliminato solo quando Resenha lo ha riconosciuto come uno dei tuoi elementi delle liste di lettura, delle tue recensioni o dei tuoi record di avanzamento, e solo nel commit che scrive il suo libro."
   },
   "steps": {
     "title": "Come si trasferisce un libro",
     "items": [
-      ["Backup.", "Quando confermi, Resenha salva prima un file con ogni record che il trasferimento eliminerà o modificherà, esattamente com’è nel tuo account. Va nella cartella di Resenha su iCloud Drive, che puoi aprire in File, oppure resta sul dispositivo se iCloud Drive è disattivato. Resenha non può ancora ripristinare da questo file; conserva i tuoi dati."],
-      ["Riconoscimento.", "Ogni libro viene riconosciuto dai suoi numeri, l’ISBN o l’ID di Goodreads. I titoli fanno solo proposte. Vedi tutto il piano, cambi ciò che vuoi e confermi una volta. Fino ad allora vengono scritte solo le tue scelte, così ti seguono sugli altri dispositivi."],
-      ["Un commit per libro.", "Il nuovo record di un libro e l’eliminazione dei suoi record di Popfeed viaggiano in un solo commit, che il tuo account applica per intero o per niente: un libro non resta mai trasferito a metà. Subito prima, Resenha rilegge i record del libro; se qualcosa è cambiato, il libro viene saltato e riproposto alla fine. Un nuovo record prende la chiave dal record di Popfeed più vecchio del libro, così un nuovo tentativo trova il primo invece di crearne una copia."],
-      ["Con calma.", "Resenha usa al massimo il 70% del budget di scrittura orario e giornaliero del tuo account, secondo i limiti pubblicati da Bluesky, e si ferma prima di raggiungerli, così i tuoi post continuano a funzionare. Se chiudi l’app, il trasferimento riprende da dove si era fermato la prossima volta che la apri."]
+      [
+        "Backup.",
+        "Quando confermi, Resenha salva prima un file con ogni record che il trasferimento eliminerà o modificherà, esattamente com’è nel tuo account. Va nella cartella di Resenha su iCloud Drive, che puoi aprire in File, oppure resta sul dispositivo se iCloud Drive è disattivato. Resenha non può ancora ripristinare da questo file; conserva i tuoi dati."
+      ],
+      [
+        "Riconoscimento.",
+        "Ogni libro viene riconosciuto dai suoi numeri, l’ISBN o l’ID di Goodreads. I titoli fanno solo proposte. Vedi tutto il piano, cambi ciò che vuoi e confermi una volta. Fino ad allora vengono scritte solo le tue scelte, così ti seguono sugli altri dispositivi."
+      ],
+      [
+        "Un commit per libro.",
+        "Il nuovo record di un libro e l’eliminazione dei suoi record di Popfeed viaggiano in un solo commit, che il tuo account applica per intero o per niente: un libro non resta mai trasferito a metà. Subito prima, Resenha rilegge i record del libro; se qualcosa è cambiato, il libro viene saltato e riproposto alla fine. Un nuovo record prende la chiave dal record di Popfeed più vecchio del libro, così un nuovo tentativo trova il primo invece di crearne una copia."
+      ],
+      [
+        "Con calma.",
+        "Resenha usa al massimo il 70% del budget di scrittura orario e giornaliero del tuo account, secondo i limiti pubblicati da Bluesky, e si ferma prima di raggiungerli, così i tuoi post continuano a funzionare. Se chiudi l’app, il trasferimento riprende da dove si era fermato la prossima volta che la apri."
+      ]
     ],
     "note": "BookHive mostra i libri trasferiti come attività recente. In Resenha mantengono le loro date."
   },
-  "footer": { "legal": "© 2026 Resenha." },
+  "footer": {
+    "legal": "© 2026 Resenha."
+  },
   "live": "{match}. {heldLegend} {held}. {goesTo}: {summary}."
 }

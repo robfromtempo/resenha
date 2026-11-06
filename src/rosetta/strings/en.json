@@ -4,7 +4,10 @@
     "title": "Rosetta — How Resenha moves your Popfeed books",
     "description": "What happens to each Popfeed record when Resenha moves your books to BookHive or to Resenha readings: how books are matched, what each field becomes, and what is never touched."
   },
-  "theme": { "toDark": "Switch to dark appearance", "toLight": "Switch to light appearance" },
+  "theme": {
+    "toDark": "Switch to dark appearance",
+    "toLight": "Switch to light appearance"
+  },
   "intro": {
     "eyebrow": "Moving books from Popfeed",
     "title": "Rosetta",
@@ -24,6 +27,14 @@
     "heldBookhive": "In BookHive",
     "heldReading": "As a Resenha reading",
     "noscript": "Shown: a book found by its ISBN, not yet in your library."
+  },
+  "explain": {
+    "isbn": "BookHive’s catalogue answered for the book’s ISBN with exactly one book, so the match is certain.",
+    "goodreads": "The book has a Goodreads ID but no ISBN. When you tap Look These Up, a BookHive result with the same Goodreads ID counts as certain.",
+    "title": "Only the title and author matched. Resenha offers the BookHive book it found, and nothing is used until you confirm it.",
+    "none": "BookHive’s catalogue doesn’t have the book for certain, and no title match was confirmed.",
+    "bookhive": "You already have it in BookHive, so that record is updated: Popfeed fills in what it lacks, and you choose where they differ.",
+    "reading": "You already have it as a Resenha reading. With a certain match it moves to BookHive; without one, the reading is updated."
   },
   "label": {
     "heading": "Migration Facts",
@@ -131,29 +142,73 @@
     "subheading": "Never written or deleted",
     "header": "Changes",
     "rows": [
-      ["Shelves, and the books on them", "They are BookHive’s shelves too."],
-      ["Films, shows, games and other items that aren’t books, and their reviews", ""],
-      ["Popfeed records Resenha can’t classify", ""],
-      ["Bridged items of books you already have in BookHive", ""],
-      ["Progress records of no book you have or are moving", ""],
-      ["Books still waiting for a lookup", "They stay in Popfeed for a later run."],
-      ["Your Popfeed likes and comments", ""],
-      ["Other people’s records", ""],
-      ["Books you already have that aren’t in Popfeed", ""],
-      ["Posts on Bluesky", ""]
+      [
+        "Shelves, and the books on them",
+        "They are BookHive’s shelves too."
+      ],
+      [
+        "Films, shows, games and other items that aren’t books, and their reviews",
+        ""
+      ],
+      [
+        "Popfeed records Resenha can’t classify",
+        ""
+      ],
+      [
+        "Bridged items of books you already have in BookHive",
+        ""
+      ],
+      [
+        "Progress records of no book you have or are moving",
+        ""
+      ],
+      [
+        "Books still waiting for a lookup",
+        "They stay in Popfeed for a later run."
+      ],
+      [
+        "Your Popfeed likes and comments",
+        ""
+      ],
+      [
+        "Other people’s records",
+        ""
+      ],
+      [
+        "Books you already have that aren’t in Popfeed",
+        ""
+      ],
+      [
+        "Posts on Bluesky",
+        ""
+      ]
     ],
     "footer": "A Popfeed record is deleted only when Resenha has identified it as one of your own reading-list items, reviews or progress records, and only in the commit that writes its book."
   },
   "steps": {
     "title": "How a book moves",
     "items": [
-      ["Backup.", "When you confirm, Resenha first saves a file with every record the run will delete or change, exactly as your account has it. It goes to Resenha’s folder in iCloud Drive, which you can open in Files, or stays on the device when iCloud Drive is off. Resenha can’t restore from it yet; it keeps your data."],
-      ["Match.", "Each book is matched by its numbers, the ISBN or the Goodreads ID. Titles only suggest. You see the whole plan, change what you like, and confirm once. Until then the only records written are your choices, so they follow you to your other devices."],
-      ["One commit per book.", "A book’s new record and the deletion of its Popfeed records travel in one commit, which your account applies whole or not at all, so a book is never half-moved. Just before, Resenha reads the book’s records again; if anything changed, the book is skipped and offered again at the end. A new record takes its key from the book’s oldest Popfeed record, so a retry finds the first attempt instead of making a copy."],
-      ["Paced.", "Resenha spends at most 70% of your account’s hourly and daily write budget, by Bluesky’s published limits, and waits before reaching them, so your own posting keeps working. If you close the app, the move picks up where it stopped the next time you open it."]
+      [
+        "Backup.",
+        "When you confirm, Resenha first saves a file with every record the run will delete or change, exactly as your account has it. It goes to Resenha’s folder in iCloud Drive, which you can open in Files, or stays on the device when iCloud Drive is off. Resenha can’t restore from it yet; it keeps your data."
+      ],
+      [
+        "Match.",
+        "Each book is matched by its numbers, the ISBN or the Goodreads ID. Titles only suggest. You see the whole plan, change what you like, and confirm once. Until then the only records written are your choices, so they follow you to your other devices."
+      ],
+      [
+        "One commit per book.",
+        "A book’s new record and the deletion of its Popfeed records travel in one commit, which your account applies whole or not at all, so a book is never half-moved. Just before, Resenha reads the book’s records again; if anything changed, the book is skipped and offered again at the end. A new record takes its key from the book’s oldest Popfeed record, so a retry finds the first attempt instead of making a copy."
+      ],
+      [
+        "Paced.",
+        "Resenha spends at most 70% of your account’s hourly and daily write budget, by Bluesky’s published limits, and waits before reaching them, so your own posting keeps working. If you close the app, the move picks up where it stopped the next time you open it."
+      ]
     ],
     "note": "BookHive lists moved books as recent activity. In Resenha they keep their own dates."
   },
-  "footer": { "legal": "© 2026 Resenha." },
+  "footer": {
+    "legal": "© 2026 Resenha."
+  },
   "live": "{match}. {heldLegend} {held}. {goesTo}: {summary}."
 }

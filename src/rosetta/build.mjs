@@ -106,12 +106,13 @@ const FIELDS = [
 // MARK: - The label
 
 /** One row of a table: its name, a value per column (one cell when they agree), and its notes under it. */
-function row(name, values, notes, cols) {
+function row(name, values, notes, cols, key, extra = "") {
   const cells = values.every((v) => v === values[0])
     ? `<td colspan="${cols.length}">${values[0]}</td>`
     : values.map((v) => `<td>${v}</td>`).join("");
-  let html = `<tr><th scope="row">${name}</th>${cells}</tr>`;
-  if (notes.length) html += `<tr class="sub"><td colspan="${cols.length + 1}">${notes.join(" ")}</td></tr>`;
+  const classes = [extra, notes.length ? "has-sub" : ""].filter(Boolean).join(" ");
+  let html = `<tr data-row="${key}"${classes ? ` class="${classes}"` : ""}><th scope="row">${name}</th>${cells}</tr>`;
+  if (notes.length) html += `<tr class="sub" data-row="${key}"><td colspan="${cols.length + 1}">${notes.join(" ")}</td></tr>`;
   return html;
 }
 
@@ -140,21 +141,21 @@ function label(lang, match, held) {
     : "";
 
   // Where it goes.
-  const dest = cols.map((c) => `<code>${COLLECTION[c.outcome]}</code><span class="dest-words">${esc(L.dest[c.outcome])}</span>`);
+  const dest = cols.map((c) => `<code>${COLLECTION[c.outcome].replace(/\./g, ".<wbr>")}</code><span class="dest-words">${esc(L.dest[c.outcome])}</span>`);
   const destNotes = columnNotes(cols.map((c) => {
     const notes = [];
     if (held !== "no") notes.push(fmt(L.destNote.heldBy));
     if (L.destNote[c.outcome]) notes.push(fmt(L.destNote[c.outcome]));
     return notes;
   }), cols, t);
-  const goes = row(`<span class="goes">${esc(L.goesTo)}</span>`, dest, destNotes, cols).replace("<tr>", '<tr class="dest">');
+  const goes = row(`<span class="goes">${esc(L.goesTo)}</span>`, dest, destNotes, cols, "dest", "dest");
 
   const amounts = AMOUNTS.map(([key, value, note]) => {
     const notes = columnNotes(cols.map((c) => {
       const n = note?.(c.outcome);
       return n ? [fmt(L.amounts[n])] : [];
     }), cols, t);
-    return row(esc(L.amounts[key]), cols.map((c) => word(value(c.outcome))), notes, cols);
+    return row(esc(L.amounts[key]), cols.map((c) => word(value(c.outcome))), notes, cols, key);
   }).join("\n          ");
 
   const fields = FIELDS.map(([key, value, note]) => {
@@ -162,7 +163,7 @@ function label(lang, match, held) {
       const n = note?.(c.outcome);
       return (Array.isArray(n) ? n : n ? [n] : []).map((k) => fmt(L.notes[k]));
     }), cols, t);
-    return row(esc(L.rows[key]), cols.map((c) => fmt(L.values[value(c.outcome)])), notes, cols);
+    return row(esc(L.rows[key]), cols.map((c) => fmt(L.values[value(c.outcome)])), notes, cols, key);
   }).join("\n          ");
 
   // What the live region reads when the label changes: where the book goes.
@@ -170,7 +171,7 @@ function label(lang, match, held) {
   const shown = match === "isbn" && held === "no";
 
   return `<section class="facts" id="${id}" data-match="${match}" data-held="${held}" data-summary="${esc(summary)}" aria-labelledby="${id}-h"${shown ? "" : " hidden"}>
-        <h2 class="facts-title" id="${id}-h">${esc(L.heading)}</h2>
+        <h3 class="facts-title" id="${id}-h">${esc(L.heading)}</h3>
         <p class="serving"><span>${esc(L.serving)}</span> <span>${esc(L.servingValue)}</span></p>
         <p class="serving-note">${esc(L.servingNote)}</p>
         <table class="amounts">
@@ -196,15 +197,30 @@ function excluded(lang) {
   const rows = E.rows.map(([name, note]) =>
     `<tr><th scope="row">${fmt(name)}${note ? `<span class="row-note">${fmt(note)}</span>` : ""}</th><td>0</td></tr>`).join("\n          ");
   return `<section class="facts small" aria-labelledby="excluded-h">
-        <h2 class="facts-title" id="excluded-h">${esc(E.heading)}</h2>
+        <h3 class="facts-title" id="excluded-h">${esc(E.heading)}</h3>
         <table class="fields">
-          <thead><tr><th scope="col">${esc(E.subheading)}</th><th scope="col">${esc(E.header)}</th></tr></thead>
+          <thead><tr><th scope="col"><span class="visually-hidden">${esc(E.subheading)}</span></th><th scope="col">${esc(E.header)}</th></tr></thead>
           <tbody>
           ${rows}
           </tbody>
         </table>
-        <p class="footnote">${fmt(E.footer)}</p>
       </section>`;
+}
+
+/** The left column's account of one state: where the book goes, in words, and what the case means. */
+function caseBlock(lang, match, held) {
+  const t = strings[lang];
+  const L = t.label;
+  const cols = columns(match, held);
+  const cap = (s) => s.charAt(0).toLocaleUpperCase(lang) + s.slice(1);
+  const lines = cols.map((c) => `<p class="becomes">${c.key ? `<span class="becomes-if">${esc(L[c.key])}</span>` : ""}<span class="becomes-dest">${esc(cap(L.dest[c.outcome]))}</span> <code>${COLLECTION[c.outcome]}</code></p>`).join("\n        ");
+  const text = [fmt(t.explain[match])];
+  if (held !== "no") text.push(fmt(t.explain[held]));
+  const shown = match === "isbn" && held === "no";
+  return `<div class="case" data-match="${match}" data-held="${held}"${shown ? "" : " hidden"}>
+        ${lines}
+        <p class="case-text">${text.join(" ")}</p>
+      </div>`;
 }
 
 // MARK: - The page
@@ -221,11 +237,16 @@ function languageMenu(current) {
     </details>`;
 }
 
-function radios(name, options, t, checked) {
-  return options.map(([value, key]) => {
+/** One switch: a radio group drawn as a glass track, with a lens that slides to the picked option. */
+function radios(name, legend, options, t, checked) {
+  const inputs = options.map(([value, key]) => {
     const id = `${name}-${value}`;
     return `<input type="radio" name="${name}" id="${id}" value="${value}"${value === checked ? " checked" : ""}><label for="${id}">${esc(t.control[key])}</label>`;
   }).join("");
+  return `<fieldset class="switch">
+          <legend>${esc(legend)}</legend>
+          <div class="track" data-track><div class="rail"><span class="lens" aria-hidden="true"></span>${inputs}</div></div>
+        </fieldset>`;
 }
 
 function page(lang) {
@@ -234,6 +255,7 @@ function page(lang) {
   const url = ORIGIN + pathFor(lang);
   const alternates = LANGUAGES.map((l) => `  <link rel="alternate" hreflang="${l}" href="${ORIGIN}${pathFor(l)}">`).join("\n");
   const labels = MATCHES.flatMap((m) => HELD.map((h) => label(lang, m, h))).join("\n      ");
+  const cases = MATCHES.flatMap((m) => HELD.map((h) => caseBlock(lang, m, h))).join("\n      ");
   const scriptStrings = JSON.stringify({
     getApp: land.bar.getApp, getFor: land.bar.getFor,
     live: t.live,
@@ -301,44 +323,51 @@ ${lang === "en" ? `  <script>
     <a class="pill" href="${APP}"><span class="long" data-get-app>${esc(land.bar.getApp)}</span><span class="short">${esc(land.bar.getApp)}</span></a>
   </header>
 
-  <main class="page">
-    <header class="intro">
+  <main class="rosetta-main">
+    <section class="hero intro">
       <p class="eyebrow">${esc(t.intro.eyebrow)}</p>
       <h1>${esc(t.intro.title)}</h1>
-${t.intro.body.map((p) => `      <p>${fmt(p)}</p>`).join("\n")}
-    </header>
+${t.intro.body.map((p) => `      <p class="lede">${fmt(p)}</p>`).join("\n")}
+    </section>
 
-    <div class="explorer">
-      <div class="switcher" data-switcher hidden>
-        <fieldset class="segments">
-          <legend>${esc(t.control.legend)}</legend>
-          <div class="options four">${radios("match", [["isbn", "isbn"], ["goodreads", "goodreads"], ["title", "title"], ["none", "none"]], t, "isbn")}</div>
-        </fieldset>
-        <fieldset class="segments">
-          <legend>${esc(t.control.heldLegend)}</legend>
-          <div class="options three">${radios("held", [["no", "heldNo"], ["bookhive", "heldBookhive"], ["reading", "heldReading"]], t, "no")}</div>
-        </fieldset>
+    <section class="explorer" aria-labelledby="explorer-h">
+      <h2 class="visually-hidden" id="explorer-h">${esc(t.label.heading)}</h2>
+      <div class="explain">
+        <p class="eyebrow">${esc(t.label.goesTo)}</p>
+      ${cases}
+        <div class="switcher" data-switcher hidden>
+        ${radios("match", t.control.legend, [["isbn", "isbn"], ["goodreads", "goodreads"], ["title", "title"], ["none", "none"]], t, "isbn")}
+        ${radios("held", t.control.heldLegend, [["no", "heldNo"], ["bookhive", "heldBookhive"], ["reading", "heldReading"]], t, "no")}
+        </div>
+        <noscript><p class="noscript">${esc(t.control.noscript)}</p></noscript>
       </div>
-      <noscript><p class="noscript">${esc(t.control.noscript)}</p></noscript>
-      <p class="visually-hidden" aria-live="polite" data-live></p>
-
+      <div class="labels">
+        <p class="visually-hidden" aria-live="polite" data-live></p>
       ${labels}
-    </div>
+      </div>
+    </section>
 
-    <div class="excluded">
+    <section class="feature flip excluded-section" aria-labelledby="excluded-copy-h">
+      <div class="copy">
+        <h2 id="excluded-copy-h">${esc(t.excluded.subheading)}</h2>
+        <p>${fmt(t.excluded.footer)}</p>
+      </div>
+      <div class="device">
       ${excluded(lang)}
-    </div>
+      </div>
+    </section>
 
-    <section class="steps-section" aria-labelledby="steps-h">
+    <section class="moves-section" aria-labelledby="steps-h">
       <h2 id="steps-h">${esc(t.steps.title)}</h2>
-      <ol class="steps moves">
-${t.steps.items.map(([lead, body]) => `        <li><strong>${esc(lead)}</strong> ${fmt(body)}</li>`).join("\n")}
+      <ol class="moves">
+${t.steps.items.map(([lead, body], i) => `        <li class="move"><span class="num" aria-hidden="true">${i + 1}</span><h3>${esc(lead.replace(/[.。]$/, ""))}</h3><p>${fmt(body)}</p></li>`).join("\n")}
       </ol>
       <p class="aside">${fmt(t.steps.note)}</p>
     </section>
   </main>
 
-  <footer class="closing slim">
+  <footer class="closing">
+    <img class="icon" src="/icon.png" alt="">
     <nav>
       <a href="/privacy.html">${esc(land.closing.privacy)}</a>
       <a href="/terms.html">${esc(land.closing.terms)}</a>

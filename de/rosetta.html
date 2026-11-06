@@ -30,7 +30,7 @@
   <meta property="og:description" content="Was mit jedem Popfeed-Eintrag passiert, wenn Resenha deine Bücher zu BookHive oder zu Lektüren in Resenha überträgt: wie Bücher zugeordnet werden, was aus jedem Feld wird und was nie angetastet wird.">
   <meta property="og:url" content="https://resenha.ink/de/rosetta">
   <link rel="stylesheet" href="/assets/landing/landing.css?v=59228ede45">
-  <link rel="stylesheet" href="/assets/rosetta/rosetta.css?v=216e30890b">
+  <link rel="stylesheet" href="/assets/rosetta/rosetta.css?v=2cbf25e3fb">
 </head>
 <body class="rosetta">
   <div class="glow" aria-hidden="true"></div>
@@ -49,58 +49,113 @@
     <a class="pill" href="https://apps.apple.com/app/id6821354481"><span class="long" data-get-app>App laden</span><span class="short">App laden</span></a>
   </header>
 
-  <main class="page">
-    <header class="intro">
+  <main class="rosetta-main">
+    <section class="hero intro">
       <p class="eyebrow">Bücher aus Popfeed übertragen</p>
       <h1>Rosetta</h1>
-      <p>Mit Rosetta überträgt Resenha 1.6.10 deine Popfeed-Bücher. Jedes Buch wird zu einem BookHive-Eintrag, wenn der Katalog von BookHive es sicher kennt, und sonst zu einer Lektüre in Resenha. Danach werden seine Popfeed-Einträge gelöscht.</p>
-      <p>Buchdaten zwischen Apps umzuziehen gilt als fehleranfällig: Es wird falsch geraten, und Dinge gehen verloren. Hier steht genau, was mit jedem Buch passiert, Feld für Feld. Nichts wird geschrieben, bevor du bestätigst.</p>
-    </header>
+      <p class="lede">Mit Rosetta überträgt Resenha 1.6.10 deine Popfeed-Bücher. Jedes Buch wird zu einem BookHive-Eintrag, wenn der Katalog von BookHive es sicher kennt, und sonst zu einer Lektüre in Resenha. Danach werden seine Popfeed-Einträge gelöscht.</p>
+      <p class="lede">Buchdaten zwischen Apps umzuziehen gilt als fehleranfällig: Es wird falsch geraten, und Dinge gehen verloren. Hier steht genau, was mit jedem Buch passiert, Feld für Feld. Nichts wird geschrieben, bevor du bestätigst.</p>
+    </section>
 
-    <div class="explorer">
-      <div class="switcher" data-switcher hidden>
-        <fieldset class="segments">
-          <legend>Wie dein Buch gefunden wurde</legend>
-          <div class="options four"><input type="radio" name="match" id="match-isbn" value="isbn" checked><label for="match-isbn">Über die ISBN</label><input type="radio" name="match" id="match-goodreads" value="goodreads"><label for="match-goodreads">Goodreads-ID</label><input type="radio" name="match" id="match-title" value="title"><label for="match-title">Nur über den Titel</label><input type="radio" name="match" id="match-none" value="none"><label for="match-none">Nicht in BookHive</label></div>
-        </fieldset>
-        <fieldset class="segments">
-          <legend>Schon in deiner Bibliothek?</legend>
-          <div class="options three"><input type="radio" name="held" id="held-no" value="no" checked><label for="held-no">Nein</label><input type="radio" name="held" id="held-bookhive" value="bookhive"><label for="held-bookhive">In BookHive</label><input type="radio" name="held" id="held-reading" value="reading"><label for="held-reading">Als Lektüre in Resenha</label></div>
-        </fieldset>
+    <section class="explorer" aria-labelledby="explorer-h">
+      <h2 class="visually-hidden" id="explorer-h">Umzugsangaben</h2>
+      <div class="explain">
+        <p class="eyebrow">Wird zu</p>
+      <div class="case" data-match="isbn" data-held="no">
+        <p class="becomes"><span class="becomes-dest">Ein neuer BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">Der Katalog von BookHive hat zur ISBN des Buchs genau ein Buch gefunden, der Treffer ist also sicher.</p>
       </div>
-      <noscript><p class="noscript">Gezeigt: ein Buch, das über seine ISBN gefunden wurde und noch nicht in deiner Bibliothek ist.</p></noscript>
-      <p class="visually-hidden" aria-live="polite" data-live></p>
-
+      <div class="case" data-match="isbn" data-held="bookhive" hidden>
+        <p class="becomes"><span class="becomes-dest">Dein BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">Der Katalog von BookHive hat zur ISBN des Buchs genau ein Buch gefunden, der Treffer ist also sicher. Du hast es schon in BookHive, also wird dieser Eintrag aktualisiert: Popfeed ergänzt, was fehlt, und wo sie sich unterscheiden, entscheidest du.</p>
+      </div>
+      <div class="case" data-match="isbn" data-held="reading" hidden>
+        <p class="becomes"><span class="becomes-dest">Ein neuer BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">Der Katalog von BookHive hat zur ISBN des Buchs genau ein Buch gefunden, der Treffer ist also sicher. Du hast es schon als Lektüre in Resenha. Mit einem sicheren Treffer zieht es zu BookHive um; ohne einen wird die Lektüre aktualisiert.</p>
+      </div>
+      <div class="case" data-match="goodreads" data-held="no" hidden>
+        <p class="becomes"><span class="becomes-dest">Ein neuer BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">Das Buch hat eine Goodreads-ID, aber keine ISBN. Wenn du auf „Diese suchen“ tippst, gilt ein BookHive-Treffer mit derselben Goodreads-ID als sicher.</p>
+      </div>
+      <div class="case" data-match="goodreads" data-held="bookhive" hidden>
+        <p class="becomes"><span class="becomes-dest">Dein BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">Das Buch hat eine Goodreads-ID, aber keine ISBN. Wenn du auf „Diese suchen“ tippst, gilt ein BookHive-Treffer mit derselben Goodreads-ID als sicher. Du hast es schon in BookHive, also wird dieser Eintrag aktualisiert: Popfeed ergänzt, was fehlt, und wo sie sich unterscheiden, entscheidest du.</p>
+      </div>
+      <div class="case" data-match="goodreads" data-held="reading" hidden>
+        <p class="becomes"><span class="becomes-dest">Ein neuer BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">Das Buch hat eine Goodreads-ID, aber keine ISBN. Wenn du auf „Diese suchen“ tippst, gilt ein BookHive-Treffer mit derselben Goodreads-ID als sicher. Du hast es schon als Lektüre in Resenha. Mit einem sicheren Treffer zieht es zu BookHive um; ohne einen wird die Lektüre aktualisiert.</p>
+      </div>
+      <div class="case" data-match="title" data-held="no" hidden>
+        <p class="becomes"><span class="becomes-if">Wenn du bestätigst</span><span class="becomes-dest">Ein neuer BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="becomes"><span class="becomes-if">Wenn nicht</span><span class="becomes-dest">Eine neue Lektüre in Resenha</span> <code>ink.resenha.reading</code></p>
+        <p class="case-text">Nur Titel und Autor stimmen überein. Resenha schlägt das gefundene BookHive-Buch vor, und nichts wird verwendet, bevor du bestätigst.</p>
+      </div>
+      <div class="case" data-match="title" data-held="bookhive" hidden>
+        <p class="becomes"><span class="becomes-if">Wenn du bestätigst</span><span class="becomes-dest">Dein BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="becomes"><span class="becomes-if">Wenn nicht</span><span class="becomes-dest">Dein BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">Nur Titel und Autor stimmen überein. Resenha schlägt das gefundene BookHive-Buch vor, und nichts wird verwendet, bevor du bestätigst. Du hast es schon in BookHive, also wird dieser Eintrag aktualisiert: Popfeed ergänzt, was fehlt, und wo sie sich unterscheiden, entscheidest du.</p>
+      </div>
+      <div class="case" data-match="title" data-held="reading" hidden>
+        <p class="becomes"><span class="becomes-if">Wenn du bestätigst</span><span class="becomes-dest">Ein neuer BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="becomes"><span class="becomes-if">Wenn nicht</span><span class="becomes-dest">Deine Lektüre in Resenha</span> <code>ink.resenha.reading</code></p>
+        <p class="case-text">Nur Titel und Autor stimmen überein. Resenha schlägt das gefundene BookHive-Buch vor, und nichts wird verwendet, bevor du bestätigst. Du hast es schon als Lektüre in Resenha. Mit einem sicheren Treffer zieht es zu BookHive um; ohne einen wird die Lektüre aktualisiert.</p>
+      </div>
+      <div class="case" data-match="none" data-held="no" hidden>
+        <p class="becomes"><span class="becomes-dest">Eine neue Lektüre in Resenha</span> <code>ink.resenha.reading</code></p>
+        <p class="case-text">Der Katalog von BookHive kennt das Buch nicht sicher, und kein Titeltreffer wurde bestätigt.</p>
+      </div>
+      <div class="case" data-match="none" data-held="bookhive" hidden>
+        <p class="becomes"><span class="becomes-dest">Dein BookHive-Eintrag</span> <code>buzz.bookhive.book</code></p>
+        <p class="case-text">Der Katalog von BookHive kennt das Buch nicht sicher, und kein Titeltreffer wurde bestätigt. Du hast es schon in BookHive, also wird dieser Eintrag aktualisiert: Popfeed ergänzt, was fehlt, und wo sie sich unterscheiden, entscheidest du.</p>
+      </div>
+      <div class="case" data-match="none" data-held="reading" hidden>
+        <p class="becomes"><span class="becomes-dest">Deine Lektüre in Resenha</span> <code>ink.resenha.reading</code></p>
+        <p class="case-text">Der Katalog von BookHive kennt das Buch nicht sicher, und kein Titeltreffer wurde bestätigt. Du hast es schon als Lektüre in Resenha. Mit einem sicheren Treffer zieht es zu BookHive um; ohne einen wird die Lektüre aktualisiert.</p>
+      </div>
+        <div class="switcher" data-switcher hidden>
+        <fieldset class="switch">
+          <legend>Wie dein Buch gefunden wurde</legend>
+          <div class="track" data-track><div class="rail"><span class="lens" aria-hidden="true"></span><input type="radio" name="match" id="match-isbn" value="isbn" checked><label for="match-isbn">Über die ISBN</label><input type="radio" name="match" id="match-goodreads" value="goodreads"><label for="match-goodreads">Goodreads-ID</label><input type="radio" name="match" id="match-title" value="title"><label for="match-title">Nur über den Titel</label><input type="radio" name="match" id="match-none" value="none"><label for="match-none">Nicht in BookHive</label></div></div>
+        </fieldset>
+        <fieldset class="switch">
+          <legend>Schon in deiner Bibliothek?</legend>
+          <div class="track" data-track><div class="rail"><span class="lens" aria-hidden="true"></span><input type="radio" name="held" id="held-no" value="no" checked><label for="held-no">Nein</label><input type="radio" name="held" id="held-bookhive" value="bookhive"><label for="held-bookhive">In BookHive</label><input type="radio" name="held" id="held-reading" value="reading"><label for="held-reading">Als Lektüre in Resenha</label></div></div>
+        </fieldset>
+        </div>
+        <noscript><p class="noscript">Gezeigt: ein Buch, das über seine ISBN gefunden wurde und noch nicht in deiner Bibliothek ist.</p></noscript>
+      </div>
+      <div class="labels">
+        <p class="visually-hidden" aria-live="polite" data-live></p>
       <section class="facts" id="facts-isbn-no" data-match="isbn" data-held="no" data-summary="ein neuer BookHive-Eintrag (buzz.bookhive.book)" aria-labelledby="facts-isbn-no-h">
-        <h2 class="facts-title" id="facts-isbn-no-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-isbn-no-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="1">1</td></tr>
+          <tr data-row="updated"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Was passiert</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="1">Übernommen</td></tr><tr class="sub"><td colspan="2">Gelesen, Am Lesen und Will ich lesen behalten ihre Bedeutung, und Aufgegeben bleibt Aufgegeben. Ein Buch, zu dem es nur eine Rezension gibt, kommt als Gelesen an, wenn du keinen anderen Status wählst.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Übernommen</td></tr><tr class="sub"><td colspan="2">Aus den Popfeed-Einträgen. Nie auf heute gesetzt.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="2">Halbe Werte werden aufgerundet, aus 7,5 wird 8. Eine 0 heißt: keine Bewertung.</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="1">Übernommen, als reiner Text</td></tr><tr class="sub"><td colspan="2">Links und Erwähnungen werden zu reinem Text. Die resenha.ink-Zeile, die Resenha an seine eigenen Kopien angehängt hat, wird entfernt. Hat ein Buch mehrere Rezensionen, bleibt die neueste mit Text, wenn du keine andere wählst.</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="2">Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="1">Der neueste wird übernommen</td></tr><tr class="sub"><td colspan="2">Ältere Fortschrittseinträge werden gelöscht und bleiben in der Sicherung. Eine Seite oder ein Kapitel 0 wird weggelassen.</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
-          <tr><th scope="row">Cover</th><td colspan="1">Das Cover aus dem BookHive-Katalog</td></tr><tr class="sub"><td colspan="2">Die Cover-Adressen aus Popfeed werden nicht übernommen.</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="1">Übernommen</td></tr><tr class="sub" data-row="status"><td colspan="2">Gelesen, Am Lesen und Will ich lesen behalten ihre Bedeutung, und Aufgegeben bleibt Aufgegeben. Ein Buch, zu dem es nur eine Rezension gibt, kommt als Gelesen an, wenn du keinen anderen Status wählst.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Übernommen</td></tr><tr class="sub" data-row="dates"><td colspan="2">Aus den Popfeed-Einträgen. Nie auf heute gesetzt.</td></tr>
+          <tr data-row="rating" class="has-sub"><th scope="row">Bewertung</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub" data-row="rating"><td colspan="2">Halbe Werte werden aufgerundet, aus 7,5 wird 8. Eine 0 heißt: keine Bewertung.</td></tr>
+          <tr data-row="review" class="has-sub"><th scope="row">Rezension</th><td colspan="1">Übernommen, als reiner Text</td></tr><tr class="sub" data-row="review"><td colspan="2">Links und Erwähnungen werden zu reinem Text. Die resenha.ink-Zeile, die Resenha an seine eigenen Kopien angehängt hat, wird entfernt. Hat ein Buch mehrere Rezensionen, bleibt die neueste mit Text, wenn du keine andere wählst.</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress" class="has-sub"><th scope="row">Lesefortschritt</th><td colspan="1">Der neueste wird übernommen</td></tr><tr class="sub" data-row="progress"><td colspan="2">Ältere Fortschrittseinträge werden gelöscht und bleiben in der Sicherung. Eine Seite oder ein Kapitel 0 wird weggelassen.</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td colspan="1">Das Cover aus dem BookHive-Katalog</td></tr><tr class="sub" data-row="cover"><td colspan="2">Die Cover-Adressen aus Popfeed werden nicht übernommen.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> die ISBN-13 des Buchs (eine ISBN-10 wird umgerechnet), im Katalog von BookHive nachgeschlagen. Sicher nur, wenn genau ein Katalogbuch antwortet; führen die ISBNs des Buchs zu zweien, wählst du. Ein Buch, zu dem BookHive nicht erreichbar ist, wartet auf einen späteren Durchlauf: Mangels Antwort wird es nie zur Lektüre. Nicht verwendet: Katalog-IDs, die in Popfeed-Einträgen gespeichert sind.</p>
@@ -108,35 +163,35 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-isbn-bookhive" data-match="isbn" data-held="bookhive" data-summary="dein BookHive-Eintrag (buzz.bookhive.book)" aria-labelledby="facts-isbn-bookhive-h" hidden>
-        <h2 class="facts-title" id="facts-isbn-bookhive-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-isbn-bookhive-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">dein BookHive-Eintrag</span></td></tr><tr class="sub"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Er wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0 oder 1</td></tr><tr class="sub"><td colspan="2">0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">dein BookHive-Eintrag</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Er wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="1">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0 oder 1</td></tr><tr class="sub" data-row="updated"><td colspan="2">0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Was passiert</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td colspan="1">Deine, unverändert</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="2">Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="2">Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Deine, unverändert</td></tr>
-          <tr><th scope="row">Cover</th><td colspan="1">Nicht geändert</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td colspan="1">Deine, unverändert</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="status"><td colspan="2">Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="dates"><td colspan="2">Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
+          <tr data-row="rating"><th scope="row">Bewertung</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
+          <tr data-row="review"><th scope="row">Rezension</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress"><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Deine, unverändert</td></tr>
+          <tr data-row="cover"><th scope="row">Cover</th><td colspan="1">Nicht geändert</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> die ISBN-13 des Buchs (eine ISBN-10 wird umgerechnet), im Katalog von BookHive nachgeschlagen. Sicher nur, wenn genau ein Katalogbuch antwortet; führen die ISBNs des Buchs zu zweien, wählst du. Ein Buch, zu dem BookHive nicht erreichbar ist, wartet auf einen späteren Durchlauf: Mangels Antwort wird es nie zur Lektüre. Nicht verwendet: Katalog-IDs, die in Popfeed-Einträgen gespeichert sind.</p>
@@ -144,35 +199,35 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-isbn-reading" data-match="isbn" data-held="reading" data-summary="ein neuer BookHive-Eintrag (buzz.bookhive.book)" aria-labelledby="facts-isbn-reading-h" hidden>
-        <h2 class="facts-title" id="facts-isbn-reading-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-isbn-reading-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td></tr><tr class="sub"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Deine Lektüre wird übergeben: Der neue Eintrag und das Löschen der Lektüre stehen im selben Commit, und der Link zu ihrer ausführlichen Rezension zieht mit um.</td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Deine Lektüre wird übergeben: Der neue Eintrag und das Löschen der Lektüre stehen im selben Commit, und der Link zu ihrer ausführlichen Rezension zieht mit um.</td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="1">1</td></tr>
+          <tr data-row="updated"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="1">1</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Was passiert</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr><tr class="sub"><td colspan="2">Wo deine Lektüre einen Wert hat, bleibt er; Popfeed ergänzt, was ihr fehlt. Unterschiede werden nicht gezeigt.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr><tr class="sub"><td colspan="2">Das frühere der beiden Daten „hinzugefügt“ bleibt.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
-          <tr><th scope="row">Cover</th><td colspan="1">Das Cover aus dem BookHive-Katalog</td></tr><tr class="sub"><td colspan="2">Die Cover-Adressen aus Popfeed werden nicht übernommen.</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr><tr class="sub" data-row="status"><td colspan="2">Wo deine Lektüre einen Wert hat, bleibt er; Popfeed ergänzt, was ihr fehlt. Unterschiede werden nicht gezeigt.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr><tr class="sub" data-row="dates"><td colspan="2">Das frühere der beiden Daten „hinzugefügt“ bleibt.</td></tr>
+          <tr data-row="rating"><th scope="row">Bewertung</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr>
+          <tr data-row="review"><th scope="row">Rezension</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress"><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td colspan="1">Das Cover aus dem BookHive-Katalog</td></tr><tr class="sub" data-row="cover"><td colspan="2">Die Cover-Adressen aus Popfeed werden nicht übernommen.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> die ISBN-13 des Buchs (eine ISBN-10 wird umgerechnet), im Katalog von BookHive nachgeschlagen. Sicher nur, wenn genau ein Katalogbuch antwortet; führen die ISBNs des Buchs zu zweien, wählst du. Ein Buch, zu dem BookHive nicht erreichbar ist, wartet auf einen späteren Durchlauf: Mangels Antwort wird es nie zur Lektüre. Nicht verwendet: Katalog-IDs, die in Popfeed-Einträgen gespeichert sind.</p>
@@ -180,35 +235,35 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-goodreads-no" data-match="goodreads" data-held="no" data-summary="ein neuer BookHive-Eintrag (buzz.bookhive.book)" aria-labelledby="facts-goodreads-no-h" hidden>
-        <h2 class="facts-title" id="facts-goodreads-no-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-goodreads-no-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="1">1</td></tr>
+          <tr data-row="updated"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Was passiert</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="1">Übernommen</td></tr><tr class="sub"><td colspan="2">Gelesen, Am Lesen und Will ich lesen behalten ihre Bedeutung, und Aufgegeben bleibt Aufgegeben. Ein Buch, zu dem es nur eine Rezension gibt, kommt als Gelesen an, wenn du keinen anderen Status wählst.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Übernommen</td></tr><tr class="sub"><td colspan="2">Aus den Popfeed-Einträgen. Nie auf heute gesetzt.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="2">Halbe Werte werden aufgerundet, aus 7,5 wird 8. Eine 0 heißt: keine Bewertung.</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="1">Übernommen, als reiner Text</td></tr><tr class="sub"><td colspan="2">Links und Erwähnungen werden zu reinem Text. Die resenha.ink-Zeile, die Resenha an seine eigenen Kopien angehängt hat, wird entfernt. Hat ein Buch mehrere Rezensionen, bleibt die neueste mit Text, wenn du keine andere wählst.</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="2">Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="1">Der neueste wird übernommen</td></tr><tr class="sub"><td colspan="2">Ältere Fortschrittseinträge werden gelöscht und bleiben in der Sicherung. Eine Seite oder ein Kapitel 0 wird weggelassen.</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
-          <tr><th scope="row">Cover</th><td colspan="1">Das Cover aus dem BookHive-Katalog</td></tr><tr class="sub"><td colspan="2">Die Cover-Adressen aus Popfeed werden nicht übernommen.</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="1">Übernommen</td></tr><tr class="sub" data-row="status"><td colspan="2">Gelesen, Am Lesen und Will ich lesen behalten ihre Bedeutung, und Aufgegeben bleibt Aufgegeben. Ein Buch, zu dem es nur eine Rezension gibt, kommt als Gelesen an, wenn du keinen anderen Status wählst.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Übernommen</td></tr><tr class="sub" data-row="dates"><td colspan="2">Aus den Popfeed-Einträgen. Nie auf heute gesetzt.</td></tr>
+          <tr data-row="rating" class="has-sub"><th scope="row">Bewertung</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub" data-row="rating"><td colspan="2">Halbe Werte werden aufgerundet, aus 7,5 wird 8. Eine 0 heißt: keine Bewertung.</td></tr>
+          <tr data-row="review" class="has-sub"><th scope="row">Rezension</th><td colspan="1">Übernommen, als reiner Text</td></tr><tr class="sub" data-row="review"><td colspan="2">Links und Erwähnungen werden zu reinem Text. Die resenha.ink-Zeile, die Resenha an seine eigenen Kopien angehängt hat, wird entfernt. Hat ein Buch mehrere Rezensionen, bleibt die neueste mit Text, wenn du keine andere wählst.</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress" class="has-sub"><th scope="row">Lesefortschritt</th><td colspan="1">Der neueste wird übernommen</td></tr><tr class="sub" data-row="progress"><td colspan="2">Ältere Fortschrittseinträge werden gelöscht und bleiben in der Sicherung. Eine Seite oder ein Kapitel 0 wird weggelassen.</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td colspan="1">Das Cover aus dem BookHive-Katalog</td></tr><tr class="sub" data-row="cover"><td colspan="2">Die Cover-Adressen aus Popfeed werden nicht übernommen.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> die Goodreads-ID des Buchs, für ein Buch ohne ISBN. Solche Bücher warten unter „Bücher zum Suchen“, bis du auf „Diese suchen“ tippst, eine BookHive-Suche nach Titel und Autor, die du selbst startest. Ein Treffer mit derselben Goodreads-ID ist sicher. Jeder andere Treffer wird nur vorgeschlagen, als Titeltreffer. Nicht verwendet: Katalog-IDs, die in Popfeed-Einträgen gespeichert sind.</p>
@@ -216,35 +271,35 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-goodreads-bookhive" data-match="goodreads" data-held="bookhive" data-summary="dein BookHive-Eintrag (buzz.bookhive.book)" aria-labelledby="facts-goodreads-bookhive-h" hidden>
-        <h2 class="facts-title" id="facts-goodreads-bookhive-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-goodreads-bookhive-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">dein BookHive-Eintrag</span></td></tr><tr class="sub"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Er wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0 oder 1</td></tr><tr class="sub"><td colspan="2">0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">dein BookHive-Eintrag</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Er wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="1">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0 oder 1</td></tr><tr class="sub" data-row="updated"><td colspan="2">0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Was passiert</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td colspan="1">Deine, unverändert</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="2">Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="2">Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Deine, unverändert</td></tr>
-          <tr><th scope="row">Cover</th><td colspan="1">Nicht geändert</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td colspan="1">Deine, unverändert</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="status"><td colspan="2">Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="dates"><td colspan="2">Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
+          <tr data-row="rating"><th scope="row">Bewertung</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
+          <tr data-row="review"><th scope="row">Rezension</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress"><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Deine, unverändert</td></tr>
+          <tr data-row="cover"><th scope="row">Cover</th><td colspan="1">Nicht geändert</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> die Goodreads-ID des Buchs, für ein Buch ohne ISBN. Solche Bücher warten unter „Bücher zum Suchen“, bis du auf „Diese suchen“ tippst, eine BookHive-Suche nach Titel und Autor, die du selbst startest. Ein Treffer mit derselben Goodreads-ID ist sicher. Jeder andere Treffer wird nur vorgeschlagen, als Titeltreffer. Nicht verwendet: Katalog-IDs, die in Popfeed-Einträgen gespeichert sind.</p>
@@ -252,35 +307,35 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-goodreads-reading" data-match="goodreads" data-held="reading" data-summary="ein neuer BookHive-Eintrag (buzz.bookhive.book)" aria-labelledby="facts-goodreads-reading-h" hidden>
-        <h2 class="facts-title" id="facts-goodreads-reading-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-goodreads-reading-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td></tr><tr class="sub"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Deine Lektüre wird übergeben: Der neue Eintrag und das Löschen der Lektüre stehen im selben Commit, und der Link zu ihrer ausführlichen Rezension zieht mit um.</td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Deine Lektüre wird übergeben: Der neue Eintrag und das Löschen der Lektüre stehen im selben Commit, und der Link zu ihrer ausführlichen Rezension zieht mit um.</td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="1">1</td></tr>
+          <tr data-row="updated"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="1">1</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Was passiert</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr><tr class="sub"><td colspan="2">Wo deine Lektüre einen Wert hat, bleibt er; Popfeed ergänzt, was ihr fehlt. Unterschiede werden nicht gezeigt.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr><tr class="sub"><td colspan="2">Das frühere der beiden Daten „hinzugefügt“ bleibt.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
-          <tr><th scope="row">Cover</th><td colspan="1">Das Cover aus dem BookHive-Katalog</td></tr><tr class="sub"><td colspan="2">Die Cover-Adressen aus Popfeed werden nicht übernommen.</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr><tr class="sub" data-row="status"><td colspan="2">Wo deine Lektüre einen Wert hat, bleibt er; Popfeed ergänzt, was ihr fehlt. Unterschiede werden nicht gezeigt.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr><tr class="sub" data-row="dates"><td colspan="2">Das frühere der beiden Daten „hinzugefügt“ bleibt.</td></tr>
+          <tr data-row="rating"><th scope="row">Bewertung</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr>
+          <tr data-row="review"><th scope="row">Rezension</th><td colspan="1">Aus deiner Lektüre, Lücken ergänzt</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress"><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Aus dem BookHive-Katalog</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td colspan="1">Das Cover aus dem BookHive-Katalog</td></tr><tr class="sub" data-row="cover"><td colspan="2">Die Cover-Adressen aus Popfeed werden nicht übernommen.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> die Goodreads-ID des Buchs, für ein Buch ohne ISBN. Solche Bücher warten unter „Bücher zum Suchen“, bis du auf „Diese suchen“ tippst, eine BookHive-Suche nach Titel und Autor, die du selbst startest. Ein Treffer mit derselben Goodreads-ID ist sicher. Jeder andere Treffer wird nur vorgeschlagen, als Titeltreffer. Nicht verwendet: Katalog-IDs, die in Popfeed-Einträgen gespeichert sind.</p>
@@ -288,35 +343,35 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-title-no" data-match="title" data-held="no" data-summary="Wenn du bestätigst: ein neuer BookHive-Eintrag (buzz.bookhive.book); Wenn nicht: eine neue Lektüre in Resenha (ink.resenha.reading)" aria-labelledby="facts-title-no-h" hidden>
-        <h2 class="facts-title" id="facts-title-no-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-title-no-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           <tr class="cols"><td></td><th scope="col">Wenn du bestätigst</th><th scope="col">Wenn nicht</th></tr>
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td><code>buzz.bookhive.book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td><td><code>ink.resenha.reading</code><span class="dest-words">eine neue Lektüre in Resenha</span></td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="2">1</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="2">0</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="2">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="2">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="2">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="2">Ja</td></tr><tr class="sub"><td colspan="3">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td><td><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">eine neue Lektüre in Resenha</span></td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="2">1</td></tr>
+          <tr data-row="updated"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="2">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="2">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="2">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="2">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="2">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="3">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Wenn du bestätigst</th><th scope="col">Wenn nicht</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td>Aus dem BookHive-Katalog</td><td>Wie in Popfeed</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="2">Übernommen</td></tr><tr class="sub"><td colspan="3">Gelesen, Am Lesen und Will ich lesen behalten ihre Bedeutung, und Aufgegeben bleibt Aufgegeben. Ein Buch, zu dem es nur eine Rezension gibt, kommt als Gelesen an, wenn du keinen anderen Status wählst.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="2">Übernommen</td></tr><tr class="sub"><td colspan="3">Aus den Popfeed-Einträgen. Nie auf heute gesetzt.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="2">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="3">Halbe Werte werden aufgerundet, aus 7,5 wird 8. Eine 0 heißt: keine Bewertung.</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="2">Übernommen, als reiner Text</td></tr><tr class="sub"><td colspan="3">Links und Erwähnungen werden zu reinem Text. Die resenha.ink-Zeile, die Resenha an seine eigenen Kopien angehängt hat, wird entfernt. Hat ein Buch mehrere Rezensionen, bleibt die neueste mit Text, wenn du keine andere wählst.</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="2">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="3">Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="2">Der neueste wird übernommen</td></tr><tr class="sub"><td colspan="3">Ältere Fortschrittseinträge werden gelöscht und bleiben in der Sicherung. Eine Seite oder ein Kapitel 0 wird weggelassen.</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td>Aus dem BookHive-Katalog</td><td>Übernommen, von einer Ausgabe</td></tr><tr class="sub"><td colspan="3"><b>Wenn nicht:</b> Eine Lektüre bekommt keine BookHive-ID.</td></tr>
-          <tr><th scope="row">Cover</th><td>Das Cover aus dem BookHive-Katalog</td><td>Übernommen, mit einer Kopie</td></tr><tr class="sub"><td colspan="3"><b>Wenn du bestätigst:</b> Die Cover-Adressen aus Popfeed werden nicht übernommen. <b>Wenn nicht:</b> Jede Cover-Adresse aus den Popfeed-Einträgen und eine Kopie des Coverbilds in deinem Konto, damit das Bild das Löschen übersteht.</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="2">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="2">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="2">Gehen verloren</td></tr><tr class="sub"><td colspan="3">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td>Aus dem BookHive-Katalog</td><td>Wie in Popfeed</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="2">Übernommen</td></tr><tr class="sub" data-row="status"><td colspan="3">Gelesen, Am Lesen und Will ich lesen behalten ihre Bedeutung, und Aufgegeben bleibt Aufgegeben. Ein Buch, zu dem es nur eine Rezension gibt, kommt als Gelesen an, wenn du keinen anderen Status wählst.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="2">Übernommen</td></tr><tr class="sub" data-row="dates"><td colspan="3">Aus den Popfeed-Einträgen. Nie auf heute gesetzt.</td></tr>
+          <tr data-row="rating" class="has-sub"><th scope="row">Bewertung</th><td colspan="2">1–10 → <code>stars</code></td></tr><tr class="sub" data-row="rating"><td colspan="3">Halbe Werte werden aufgerundet, aus 7,5 wird 8. Eine 0 heißt: keine Bewertung.</td></tr>
+          <tr data-row="review" class="has-sub"><th scope="row">Rezension</th><td colspan="2">Übernommen, als reiner Text</td></tr><tr class="sub" data-row="review"><td colspan="3">Links und Erwähnungen werden zu reinem Text. Die resenha.ink-Zeile, die Resenha an seine eigenen Kopien angehängt hat, wird entfernt. Hat ein Buch mehrere Rezensionen, bleibt die neueste mit Text, wenn du keine andere wählst.</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="2">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="3">Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress" class="has-sub"><th scope="row">Lesefortschritt</th><td colspan="2">Der neueste wird übernommen</td></tr><tr class="sub" data-row="progress"><td colspan="3">Ältere Fortschrittseinträge werden gelöscht und bleiben in der Sicherung. Eine Seite oder ein Kapitel 0 wird weggelassen.</td></tr>
+          <tr data-row="ids" class="has-sub"><th scope="row">ISBN und Goodreads-ID</th><td>Aus dem BookHive-Katalog</td><td>Übernommen, von einer Ausgabe</td></tr><tr class="sub" data-row="ids"><td colspan="3"><b>Wenn nicht:</b> Eine Lektüre bekommt keine BookHive-ID.</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td>Das Cover aus dem BookHive-Katalog</td><td>Übernommen, mit einer Kopie</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>Wenn du bestätigst:</b> Die Cover-Adressen aus Popfeed werden nicht übernommen. <b>Wenn nicht:</b> Jede Cover-Adresse aus den Popfeed-Einträgen und eine Kopie des Coverbilds in deinem Konto, damit das Bild das Löschen übersteht.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="2">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="2">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="2">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="3">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> der Titel und der Nachname des ersten Autors. Wenn du die Titeltreffer öffnest, durchsucht Resenha BookHive und behält bis zu drei Treffer mit demselben Titel und Autor. Das gilt auch für Bücher, deren ISBN BookHive nicht kennt. Keiner wird verwendet, bevor du ihn bestätigst, mit einem Tippen pro Buch oder mit „Alle Titeltreffer bestätigen“.</p>
@@ -324,35 +379,35 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-title-bookhive" data-match="title" data-held="bookhive" data-summary="Wenn du bestätigst: dein BookHive-Eintrag (buzz.bookhive.book); Wenn nicht: dein BookHive-Eintrag (buzz.bookhive.book)" aria-labelledby="facts-title-bookhive-h" hidden>
-        <h2 class="facts-title" id="facts-title-bookhive-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-title-bookhive-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           <tr class="cols"><td></td><th scope="col">Wenn du bestätigst</th><th scope="col">Wenn nicht</th></tr>
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="2"><code>buzz.bookhive.book</code><span class="dest-words">dein BookHive-Eintrag</span></td></tr><tr class="sub"><td colspan="3">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Er wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="2">0</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="2">0 oder 1</td></tr><tr class="sub"><td colspan="3">0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="2">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="2">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="2">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="2">Ja</td></tr><tr class="sub"><td colspan="3">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="2"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">dein BookHive-Eintrag</span></td></tr><tr class="sub" data-row="dest"><td colspan="3">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Er wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="2">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="2">0 oder 1</td></tr><tr class="sub" data-row="updated"><td colspan="3">0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="2">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="2">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="2">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="2">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="3">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Wenn du bestätigst</th><th scope="col">Wenn nicht</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td colspan="2">Deine, unverändert</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="2">Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="3">Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="2">Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="3">Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="2">Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="2">Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="2">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="3">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="2">Der neuere von beiden</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td colspan="2">Deine, unverändert</td></tr>
-          <tr><th scope="row">Cover</th><td colspan="2">Nicht geändert</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="2">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="2">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="2">Gehen verloren</td></tr><tr class="sub"><td colspan="3">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td colspan="2">Deine, unverändert</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="2">Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="status"><td colspan="3">Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="2">Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="dates"><td colspan="3">Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
+          <tr data-row="rating"><th scope="row">Bewertung</th><td colspan="2">Ergänzt, oder du wählst</td></tr>
+          <tr data-row="review"><th scope="row">Rezension</th><td colspan="2">Ergänzt, oder du wählst</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="2">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="3">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress"><th scope="row">Lesefortschritt</th><td colspan="2">Der neuere von beiden</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN und Goodreads-ID</th><td colspan="2">Deine, unverändert</td></tr>
+          <tr data-row="cover"><th scope="row">Cover</th><td colspan="2">Nicht geändert</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="2">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="2">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="2">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="3">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> der Titel und der Nachname des ersten Autors. Wenn du die Titeltreffer öffnest, durchsucht Resenha BookHive und behält bis zu drei Treffer mit demselben Titel und Autor. Das gilt auch für Bücher, deren ISBN BookHive nicht kennt. Keiner wird verwendet, bevor du ihn bestätigst, mit einem Tippen pro Buch oder mit „Alle Titeltreffer bestätigen“.</p>
@@ -360,35 +415,35 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-title-reading" data-match="title" data-held="reading" data-summary="Wenn du bestätigst: ein neuer BookHive-Eintrag (buzz.bookhive.book); Wenn nicht: deine Lektüre in Resenha (ink.resenha.reading)" aria-labelledby="facts-title-reading-h" hidden>
-        <h2 class="facts-title" id="facts-title-reading-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-title-reading-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           <tr class="cols"><td></td><th scope="col">Wenn du bestätigst</th><th scope="col">Wenn nicht</th></tr>
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td><code>buzz.bookhive.book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td><td><code>ink.resenha.reading</code><span class="dest-words">deine Lektüre in Resenha</span></td></tr><tr class="sub"><td colspan="3">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. <b>Wenn du bestätigst:</b> Deine Lektüre wird übergeben: Der neue Eintrag und das Löschen der Lektüre stehen im selben Commit, und der Link zu ihrer ausführlichen Rezension zieht mit um. <b>Wenn nicht:</b> Sie wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td>1</td><td>0</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td>0</td><td>0 oder 1</td></tr><tr class="sub"><td colspan="3"><b>Wenn nicht:</b> 0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="2">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td>1</td><td>0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="2">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="2">Ja</td></tr><tr class="sub"><td colspan="3">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Wird zu</span></th><td><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">ein neuer BookHive-Eintrag</span></td><td><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">deine Lektüre in Resenha</span></td></tr><tr class="sub" data-row="dest"><td colspan="3">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. <b>Wenn du bestätigst:</b> Deine Lektüre wird übergeben: Der neue Eintrag und das Löschen der Lektüre stehen im selben Commit, und der Link zu ihrer ausführlichen Rezension zieht mit um. <b>Wenn nicht:</b> Sie wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td>1</td><td>0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Aktualisierte Bucheinträge</th><td>0</td><td>0 oder 1</td></tr><tr class="sub" data-row="updated"><td colspan="3"><b>Wenn nicht:</b> 0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="2">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td>1</td><td>0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="2">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="2">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="3">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Wenn du bestätigst</th><th scope="col">Wenn nicht</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td>Aus dem BookHive-Katalog</td><td>Deine, unverändert</td></tr>
-          <tr><th scope="row">Lesestatus</th><td>Aus deiner Lektüre, Lücken ergänzt</td><td>Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="3"><b>Wenn du bestätigst:</b> Wo deine Lektüre einen Wert hat, bleibt er; Popfeed ergänzt, was ihr fehlt. Unterschiede werden nicht gezeigt. <b>Wenn nicht:</b> Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td>Aus deiner Lektüre, Lücken ergänzt</td><td>Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="3"><b>Wenn du bestätigst:</b> Das frühere der beiden Daten „hinzugefügt“ bleibt. <b>Wenn nicht:</b> Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
-          <tr><th scope="row">Bewertung</th><td>Aus deiner Lektüre, Lücken ergänzt</td><td>Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension</th><td>Aus deiner Lektüre, Lücken ergänzt</td><td>Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="2">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="3">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="2">Der neuere von beiden</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td>Aus dem BookHive-Katalog</td><td>Deine, unverändert</td></tr>
-          <tr><th scope="row">Cover</th><td>Das Cover aus dem BookHive-Katalog</td><td>Ergänzt, wenn es fehlt</td></tr><tr class="sub"><td colspan="3"><b>Wenn du bestätigst:</b> Die Cover-Adressen aus Popfeed werden nicht übernommen.</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="2">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="2">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="2">Gehen verloren</td></tr><tr class="sub"><td colspan="3">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td>Aus dem BookHive-Katalog</td><td>Deine, unverändert</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td>Aus deiner Lektüre, Lücken ergänzt</td><td>Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="status"><td colspan="3"><b>Wenn du bestätigst:</b> Wo deine Lektüre einen Wert hat, bleibt er; Popfeed ergänzt, was ihr fehlt. Unterschiede werden nicht gezeigt. <b>Wenn nicht:</b> Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td>Aus deiner Lektüre, Lücken ergänzt</td><td>Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="dates"><td colspan="3"><b>Wenn du bestätigst:</b> Das frühere der beiden Daten „hinzugefügt“ bleibt. <b>Wenn nicht:</b> Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
+          <tr data-row="rating"><th scope="row">Bewertung</th><td>Aus deiner Lektüre, Lücken ergänzt</td><td>Ergänzt, oder du wählst</td></tr>
+          <tr data-row="review"><th scope="row">Rezension</th><td>Aus deiner Lektüre, Lücken ergänzt</td><td>Ergänzt, oder du wählst</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="2">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="3">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress"><th scope="row">Lesefortschritt</th><td colspan="2">Der neuere von beiden</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN und Goodreads-ID</th><td>Aus dem BookHive-Katalog</td><td>Deine, unverändert</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td>Das Cover aus dem BookHive-Katalog</td><td>Ergänzt, wenn es fehlt</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>Wenn du bestätigst:</b> Die Cover-Adressen aus Popfeed werden nicht übernommen.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="2">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="2">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="2">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="3">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> der Titel und der Nachname des ersten Autors. Wenn du die Titeltreffer öffnest, durchsucht Resenha BookHive und behält bis zu drei Treffer mit demselben Titel und Autor. Das gilt auch für Bücher, deren ISBN BookHive nicht kennt. Keiner wird verwendet, bevor du ihn bestätigst, mit einem Tippen pro Buch oder mit „Alle Titeltreffer bestätigen“.</p>
@@ -396,35 +451,35 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-none-no" data-match="none" data-held="no" data-summary="eine neue Lektüre in Resenha (ink.resenha.reading)" aria-labelledby="facts-none-no-h" hidden>
-        <h2 class="facts-title" id="facts-none-no-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-none-no-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>ink.resenha.reading</code><span class="dest-words">eine neue Lektüre in Resenha</span></td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="1">1</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">eine neue Lektüre in Resenha</span></td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="1">1</td></tr>
+          <tr data-row="updated"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Was passiert</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td colspan="1">Wie in Popfeed</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="1">Übernommen</td></tr><tr class="sub"><td colspan="2">Gelesen, Am Lesen und Will ich lesen behalten ihre Bedeutung, und Aufgegeben bleibt Aufgegeben. Ein Buch, zu dem es nur eine Rezension gibt, kommt als Gelesen an, wenn du keinen anderen Status wählst.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Übernommen</td></tr><tr class="sub"><td colspan="2">Aus den Popfeed-Einträgen. Nie auf heute gesetzt.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="2">Halbe Werte werden aufgerundet, aus 7,5 wird 8. Eine 0 heißt: keine Bewertung.</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="1">Übernommen, als reiner Text</td></tr><tr class="sub"><td colspan="2">Links und Erwähnungen werden zu reinem Text. Die resenha.ink-Zeile, die Resenha an seine eigenen Kopien angehängt hat, wird entfernt. Hat ein Buch mehrere Rezensionen, bleibt die neueste mit Text, wenn du keine andere wählst.</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="2">Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="1">Der neueste wird übernommen</td></tr><tr class="sub"><td colspan="2">Ältere Fortschrittseinträge werden gelöscht und bleiben in der Sicherung. Eine Seite oder ein Kapitel 0 wird weggelassen.</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Übernommen, von einer Ausgabe</td></tr><tr class="sub"><td colspan="2">Eine Lektüre bekommt keine BookHive-ID.</td></tr>
-          <tr><th scope="row">Cover</th><td colspan="1">Übernommen, mit einer Kopie</td></tr><tr class="sub"><td colspan="2">Jede Cover-Adresse aus den Popfeed-Einträgen und eine Kopie des Coverbilds in deinem Konto, damit das Bild das Löschen übersteht.</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td colspan="1">Wie in Popfeed</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="1">Übernommen</td></tr><tr class="sub" data-row="status"><td colspan="2">Gelesen, Am Lesen und Will ich lesen behalten ihre Bedeutung, und Aufgegeben bleibt Aufgegeben. Ein Buch, zu dem es nur eine Rezension gibt, kommt als Gelesen an, wenn du keinen anderen Status wählst.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Übernommen</td></tr><tr class="sub" data-row="dates"><td colspan="2">Aus den Popfeed-Einträgen. Nie auf heute gesetzt.</td></tr>
+          <tr data-row="rating" class="has-sub"><th scope="row">Bewertung</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub" data-row="rating"><td colspan="2">Halbe Werte werden aufgerundet, aus 7,5 wird 8. Eine 0 heißt: keine Bewertung.</td></tr>
+          <tr data-row="review" class="has-sub"><th scope="row">Rezension</th><td colspan="1">Übernommen, als reiner Text</td></tr><tr class="sub" data-row="review"><td colspan="2">Links und Erwähnungen werden zu reinem Text. Die resenha.ink-Zeile, die Resenha an seine eigenen Kopien angehängt hat, wird entfernt. Hat ein Buch mehrere Rezensionen, bleibt die neueste mit Text, wenn du keine andere wählst.</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress" class="has-sub"><th scope="row">Lesefortschritt</th><td colspan="1">Der neueste wird übernommen</td></tr><tr class="sub" data-row="progress"><td colspan="2">Ältere Fortschrittseinträge werden gelöscht und bleiben in der Sicherung. Eine Seite oder ein Kapitel 0 wird weggelassen.</td></tr>
+          <tr data-row="ids" class="has-sub"><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Übernommen, von einer Ausgabe</td></tr><tr class="sub" data-row="ids"><td colspan="2">Eine Lektüre bekommt keine BookHive-ID.</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td colspan="1">Übernommen, mit einer Kopie</td></tr><tr class="sub" data-row="cover"><td colspan="2">Jede Cover-Adresse aus den Popfeed-Einträgen und eine Kopie des Coverbilds in deinem Konto, damit das Bild das Löschen übersteht.</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> keine, die BookHive erkennt: keine ISBN, die sein Katalog kennt, kein Treffer mit der Goodreads-ID und kein Titeltreffer, den du bestätigt hast. Das Buch behält seine eigenen Angaben in einer Lektüre in Resenha.</p>
@@ -432,35 +487,35 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-none-bookhive" data-match="none" data-held="bookhive" data-summary="dein BookHive-Eintrag (buzz.bookhive.book)" aria-labelledby="facts-none-bookhive-h" hidden>
-        <h2 class="facts-title" id="facts-none-bookhive-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-none-bookhive-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">dein BookHive-Eintrag</span></td></tr><tr class="sub"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Er wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0 oder 1</td></tr><tr class="sub"><td colspan="2">0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">dein BookHive-Eintrag</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Er wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="1">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0 oder 1</td></tr><tr class="sub" data-row="updated"><td colspan="2">0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Was passiert</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td colspan="1">Deine, unverändert</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="2">Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="2">Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Deine, unverändert</td></tr>
-          <tr><th scope="row">Cover</th><td colspan="1">Nicht geändert</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td colspan="1">Deine, unverändert</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="status"><td colspan="2">Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="dates"><td colspan="2">Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
+          <tr data-row="rating"><th scope="row">Bewertung</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
+          <tr data-row="review"><th scope="row">Rezension</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress"><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Deine, unverändert</td></tr>
+          <tr data-row="cover"><th scope="row">Cover</th><td colspan="1">Nicht geändert</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> keine, die BookHive erkennt: keine ISBN, die sein Katalog kennt, kein Treffer mit der Goodreads-ID und kein Titeltreffer, den du bestätigt hast. Das Buch behält seine eigenen Angaben in einer Lektüre in Resenha.</p>
@@ -468,48 +523,54 @@
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
       <section class="facts" id="facts-none-reading" data-match="none" data-held="reading" data-summary="deine Lektüre in Resenha (ink.resenha.reading)" aria-labelledby="facts-none-reading-h" hidden>
-        <h2 class="facts-title" id="facts-none-reading-h">Umzugsangaben</h2>
+        <h3 class="facts-title" id="facts-none-reading-h">Umzugsangaben</h3>
         <p class="serving"><span>Portionsgröße</span> <span>1 Buch</span></p>
         <p class="serving-note">Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag</p>
         <table class="amounts">
           <caption>Menge pro Buch</caption>
           
-          <tr class="dest"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>ink.resenha.reading</code><span class="dest-words">deine Lektüre in Resenha</span></td></tr><tr class="sub"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Sie wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
-          <tr><th scope="row">Neue Bucheinträge</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0 oder 1</td></tr><tr class="sub"><td colspan="2">0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
-          <tr><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
-          <tr><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
-          <tr><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
-          <tr><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Wird zu</span></th><td colspan="1"><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">deine Lektüre in Resenha</span></td></tr><tr class="sub" data-row="dest"><td colspan="2">Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist. Sie wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.</td></tr>
+          <tr data-row="created"><th scope="row">Neue Bucheinträge</th><td colspan="1">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Aktualisierte Bucheinträge</th><td colspan="1">0 oder 1</td></tr><tr class="sub" data-row="updated"><td colspan="2">0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.</td></tr>
+          <tr data-row="deletedPopfeed"><th scope="row">Gelöschte Popfeed-Einträge</th><td colspan="1">3</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Gelöschte Lektüren</th><td colspan="1">0</td></tr>
+          <tr data-row="commits"><th scope="row">Commits</th><td colspan="1">1*, ganz oder gar nicht</td></tr>
+          <tr data-row="checked" class="has-sub"><th scope="row">Mit deiner Bestätigung abgeglichen</th><td colspan="1">Ja</td></tr><tr class="sub" data-row="checked"><td colspan="2">Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Feld</th><th scope="col">Was passiert</th></tr></thead>
           <tbody>
-          <tr><th scope="row">Titel und Autoren</th><td colspan="1">Deine, unverändert</td></tr>
-          <tr><th scope="row">Lesestatus</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="2">Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
-          <tr><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub"><td colspan="2">Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
-          <tr><th scope="row">Bewertung</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
-          <tr><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
-          <tr><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
-          <tr><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Deine, unverändert</td></tr>
-          <tr><th scope="row">Cover</th><td colspan="1">Ergänzt, wenn es fehlt</td></tr>
-          <tr><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
-          <tr><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
-          <tr><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
+          <tr data-row="title"><th scope="row">Titel und Autoren</th><td colspan="1">Deine, unverändert</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Lesestatus</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="status"><td colspan="2">Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Hinzugefügt, begonnen, beendet</th><td colspan="1">Ergänzt, oder du wählst</td></tr><tr class="sub" data-row="dates"><td colspan="2">Dein Eintrag behält sein Datum „hinzugefügt“.</td></tr>
+          <tr data-row="rating"><th scope="row">Bewertung</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
+          <tr data-row="review"><th scope="row">Rezension</th><td colspan="1">Ergänzt, oder du wählst</td></tr>
+          <tr data-row="spoiler" class="has-sub"><th scope="row">Rezension mit Spoilern</th><td colspan="1">Zusätzlich eine ausführliche Rezension</td></tr><tr class="sub" data-row="spoiler"><td colspan="2">Nur wenn dein Eintrag am Ende den Text dieser Rezension hat. Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.</td></tr>
+          <tr data-row="progress"><th scope="row">Lesefortschritt</th><td colspan="1">Der neuere von beiden</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN und Goodreads-ID</th><td colspan="1">Deine, unverändert</td></tr>
+          <tr data-row="cover"><th scope="row">Cover</th><td colspan="1">Ergänzt, wenn es fehlt</td></tr>
+          <tr data-row="leftovers"><th scope="row">Weitere Rezensionen, älterer Fortschritt</th><td colspan="1">Gelöscht; in der Sicherung</td></tr>
+          <tr data-row="extras"><th scope="row">Tags, Position in der Liste</th><td colspan="1">Nicht übernommen; in der Sicherung</td></tr>
+          <tr data-row="likes" class="has-sub"><th scope="row">Likes und Kommentare anderer zu deinen Rezensionen</th><td colspan="1">Gehen verloren</td></tr><tr class="sub" data-row="likes"><td colspan="2">Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird.</td></tr>
           </tbody>
         </table>
         <p class="ingredients"><b>Zutaten:</b> keine, die BookHive erkennt: keine ISBN, die sein Katalog kennt, kein Treffer mit der Goodreads-ID und kein Titeltreffer, den du bestätigt hast. Das Buch behält seine eigenen Angaben in einer Lektüre in Resenha.</p>
         <p class="contains"><b>Enthält keine Vermutungen.</b> Ein Treffer nur über den Titel wird nie ohne dein Tippen übernommen.</p>
         <p class="footnote">* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach.</p>
       </section>
-    </div>
+      </div>
+    </section>
 
-    <div class="excluded">
+    <section class="feature flip excluded-section" aria-labelledby="excluded-copy-h">
+      <div class="copy">
+        <h2 id="excluded-copy-h">Nie geschrieben oder gelöscht</h2>
+        <p>Ein Popfeed-Eintrag wird nur gelöscht, wenn Resenha ihn als einen deiner eigenen Leselisten-Einträge, deiner Rezensionen oder Fortschrittseinträge erkannt hat, und nur im Commit, der sein Buch schreibt.</p>
+      </div>
+      <div class="device">
       <section class="facts small" aria-labelledby="excluded-h">
-        <h2 class="facts-title" id="excluded-h">Nicht enthalten</h2>
+        <h3 class="facts-title" id="excluded-h">Nicht enthalten</h3>
         <table class="fields">
-          <thead><tr><th scope="col">Nie geschrieben oder gelöscht</th><th scope="col">Änderungen</th></tr></thead>
+          <thead><tr><th scope="col"><span class="visually-hidden">Nie geschrieben oder gelöscht</span></th><th scope="col">Änderungen</th></tr></thead>
           <tbody>
           <tr><th scope="row">Regale und die Bücher darauf<span class="row-note">Sie sind auch die Regale von BookHive.</span></th><td>0</td></tr>
           <tr><th scope="row">Filme, Serien, Spiele und alles andere, was kein Buch ist, samt Rezensionen</th><td>0</td></tr>
@@ -523,23 +584,24 @@
           <tr><th scope="row">Beiträge auf Bluesky</th><td>0</td></tr>
           </tbody>
         </table>
-        <p class="footnote">Ein Popfeed-Eintrag wird nur gelöscht, wenn Resenha ihn als einen deiner eigenen Leselisten-Einträge, deiner Rezensionen oder Fortschrittseinträge erkannt hat, und nur im Commit, der sein Buch schreibt.</p>
       </section>
-    </div>
+      </div>
+    </section>
 
-    <section class="steps-section" aria-labelledby="steps-h">
+    <section class="moves-section" aria-labelledby="steps-h">
       <h2 id="steps-h">So zieht ein Buch um</h2>
-      <ol class="steps moves">
-        <li><strong>Sicherung.</strong> Wenn du bestätigst, speichert Resenha zuerst eine Datei mit jedem Eintrag, den der Durchlauf löscht oder ändert, genau so, wie er in deinem Konto steht. Sie landet in Resenhas Ordner in iCloud Drive, den du in der Dateien-App öffnen kannst, oder bleibt auf dem Gerät, wenn iCloud Drive aus ist. Wiederherstellen kann Resenha daraus noch nicht; sie bewahrt deine Daten.</li>
-        <li><strong>Zuordnen.</strong> Jedes Buch wird über seine Nummern zugeordnet, die ISBN oder die Goodreads-ID. Titel machen nur Vorschläge. Du siehst den ganzen Plan, änderst, was du willst, und bestätigst einmal. Bis dahin werden nur deine Entscheidungen gespeichert, damit sie dir auf deine anderen Geräte folgen.</li>
-        <li><strong>Ein Commit pro Buch.</strong> Der neue Eintrag eines Buchs und das Löschen seiner Popfeed-Einträge gehen in einem Commit, den dein Konto ganz oder gar nicht übernimmt. Ein Buch zieht also nie halb um. Unmittelbar davor liest Resenha die Einträge des Buchs noch einmal; hat sich etwas geändert, wird das Buch übersprungen und am Ende erneut angeboten. Ein neuer Eintrag bekommt seinen Schlüssel vom ältesten Popfeed-Eintrag des Buchs, sodass ein zweiter Versuch auf den ersten trifft, statt eine Kopie anzulegen.</li>
-        <li><strong>Im eigenen Tempo.</strong> Resenha nutzt höchstens 70 % des stündlichen und täglichen Schreibbudgets deines Kontos, nach den von Bluesky veröffentlichten Grenzen, und wartet, bevor es sie erreicht. So funktioniert dein eigenes Posten weiter. Schließt du die App, geht der Umzug beim nächsten Öffnen dort weiter, wo er stehen geblieben ist.</li>
+      <ol class="moves">
+        <li class="move"><span class="num" aria-hidden="true">1</span><h3>Sicherung</h3><p>Wenn du bestätigst, speichert Resenha zuerst eine Datei mit jedem Eintrag, den der Durchlauf löscht oder ändert, genau so, wie er in deinem Konto steht. Sie landet in Resenhas Ordner in iCloud Drive, den du in der Dateien-App öffnen kannst, oder bleibt auf dem Gerät, wenn iCloud Drive aus ist. Wiederherstellen kann Resenha daraus noch nicht; sie bewahrt deine Daten.</p></li>
+        <li class="move"><span class="num" aria-hidden="true">2</span><h3>Zuordnen</h3><p>Jedes Buch wird über seine Nummern zugeordnet, die ISBN oder die Goodreads-ID. Titel machen nur Vorschläge. Du siehst den ganzen Plan, änderst, was du willst, und bestätigst einmal. Bis dahin werden nur deine Entscheidungen gespeichert, damit sie dir auf deine anderen Geräte folgen.</p></li>
+        <li class="move"><span class="num" aria-hidden="true">3</span><h3>Ein Commit pro Buch</h3><p>Der neue Eintrag eines Buchs und das Löschen seiner Popfeed-Einträge gehen in einem Commit, den dein Konto ganz oder gar nicht übernimmt. Ein Buch zieht also nie halb um. Unmittelbar davor liest Resenha die Einträge des Buchs noch einmal; hat sich etwas geändert, wird das Buch übersprungen und am Ende erneut angeboten. Ein neuer Eintrag bekommt seinen Schlüssel vom ältesten Popfeed-Eintrag des Buchs, sodass ein zweiter Versuch auf den ersten trifft, statt eine Kopie anzulegen.</p></li>
+        <li class="move"><span class="num" aria-hidden="true">4</span><h3>Im eigenen Tempo</h3><p>Resenha nutzt höchstens 70 % des stündlichen und täglichen Schreibbudgets deines Kontos, nach den von Bluesky veröffentlichten Grenzen, und wartet, bevor es sie erreicht. So funktioniert dein eigenes Posten weiter. Schließt du die App, geht der Umzug beim nächsten Öffnen dort weiter, wo er stehen geblieben ist.</p></li>
       </ol>
       <p class="aside">BookHive zeigt übertragene Bücher als neue Aktivität an. In Resenha behalten sie ihre eigenen Daten.</p>
     </section>
   </main>
 
-  <footer class="closing slim">
+  <footer class="closing">
+    <img class="icon" src="/icon.png" alt="">
     <nav>
       <a href="/privacy.html">Datenschutz</a>
       <a href="/terms.html">Nutzungsbedingungen</a>
@@ -554,6 +616,6 @@
   <script type="application/json" id="rosetta-strings">{"getApp":"App laden","getFor":"Resenha für {device} laden","live":"{match}. {heldLegend} {held}. {goesTo}: {summary}.","match":{"isbn":"Über die ISBN","goodreads":"Goodreads-ID","title":"Nur über den Titel","none":"Nicht in BookHive"},"held":{"no":"Nein","bookhive":"In BookHive","reading":"Als Lektüre in Resenha"},"heldLegend":"Schon in deiner Bibliothek?","goesTo":"Wird zu"}</script>
   <script src="/assets/theme.js?v=4ad6472390" defer></script>
   <script src="/assets/landing/landing.js?v=d6c45e37b4" defer></script>
-  <script src="/assets/rosetta/rosetta.js?v=0d901c738a" defer></script>
+  <script src="/assets/rosetta/rosetta.js?v=90d26f6547" defer></script>
 </body>
 </html>
