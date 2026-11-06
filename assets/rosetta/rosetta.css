@@ -296,6 +296,11 @@
     font-size: .875rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink2);
   }
   .facts[data-match="title"] tr.dest > td[data-col]::before { display: block; margin-bottom: 4px; }
+  /* A value both outcomes share follows the single-column rule: beside its name on the right when they fit with
+     16px between them, otherwise under it, still on the right. */
+  .facts[data-match="title"] tr:not(.sub):has(> td[colspan]) { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; row-gap: 4px; }
+  .facts[data-match="title"] tr:not(.sub):has(> td[colspan]) > :is(th, td) { flex: 0 0 auto; max-width: 100%; }
+  .facts[data-match="title"] tr:not(.sub):has(> td[colspan]) > td { margin: 0 0 0 auto; text-align: right; }
   :lang(ja) .facts[data-match="title"] tr > td[data-col]::before { letter-spacing: .04em; }
   .facts[data-match="title"] tr.dest td code + .dest-words { margin-top: 4px; }
 }
