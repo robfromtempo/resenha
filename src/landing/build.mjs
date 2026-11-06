@@ -251,6 +251,7 @@ ${t.import.steps.map((s) => `          <li>${s}</li>`).join("\n")}
     <nav>
       <a href="/privacy.html">${esc(t.closing.privacy)}</a>
       <a href="/terms.html">${esc(t.closing.terms)}</a>
+      <a href="${lang === "en" ? "/rosetta" : `/${lang}/rosetta`}">Rosetta</a>
       <a href="${FEEDBACK}">${esc(t.closing.feedback)}</a>
       <a href="https://bsky.app/profile/resenha.ink">${esc(t.closing.bluesky)}</a>
     </nav>

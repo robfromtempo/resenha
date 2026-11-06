@@ -1,0 +1,159 @@
+{
+  "ogLocale": "it_IT",
+  "meta": {
+    "title": "Rosetta — Come Resenha trasferisce i tuoi libri di Popfeed",
+    "description": "Cosa succede a ogni record di Popfeed quando Resenha trasferisce i tuoi libri su BookHive o in letture di Resenha: come vengono riconosciuti i libri, cosa diventa ogni campo e cosa non viene mai toccato."
+  },
+  "theme": { "toDark": "Passa all’aspetto scuro", "toLight": "Passa all’aspetto chiaro" },
+  "intro": {
+    "eyebrow": "Trasferire i libri da Popfeed",
+    "title": "Rosetta",
+    "body": [
+      "Rosetta è il modo in cui Resenha 1.6.10 trasferisce i tuoi libri di Popfeed. Ogni libro diventa un record di BookHive quando il catalogo di BookHive lo conosce con certezza, e una lettura di Resenha quando no. Poi i suoi record di Popfeed vengono eliminati.",
+      "Spostare i dati dei libri da un’app all’altra ha la fama di tirare a indovinare e di perdere qualcosa per strada. Qui trovi esattamente cosa succede a ogni libro, campo per campo. Non viene scritto nulla finché non confermi."
+    ]
+  },
+  "control": {
+    "legend": "Come abbiamo trovato il tuo libro",
+    "isbn": "Tramite ISBN",
+    "goodreads": "ID di Goodreads",
+    "title": "Solo dal titolo",
+    "none": "Non è su BookHive",
+    "heldLegend": "È già nella tua libreria?",
+    "heldNo": "No",
+    "heldBookhive": "Su BookHive",
+    "heldReading": "Come lettura di Resenha",
+    "noscript": "Mostrato: un libro trovato tramite ISBN, non ancora nella tua libreria."
+  },
+  "label": {
+    "heading": "Valori del trasferimento",
+    "serving": "Porzione",
+    "servingValue": "1 libro",
+    "servingNote": "Esempio: 1 elemento di lista, 1 recensione, 1 record di avanzamento",
+    "amountPer": "Quantità per libro",
+    "goesTo": "Diventa",
+    "colYes": "Se confermi",
+    "colNo": "Se no",
+    "amountHeader": "Record",
+    "fieldHeader": "Campo",
+    "valueHeader": "Cosa succede",
+    "dest": {
+      "newBookHive": "un nuovo record di BookHive",
+      "newReading": "una nuova lettura di Resenha",
+      "mergeBookHive": "il tuo record di BookHive",
+      "upgradeReading": "un nuovo record di BookHive",
+      "mergeReading": "la tua lettura di Resenha"
+    },
+    "destNote": {
+      "heldBy": "Il tuo record viene trovato dal suo ID di catalogo o dall’ISBN, oppure perché hai confermato il suggerimento di Resenha che si tratta dello stesso libro.",
+      "mergeBookHive": "Viene aggiornato nello stesso commit che elimina i record di Popfeed.",
+      "upgradeReading": "La tua lettura viene ceduta: il nuovo record e l’eliminazione della lettura sono nello stesso commit, e il link alla sua recensione estesa si sposta con lei.",
+      "mergeReading": "Viene aggiornata nello stesso commit che elimina i record di Popfeed."
+    },
+    "amounts": {
+      "created": "Record di libro creati",
+      "updated": "Record di libro aggiornati",
+      "updatedMaybe": "0 o 1",
+      "updatedNote": "0 se il tuo record dice già tutto quello che dice Popfeed.",
+      "deletedPopfeed": "Record di Popfeed eliminati",
+      "deletedReading": "Letture eliminate",
+      "commits": "Commit",
+      "commitsValue": "1*, tutto o niente",
+      "checked": "Verificato con ciò che hai confermato",
+      "checkedValue": "Sì",
+      "checkedNote": "Se uno dei suoi record è cambiato dopo la tua conferma, il libro viene saltato e ti viene chiesto di nuovo."
+    },
+    "rows": {
+      "title": "Titolo e autori",
+      "status": "Stato di lettura",
+      "dates": "Date di aggiunta, inizio, fine",
+      "rating": "Voto",
+      "review": "Recensione",
+      "spoiler": "Recensione con spoiler",
+      "progress": "Avanzamento di lettura",
+      "ids": "ISBN e ID di Goodreads",
+      "cover": "Copertina",
+      "leftovers": "Altre recensioni, avanzamenti precedenti",
+      "extras": "Tag, posizione nella lista",
+      "likes": "Mi piace e commenti di altri alle tue recensioni"
+    },
+    "values": {
+      "catalogue": "Dal catalogo di BookHive",
+      "keptPopfeed": "Come su Popfeed",
+      "unchanged": "I tuoi, invariati",
+      "carried": "Mantenuto",
+      "fillChoose": "Completato, o scegli tu",
+      "readingFirst": "Della tua lettura, lacune completate",
+      "stars": "1–10 → `stars`",
+      "plainText": "Mantenuta, come testo semplice",
+      "longForm": "Anche una recensione estesa",
+      "newest": "Si mantiene il più recente",
+      "newer": "Il più recente dei due",
+      "keptEdition": "Mantenuti, di una sola edizione",
+      "catalogueCover": "La copertina del catalogo di BookHive",
+      "keptCopy": "Mantenuta, con una copia",
+      "notChanged": "Invariata",
+      "fillMissing": "Completata se manca",
+      "backup": "Eliminati; restano nel backup",
+      "notCarried": "Non trasferiti; restano nel backup",
+      "lost": "Vanno persi"
+    },
+    "notes": {
+      "status": "Letto, In lettura e Da leggere mantengono il loro significato, e Abbandonato resta Abbandonato. Un libro che ha solo una recensione arriva come Letto, a meno che tu non scelga un altro stato.",
+      "merge": "Popfeed completa ciò che manca al tuo record. Dove i due differiscono, scegli tu, libro per libro o per tutti insieme; finché non scegli, resta la versione della tua libreria.",
+      "upgrade": "Dove la tua lettura ha un valore, resta; Popfeed completa ciò che le manca. Le differenze non vengono mostrate.",
+      "dates": "Prese dai record di Popfeed. Mai impostate a oggi.",
+      "datesMerge": "Il tuo record mantiene la sua data di aggiunta.",
+      "datesUpgrade": "Si mantiene la prima delle due date di aggiunta.",
+      "rating": "I mezzi punti si arrotondano per eccesso: 7,5 diventa 8. Un voto 0 significa nessun voto.",
+      "review": "Link e menzioni diventano testo semplice. La riga di resenha.ink che Resenha aggiungeva alle sue copie viene tolta. Se un libro ha più recensioni, si mantiene la più recente con del testo, a meno che tu non ne scelga un’altra.",
+      "spoiler": "Pubblicata su resenha.ink con l’avviso di spoiler e i suoi link: 2 record in più, la recensione e il suo link. Su Bluesky non viene pubblicato nulla. Il record del libro mantiene il testo completo. Non viene creata se il libro ha già una recensione estesa.",
+      "spoilerMerge": "Solo se il tuo record finisce con il testo di questa recensione.",
+      "progress": "I record di avanzamento precedenti vengono eliminati e restano nel backup. Una pagina o un capitolo 0 viene omesso.",
+      "ids": "A una lettura non viene aggiunto alcun ID di BookHive.",
+      "catalogueCover": "Gli indirizzi delle copertine di Popfeed non vengono mantenuti.",
+      "keptCopy": "Ogni indirizzo di copertina dei record di Popfeed, e una copia dell’immagine salvata nel tuo account, così l’immagine sopravvive all’eliminazione.",
+      "likes": "Si trovano negli account di chi li ha scritti e puntano a una recensione di Popfeed che viene eliminata."
+    },
+    "ingredientsLabel": "Ingredienti:",
+    "ingredients": {
+      "isbn": "l’ISBN-13 del libro (un ISBN-10 viene convertito), cercato nel catalogo di BookHive. Certo solo quando risponde esattamente un libro del catalogo; se gli ISBN del libro portano a due, scegli tu. Un libro per cui non si riesce a interrogare BookHive aspetta un passaggio successivo: non diventa mai una lettura per mancanza di risposta. Non usati: gli ID di catalogo salvati negli elementi di Popfeed.",
+      "goodreads": "l’ID di Goodreads del libro, per un libro senza ISBN. Questi libri aspettano in «Libri da cercare» finché non tocchi «Cercali», una ricerca su BookHive per titolo e autore che avvii tu. Un risultato con lo stesso ID di Goodreads è certo. Ogni altro risultato viene solo proposto, come corrispondenza di titolo. Non usati: gli ID di catalogo salvati negli elementi di Popfeed.",
+      "title": "il titolo e il cognome del primo autore. Quando apri «Corrispondenze di titolo», Resenha cerca su BookHive e tiene fino a tre risultati con lo stesso titolo e autore. Vale anche per i libri il cui ISBN BookHive non conosce. Nessuno viene usato finché non lo confermi, con un tocco ciascuno o con «Conferma tutte le corrispondenze di titolo».",
+      "none": "nessuno che BookHive riconosca: nessun ISBN noto al suo catalogo, nessun risultato con il suo ID di Goodreads e nessuna corrispondenza di titolo che hai confermato. Il libro mantiene i propri dati in una lettura di Resenha."
+    },
+    "warningLead": "Non contiene supposizioni.",
+    "warning": "Una corrispondenza solo dal titolo non viene mai applicata senza un tuo tocco.",
+    "footnote": "* Un libro che richiede più di 200 scritture, il che significa centinaia di record di avanzamento, elimina i suoi record di avanzamento più vecchi in altri commit subito dopo."
+  },
+  "excluded": {
+    "heading": "Non incluso",
+    "subheading": "Mai scritto né eliminato",
+    "header": "Modifiche",
+    "rows": [
+      ["Gli scaffali, e i libri che contengono", "Sono anche gli scaffali di BookHive."],
+      ["Film, serie, giochi e tutto ciò che non è un libro, con le loro recensioni", ""],
+      ["I record di Popfeed che Resenha non sa classificare", ""],
+      ["Gli elementi ponte di libri che hai già su BookHive", ""],
+      ["I record di avanzamento di nessun libro che hai o che trasferisci", ""],
+      ["I libri che aspettano ancora una ricerca", "Restano su Popfeed per un passaggio successivo."],
+      ["I tuoi Mi piace e commenti su Popfeed", ""],
+      ["I record di altre persone", ""],
+      ["I libri che hai già e che non sono su Popfeed", ""],
+      ["I post su Bluesky", ""]
+    ],
+    "footer": "Un record di Popfeed viene eliminato solo quando Resenha lo ha riconosciuto come uno dei tuoi elementi delle liste di lettura, delle tue recensioni o dei tuoi record di avanzamento, e solo nel commit che scrive il suo libro."
+  },
+  "steps": {
+    "title": "Come si trasferisce un libro",
+    "items": [
+      ["Backup.", "Quando confermi, Resenha salva prima un file con ogni record che il trasferimento eliminerà o modificherà, esattamente com’è nel tuo account. Va nella cartella di Resenha su iCloud Drive, che puoi aprire in File, oppure resta sul dispositivo se iCloud Drive è disattivato. Resenha non può ancora ripristinare da questo file; conserva i tuoi dati."],
+      ["Riconoscimento.", "Ogni libro viene riconosciuto dai suoi numeri, l’ISBN o l’ID di Goodreads. I titoli fanno solo proposte. Vedi tutto il piano, cambi ciò che vuoi e confermi una volta. Fino ad allora vengono scritte solo le tue scelte, così ti seguono sugli altri dispositivi."],
+      ["Un commit per libro.", "Il nuovo record di un libro e l’eliminazione dei suoi record di Popfeed viaggiano in un solo commit, che il tuo account applica per intero o per niente: un libro non resta mai trasferito a metà. Subito prima, Resenha rilegge i record del libro; se qualcosa è cambiato, il libro viene saltato e riproposto alla fine. Un nuovo record prende la chiave dal record di Popfeed più vecchio del libro, così un nuovo tentativo trova il primo invece di crearne una copia."],
+      ["Con calma.", "Resenha usa al massimo il 70% del budget di scrittura orario e giornaliero del tuo account, secondo i limiti pubblicati da Bluesky, e si ferma prima di raggiungerli, così i tuoi post continuano a funzionare. Se chiudi l’app, il trasferimento riprende da dove si era fermato la prossima volta che la apri."]
+    ],
+    "note": "BookHive mostra i libri trasferiti come attività recente. In Resenha mantengono le loro date."
+  },
+  "footer": { "legal": "© 2026 Resenha." },
+  "live": "{match}. {heldLegend} {held}. {goesTo}: {summary}."
+}

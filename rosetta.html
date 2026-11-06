@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Rosetta — How Resenha moves your Popfeed books</title>
+  <meta name="description" content="What happens to each Popfeed record when Resenha moves your books to BookHive or to Resenha readings: how books are matched, what each field becomes, and what is never touched.">
+  <meta name="theme-color" content="#F4F5F7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1A1C20" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    // The appearance picked with the toggle, set before anything is drawn. Without one the page follows the system.
+    try { var theme = localStorage.getItem("resenha.theme"); if (theme === "dark" || theme === "light") document.documentElement.setAttribute("data-theme", theme); } catch (e) {}
+  </script>
+  <link rel="canonical" href="https://resenha.ink/rosetta">
+  <link rel="alternate" hreflang="en" href="https://resenha.ink/rosetta">
+  <link rel="alternate" hreflang="de" href="https://resenha.ink/de/rosetta">
+  <link rel="alternate" hreflang="es" href="https://resenha.ink/es/rosetta">
+  <link rel="alternate" hreflang="fr" href="https://resenha.ink/fr/rosetta">
+  <link rel="alternate" hreflang="it" href="https://resenha.ink/it/rosetta">
+  <link rel="alternate" hreflang="ja" href="https://resenha.ink/ja/rosetta">
+  <link rel="alternate" hreflang="pt" href="https://resenha.ink/pt/rosetta">
+  <link rel="alternate" hreflang="x-default" href="https://resenha.ink/rosetta">
+  <link rel="icon" href="/icon.png">
+  <link rel="apple-touch-icon" href="/icon.png">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Resenha">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Rosetta — How Resenha moves your Popfeed books">
+  <meta property="og:description" content="What happens to each Popfeed record when Resenha moves your books to BookHive or to Resenha readings: how books are matched, what each field becomes, and what is never touched.">
+  <meta property="og:url" content="https://resenha.ink/rosetta">
+  <script>
+    // As on the home page: a first visit to the English page from a browser set to another of the site's languages
+    // goes to that language's page, and a language chosen from the menu wins from then on.
+    (function () {
+      try {
+        var chosen = localStorage.getItem("resenha.lang");
+        if (chosen) { if (chosen !== "en" && ["de","es","fr","it","ja","pt"].indexOf(chosen) >= 0) location.replace("/" + chosen + "/rosetta"); return; }
+        var have = ["de","es","fr","it","ja","pt"];
+        var wanted = (navigator.languages || [navigator.language || "en"]).map(function (l) { return String(l).slice(0, 2).toLowerCase(); });
+        for (var i = 0; i < wanted.length; i++) {
+          if (wanted[i] === "en") return;
+          if (have.indexOf(wanted[i]) >= 0) { location.replace("/" + wanted[i] + "/rosetta"); return; }
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="/assets/landing/landing.css?v=59228ede45">
+  <link rel="stylesheet" href="/assets/rosetta/rosetta.css?v=216e30890b">
+</head>
+<body class="rosetta">
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="bar">
+    <img src="/icon.png" alt="">
+    <a class="name" href="/">Resenha</a>
+    <details class="lang">
+      <summary aria-label="Language"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg><span>EN</span></summary>
+      <ul><li><a href="/rosetta" hreflang="en" lang="en" data-lang="en" aria-current="page">English</a></li><li><a href="/de/rosetta" hreflang="de" lang="de" data-lang="de">Deutsch</a></li><li><a href="/es/rosetta" hreflang="es" lang="es" data-lang="es">Español</a></li><li><a href="/fr/rosetta" hreflang="fr" lang="fr" data-lang="fr">Français</a></li><li><a href="/it/rosetta" hreflang="it" lang="it" data-lang="it">Italiano</a></li><li><a href="/ja/rosetta" hreflang="ja" lang="ja" data-lang="ja">日本語</a></li><li><a href="/pt/rosetta" hreflang="pt" lang="pt" data-lang="pt">Português</a></li></ul>
+    </details>
+    <button class="theme-toggle" type="button" data-theme-toggle data-label-dark="Switch to dark appearance" data-label-light="Switch to light appearance" aria-label="Switch to dark appearance" title="Switch to dark appearance">
+      <svg class="only-light" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+      <svg class="only-dark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>
+    </button>
+    <a class="pill" href="https://apps.apple.com/app/id6821354481"><span class="long" data-get-app>Get the App</span><span class="short">Get the App</span></a>
+  </header>
+
+  <main class="page">
+    <header class="intro">
+      <p class="eyebrow">Moving books from Popfeed</p>
+      <h1>Rosetta</h1>
+      <p>Rosetta is how Resenha 1.6.10 moves your Popfeed books. Each book becomes a BookHive record when BookHive’s catalogue has it for certain, and a Resenha reading when it doesn’t. Its Popfeed records are then deleted.</p>
+      <p>Moving book data between apps has a reputation for guessing wrong and losing things. Below is exactly what happens to each book, field by field. Nothing is written until you confirm.</p>
+    </header>
+
+    <div class="explorer">
+      <div class="switcher" data-switcher hidden>
+        <fieldset class="segments">
+          <legend>How we found your book</legend>
+          <div class="options four"><input type="radio" name="match" id="match-isbn" value="isbn" checked><label for="match-isbn">ISBN match</label><input type="radio" name="match" id="match-goodreads" value="goodreads"><label for="match-goodreads">Goodreads ID</label><input type="radio" name="match" id="match-title" value="title"><label for="match-title">Title only</label><input type="radio" name="match" id="match-none" value="none"><label for="match-none">Not in BookHive</label></div>
+        </fieldset>
+        <fieldset class="segments">
+          <legend>Already in your library?</legend>
+          <div class="options three"><input type="radio" name="held" id="held-no" value="no" checked><label for="held-no">No</label><input type="radio" name="held" id="held-bookhive" value="bookhive"><label for="held-bookhive">In BookHive</label><input type="radio" name="held" id="held-reading" value="reading"><label for="held-reading">As a Resenha reading</label></div>
+        </fieldset>
+      </div>
+      <noscript><p class="noscript">Shown: a book found by its ISBN, not yet in your library.</p></noscript>
+      <p class="visually-hidden" aria-live="polite" data-live></p>
+
+      <section class="facts" id="facts-isbn-no" data-match="isbn" data-held="no" data-summary="a new BookHive record (buzz.bookhive.book)" aria-labelledby="facts-isbn-no-h">
+        <h2 class="facts-title" id="facts-isbn-no-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">a new BookHive record</span></td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="1">1</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="1">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="1">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="1">Yes</td></tr><tr class="sub"><td colspan="2">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">What happens</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td colspan="1">From BookHive’s catalogue</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="1">Carried</td></tr><tr class="sub"><td colspan="2">Read, Currently Reading and Want to Read keep their meaning, and abandoned stays abandoned. A book with only a review comes in as Finished unless you pick another status.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="1">Carried</td></tr><tr class="sub"><td colspan="2">Taken from the Popfeed records. Never set to today.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="2">Halves round up, so 7.5 becomes 8. A rating of 0 means none.</td></tr>
+          <tr><th scope="row">Review</th><td colspan="1">Carried, as plain text</td></tr><tr class="sub"><td colspan="2">Links and mentions become plain text. The resenha.ink line Resenha added to its own copies is removed. If a book has several reviews, the newest with text is kept unless you pick another.</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="1">Also a long-form review</td></tr><tr class="sub"><td colspan="2">Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="1">Newest carried</td></tr><tr class="sub"><td colspan="2">Older progress records are deleted and kept in the backup. A page or chapter of 0 is left out.</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td colspan="1">From BookHive’s catalogue</td></tr>
+          <tr><th scope="row">Cover</th><td colspan="1">BookHive’s catalogue cover</td></tr><tr class="sub"><td colspan="2">Popfeed’s cover addresses aren’t kept.</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="1">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="1">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="1">Lost</td></tr><tr class="sub"><td colspan="2">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> the book’s ISBN-13 (an ISBN-10 is converted), looked up in BookHive’s catalogue. Certain only when exactly one catalogue book answers; if the book’s ISBNs point to two, you pick. A book BookHive can’t be asked about waits for a later run: it never becomes a reading for want of an answer. Not used: catalogue IDs saved in Popfeed items.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-isbn-bookhive" data-match="isbn" data-held="bookhive" data-summary="your BookHive record (buzz.bookhive.book)" aria-labelledby="facts-isbn-bookhive-h" hidden>
+        <h2 class="facts-title" id="facts-isbn-bookhive-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">your BookHive record</span></td></tr><tr class="sub"><td colspan="2">Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book. It is updated in the same commit that deletes the Popfeed records.</td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="1">0 or 1</td></tr><tr class="sub"><td colspan="2">0 when your record already says everything Popfeed does.</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="1">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="1">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="1">Yes</td></tr><tr class="sub"><td colspan="2">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">What happens</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td colspan="1">Yours, unchanged</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="1">Filled in, or your choice</td></tr><tr class="sub"><td colspan="2">Popfeed fills in what your record lacks. Where the two differ, you choose, book by book or for all at once; until you do, your library’s version stays.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="1">Filled in, or your choice</td></tr><tr class="sub"><td colspan="2">Your record keeps its date added.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="1">Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review</th><td colspan="1">Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="1">Also a long-form review</td></tr><tr class="sub"><td colspan="2">Only when your record ends up with this review’s text. Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="1">The newer of the two</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td colspan="1">Yours, unchanged</td></tr>
+          <tr><th scope="row">Cover</th><td colspan="1">Not changed</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="1">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="1">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="1">Lost</td></tr><tr class="sub"><td colspan="2">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> the book’s ISBN-13 (an ISBN-10 is converted), looked up in BookHive’s catalogue. Certain only when exactly one catalogue book answers; if the book’s ISBNs point to two, you pick. A book BookHive can’t be asked about waits for a later run: it never becomes a reading for want of an answer. Not used: catalogue IDs saved in Popfeed items.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-isbn-reading" data-match="isbn" data-held="reading" data-summary="a new BookHive record (buzz.bookhive.book)" aria-labelledby="facts-isbn-reading-h" hidden>
+        <h2 class="facts-title" id="facts-isbn-reading-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">a new BookHive record</span></td></tr><tr class="sub"><td colspan="2">Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book. Your reading is handed over: the new record and the reading’s deletion are in the same commit, and its long-form review link moves with it.</td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="1">1</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="1">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="1">1</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="1">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="1">Yes</td></tr><tr class="sub"><td colspan="2">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">What happens</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td colspan="1">From BookHive’s catalogue</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="1">Your reading’s, gaps filled</td></tr><tr class="sub"><td colspan="2">Where your reading has a value, it stays; Popfeed fills in what it lacks. No differences are shown.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="1">Your reading’s, gaps filled</td></tr><tr class="sub"><td colspan="2">The earlier of the two dates added is kept.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="1">Your reading’s, gaps filled</td></tr>
+          <tr><th scope="row">Review</th><td colspan="1">Your reading’s, gaps filled</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="1">Also a long-form review</td></tr><tr class="sub"><td colspan="2">Only when your record ends up with this review’s text. Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="1">The newer of the two</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td colspan="1">From BookHive’s catalogue</td></tr>
+          <tr><th scope="row">Cover</th><td colspan="1">BookHive’s catalogue cover</td></tr><tr class="sub"><td colspan="2">Popfeed’s cover addresses aren’t kept.</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="1">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="1">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="1">Lost</td></tr><tr class="sub"><td colspan="2">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> the book’s ISBN-13 (an ISBN-10 is converted), looked up in BookHive’s catalogue. Certain only when exactly one catalogue book answers; if the book’s ISBNs point to two, you pick. A book BookHive can’t be asked about waits for a later run: it never becomes a reading for want of an answer. Not used: catalogue IDs saved in Popfeed items.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-goodreads-no" data-match="goodreads" data-held="no" data-summary="a new BookHive record (buzz.bookhive.book)" aria-labelledby="facts-goodreads-no-h" hidden>
+        <h2 class="facts-title" id="facts-goodreads-no-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">a new BookHive record</span></td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="1">1</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="1">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="1">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="1">Yes</td></tr><tr class="sub"><td colspan="2">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">What happens</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td colspan="1">From BookHive’s catalogue</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="1">Carried</td></tr><tr class="sub"><td colspan="2">Read, Currently Reading and Want to Read keep their meaning, and abandoned stays abandoned. A book with only a review comes in as Finished unless you pick another status.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="1">Carried</td></tr><tr class="sub"><td colspan="2">Taken from the Popfeed records. Never set to today.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="2">Halves round up, so 7.5 becomes 8. A rating of 0 means none.</td></tr>
+          <tr><th scope="row">Review</th><td colspan="1">Carried, as plain text</td></tr><tr class="sub"><td colspan="2">Links and mentions become plain text. The resenha.ink line Resenha added to its own copies is removed. If a book has several reviews, the newest with text is kept unless you pick another.</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="1">Also a long-form review</td></tr><tr class="sub"><td colspan="2">Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="1">Newest carried</td></tr><tr class="sub"><td colspan="2">Older progress records are deleted and kept in the backup. A page or chapter of 0 is left out.</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td colspan="1">From BookHive’s catalogue</td></tr>
+          <tr><th scope="row">Cover</th><td colspan="1">BookHive’s catalogue cover</td></tr><tr class="sub"><td colspan="2">Popfeed’s cover addresses aren’t kept.</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="1">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="1">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="1">Lost</td></tr><tr class="sub"><td colspan="2">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> the book’s Goodreads ID, for a book with no ISBN. Such books wait under Books to Look Up until you tap Look These Up, a BookHive search by title and author that you start. A result with the same Goodreads ID is certain. Any other result is only offered, as a title match. Not used: catalogue IDs saved in Popfeed items.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-goodreads-bookhive" data-match="goodreads" data-held="bookhive" data-summary="your BookHive record (buzz.bookhive.book)" aria-labelledby="facts-goodreads-bookhive-h" hidden>
+        <h2 class="facts-title" id="facts-goodreads-bookhive-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">your BookHive record</span></td></tr><tr class="sub"><td colspan="2">Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book. It is updated in the same commit that deletes the Popfeed records.</td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="1">0 or 1</td></tr><tr class="sub"><td colspan="2">0 when your record already says everything Popfeed does.</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="1">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="1">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="1">Yes</td></tr><tr class="sub"><td colspan="2">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">What happens</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td colspan="1">Yours, unchanged</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="1">Filled in, or your choice</td></tr><tr class="sub"><td colspan="2">Popfeed fills in what your record lacks. Where the two differ, you choose, book by book or for all at once; until you do, your library’s version stays.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="1">Filled in, or your choice</td></tr><tr class="sub"><td colspan="2">Your record keeps its date added.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="1">Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review</th><td colspan="1">Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="1">Also a long-form review</td></tr><tr class="sub"><td colspan="2">Only when your record ends up with this review’s text. Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="1">The newer of the two</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td colspan="1">Yours, unchanged</td></tr>
+          <tr><th scope="row">Cover</th><td colspan="1">Not changed</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="1">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="1">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="1">Lost</td></tr><tr class="sub"><td colspan="2">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> the book’s Goodreads ID, for a book with no ISBN. Such books wait under Books to Look Up until you tap Look These Up, a BookHive search by title and author that you start. A result with the same Goodreads ID is certain. Any other result is only offered, as a title match. Not used: catalogue IDs saved in Popfeed items.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-goodreads-reading" data-match="goodreads" data-held="reading" data-summary="a new BookHive record (buzz.bookhive.book)" aria-labelledby="facts-goodreads-reading-h" hidden>
+        <h2 class="facts-title" id="facts-goodreads-reading-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">a new BookHive record</span></td></tr><tr class="sub"><td colspan="2">Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book. Your reading is handed over: the new record and the reading’s deletion are in the same commit, and its long-form review link moves with it.</td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="1">1</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="1">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="1">1</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="1">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="1">Yes</td></tr><tr class="sub"><td colspan="2">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">What happens</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td colspan="1">From BookHive’s catalogue</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="1">Your reading’s, gaps filled</td></tr><tr class="sub"><td colspan="2">Where your reading has a value, it stays; Popfeed fills in what it lacks. No differences are shown.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="1">Your reading’s, gaps filled</td></tr><tr class="sub"><td colspan="2">The earlier of the two dates added is kept.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="1">Your reading’s, gaps filled</td></tr>
+          <tr><th scope="row">Review</th><td colspan="1">Your reading’s, gaps filled</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="1">Also a long-form review</td></tr><tr class="sub"><td colspan="2">Only when your record ends up with this review’s text. Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="1">The newer of the two</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td colspan="1">From BookHive’s catalogue</td></tr>
+          <tr><th scope="row">Cover</th><td colspan="1">BookHive’s catalogue cover</td></tr><tr class="sub"><td colspan="2">Popfeed’s cover addresses aren’t kept.</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="1">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="1">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="1">Lost</td></tr><tr class="sub"><td colspan="2">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> the book’s Goodreads ID, for a book with no ISBN. Such books wait under Books to Look Up until you tap Look These Up, a BookHive search by title and author that you start. A result with the same Goodreads ID is certain. Any other result is only offered, as a title match. Not used: catalogue IDs saved in Popfeed items.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-title-no" data-match="title" data-held="no" data-summary="If you confirm: a new BookHive record (buzz.bookhive.book); If you don’t: a new Resenha reading (ink.resenha.reading)" aria-labelledby="facts-title-no-h" hidden>
+        <h2 class="facts-title" id="facts-title-no-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          <tr class="cols"><td></td><th scope="col">If you confirm</th><th scope="col">If you don’t</th></tr>
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td><code>buzz.bookhive.book</code><span class="dest-words">a new BookHive record</span></td><td><code>ink.resenha.reading</code><span class="dest-words">a new Resenha reading</span></td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="2">1</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="2">0</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="2">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="2">0</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="2">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="2">Yes</td></tr><tr class="sub"><td colspan="3">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">If you confirm</th><th scope="col">If you don’t</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td>From BookHive’s catalogue</td><td>Kept as in Popfeed</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="2">Carried</td></tr><tr class="sub"><td colspan="3">Read, Currently Reading and Want to Read keep their meaning, and abandoned stays abandoned. A book with only a review comes in as Finished unless you pick another status.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="2">Carried</td></tr><tr class="sub"><td colspan="3">Taken from the Popfeed records. Never set to today.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="2">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="3">Halves round up, so 7.5 becomes 8. A rating of 0 means none.</td></tr>
+          <tr><th scope="row">Review</th><td colspan="2">Carried, as plain text</td></tr><tr class="sub"><td colspan="3">Links and mentions become plain text. The resenha.ink line Resenha added to its own copies is removed. If a book has several reviews, the newest with text is kept unless you pick another.</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="2">Also a long-form review</td></tr><tr class="sub"><td colspan="3">Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="2">Newest carried</td></tr><tr class="sub"><td colspan="3">Older progress records are deleted and kept in the backup. A page or chapter of 0 is left out.</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td>From BookHive’s catalogue</td><td>Kept, from one edition</td></tr><tr class="sub"><td colspan="3"><b>If you don’t:</b> No BookHive ID is added to a reading.</td></tr>
+          <tr><th scope="row">Cover</th><td>BookHive’s catalogue cover</td><td>Kept, with a copy</td></tr><tr class="sub"><td colspan="3"><b>If you confirm:</b> Popfeed’s cover addresses aren’t kept. <b>If you don’t:</b> Every cover address the Popfeed records name, and a copy of the cover image saved to your account, so the picture survives the deletion.</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="2">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="2">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="2">Lost</td></tr><tr class="sub"><td colspan="3">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> the title and the first author’s surname. When you open Title Matches, Resenha searches BookHive and keeps up to three results with the same title and author. This also covers books whose ISBN BookHive doesn’t know. None is used until you confirm it, with one tap each or Confirm All Title Matches.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-title-bookhive" data-match="title" data-held="bookhive" data-summary="If you confirm: your BookHive record (buzz.bookhive.book); If you don’t: your BookHive record (buzz.bookhive.book)" aria-labelledby="facts-title-bookhive-h" hidden>
+        <h2 class="facts-title" id="facts-title-bookhive-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          <tr class="cols"><td></td><th scope="col">If you confirm</th><th scope="col">If you don’t</th></tr>
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td colspan="2"><code>buzz.bookhive.book</code><span class="dest-words">your BookHive record</span></td></tr><tr class="sub"><td colspan="3">Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book. It is updated in the same commit that deletes the Popfeed records.</td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="2">0</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="2">0 or 1</td></tr><tr class="sub"><td colspan="3">0 when your record already says everything Popfeed does.</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="2">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="2">0</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="2">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="2">Yes</td></tr><tr class="sub"><td colspan="3">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">If you confirm</th><th scope="col">If you don’t</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td colspan="2">Yours, unchanged</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="2">Filled in, or your choice</td></tr><tr class="sub"><td colspan="3">Popfeed fills in what your record lacks. Where the two differ, you choose, book by book or for all at once; until you do, your library’s version stays.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="2">Filled in, or your choice</td></tr><tr class="sub"><td colspan="3">Your record keeps its date added.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="2">Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review</th><td colspan="2">Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="2">Also a long-form review</td></tr><tr class="sub"><td colspan="3">Only when your record ends up with this review’s text. Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="2">The newer of the two</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td colspan="2">Yours, unchanged</td></tr>
+          <tr><th scope="row">Cover</th><td colspan="2">Not changed</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="2">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="2">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="2">Lost</td></tr><tr class="sub"><td colspan="3">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> the title and the first author’s surname. When you open Title Matches, Resenha searches BookHive and keeps up to three results with the same title and author. This also covers books whose ISBN BookHive doesn’t know. None is used until you confirm it, with one tap each or Confirm All Title Matches.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-title-reading" data-match="title" data-held="reading" data-summary="If you confirm: a new BookHive record (buzz.bookhive.book); If you don’t: your Resenha reading (ink.resenha.reading)" aria-labelledby="facts-title-reading-h" hidden>
+        <h2 class="facts-title" id="facts-title-reading-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          <tr class="cols"><td></td><th scope="col">If you confirm</th><th scope="col">If you don’t</th></tr>
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td><code>buzz.bookhive.book</code><span class="dest-words">a new BookHive record</span></td><td><code>ink.resenha.reading</code><span class="dest-words">your Resenha reading</span></td></tr><tr class="sub"><td colspan="3">Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book. <b>If you confirm:</b> Your reading is handed over: the new record and the reading’s deletion are in the same commit, and its long-form review link moves with it. <b>If you don’t:</b> It is updated in the same commit that deletes the Popfeed records.</td></tr>
+          <tr><th scope="row">Book records created</th><td>1</td><td>0</td></tr>
+          <tr><th scope="row">Book records updated</th><td>0</td><td>0 or 1</td></tr><tr class="sub"><td colspan="3"><b>If you don’t:</b> 0 when your record already says everything Popfeed does.</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="2">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td>1</td><td>0</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="2">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="2">Yes</td></tr><tr class="sub"><td colspan="3">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">If you confirm</th><th scope="col">If you don’t</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td>From BookHive’s catalogue</td><td>Yours, unchanged</td></tr>
+          <tr><th scope="row">Reading status</th><td>Your reading’s, gaps filled</td><td>Filled in, or your choice</td></tr><tr class="sub"><td colspan="3"><b>If you confirm:</b> Where your reading has a value, it stays; Popfeed fills in what it lacks. No differences are shown. <b>If you don’t:</b> Popfeed fills in what your record lacks. Where the two differ, you choose, book by book or for all at once; until you do, your library’s version stays.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td>Your reading’s, gaps filled</td><td>Filled in, or your choice</td></tr><tr class="sub"><td colspan="3"><b>If you confirm:</b> The earlier of the two dates added is kept. <b>If you don’t:</b> Your record keeps its date added.</td></tr>
+          <tr><th scope="row">Rating</th><td>Your reading’s, gaps filled</td><td>Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review</th><td>Your reading’s, gaps filled</td><td>Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="2">Also a long-form review</td></tr><tr class="sub"><td colspan="3">Only when your record ends up with this review’s text. Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="2">The newer of the two</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td>From BookHive’s catalogue</td><td>Yours, unchanged</td></tr>
+          <tr><th scope="row">Cover</th><td>BookHive’s catalogue cover</td><td>Filled in if missing</td></tr><tr class="sub"><td colspan="3"><b>If you confirm:</b> Popfeed’s cover addresses aren’t kept.</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="2">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="2">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="2">Lost</td></tr><tr class="sub"><td colspan="3">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> the title and the first author’s surname. When you open Title Matches, Resenha searches BookHive and keeps up to three results with the same title and author. This also covers books whose ISBN BookHive doesn’t know. None is used until you confirm it, with one tap each or Confirm All Title Matches.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-none-no" data-match="none" data-held="no" data-summary="a new Resenha reading (ink.resenha.reading)" aria-labelledby="facts-none-no-h" hidden>
+        <h2 class="facts-title" id="facts-none-no-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td colspan="1"><code>ink.resenha.reading</code><span class="dest-words">a new Resenha reading</span></td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="1">1</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="1">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="1">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="1">Yes</td></tr><tr class="sub"><td colspan="2">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">What happens</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td colspan="1">Kept as in Popfeed</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="1">Carried</td></tr><tr class="sub"><td colspan="2">Read, Currently Reading and Want to Read keep their meaning, and abandoned stays abandoned. A book with only a review comes in as Finished unless you pick another status.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="1">Carried</td></tr><tr class="sub"><td colspan="2">Taken from the Popfeed records. Never set to today.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="1">1–10 → <code>stars</code></td></tr><tr class="sub"><td colspan="2">Halves round up, so 7.5 becomes 8. A rating of 0 means none.</td></tr>
+          <tr><th scope="row">Review</th><td colspan="1">Carried, as plain text</td></tr><tr class="sub"><td colspan="2">Links and mentions become plain text. The resenha.ink line Resenha added to its own copies is removed. If a book has several reviews, the newest with text is kept unless you pick another.</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="1">Also a long-form review</td></tr><tr class="sub"><td colspan="2">Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="1">Newest carried</td></tr><tr class="sub"><td colspan="2">Older progress records are deleted and kept in the backup. A page or chapter of 0 is left out.</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td colspan="1">Kept, from one edition</td></tr><tr class="sub"><td colspan="2">No BookHive ID is added to a reading.</td></tr>
+          <tr><th scope="row">Cover</th><td colspan="1">Kept, with a copy</td></tr><tr class="sub"><td colspan="2">Every cover address the Popfeed records name, and a copy of the cover image saved to your account, so the picture survives the deletion.</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="1">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="1">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="1">Lost</td></tr><tr class="sub"><td colspan="2">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> none that BookHive recognises: no ISBN its catalogue knows, no result with its Goodreads ID, and no title match you confirmed. The book keeps its own details in a Resenha reading.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-none-bookhive" data-match="none" data-held="bookhive" data-summary="your BookHive record (buzz.bookhive.book)" aria-labelledby="facts-none-bookhive-h" hidden>
+        <h2 class="facts-title" id="facts-none-bookhive-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td colspan="1"><code>buzz.bookhive.book</code><span class="dest-words">your BookHive record</span></td></tr><tr class="sub"><td colspan="2">Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book. It is updated in the same commit that deletes the Popfeed records.</td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="1">0 or 1</td></tr><tr class="sub"><td colspan="2">0 when your record already says everything Popfeed does.</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="1">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="1">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="1">Yes</td></tr><tr class="sub"><td colspan="2">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">What happens</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td colspan="1">Yours, unchanged</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="1">Filled in, or your choice</td></tr><tr class="sub"><td colspan="2">Popfeed fills in what your record lacks. Where the two differ, you choose, book by book or for all at once; until you do, your library’s version stays.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="1">Filled in, or your choice</td></tr><tr class="sub"><td colspan="2">Your record keeps its date added.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="1">Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review</th><td colspan="1">Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="1">Also a long-form review</td></tr><tr class="sub"><td colspan="2">Only when your record ends up with this review’s text. Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="1">The newer of the two</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td colspan="1">Yours, unchanged</td></tr>
+          <tr><th scope="row">Cover</th><td colspan="1">Not changed</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="1">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="1">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="1">Lost</td></tr><tr class="sub"><td colspan="2">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> none that BookHive recognises: no ISBN its catalogue knows, no result with its Goodreads ID, and no title match you confirmed. The book keeps its own details in a Resenha reading.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+      <section class="facts" id="facts-none-reading" data-match="none" data-held="reading" data-summary="your Resenha reading (ink.resenha.reading)" aria-labelledby="facts-none-reading-h" hidden>
+        <h2 class="facts-title" id="facts-none-reading-h">Migration Facts</h2>
+        <p class="serving"><span>Serving size</span> <span>1 book</span></p>
+        <p class="serving-note">Example: 1 list item, 1 review, 1 progress record</p>
+        <table class="amounts">
+          <caption>Amount per book</caption>
+          
+          <tr class="dest"><th scope="row"><span class="goes">Goes to</span></th><td colspan="1"><code>ink.resenha.reading</code><span class="dest-words">your Resenha reading</span></td></tr><tr class="sub"><td colspan="2">Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book. It is updated in the same commit that deletes the Popfeed records.</td></tr>
+          <tr><th scope="row">Book records created</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Book records updated</th><td colspan="1">0 or 1</td></tr><tr class="sub"><td colspan="2">0 when your record already says everything Popfeed does.</td></tr>
+          <tr><th scope="row">Popfeed records deleted</th><td colspan="1">3</td></tr>
+          <tr><th scope="row">Readings deleted</th><td colspan="1">0</td></tr>
+          <tr><th scope="row">Commits</th><td colspan="1">1*, all or nothing</td></tr>
+          <tr><th scope="row">Checked against what you confirmed</th><td colspan="1">Yes</td></tr><tr class="sub"><td colspan="2">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
+        </table>
+        <table class="fields">
+          <thead><tr><th scope="col">Field</th><th scope="col">What happens</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Title and authors</th><td colspan="1">Yours, unchanged</td></tr>
+          <tr><th scope="row">Reading status</th><td colspan="1">Filled in, or your choice</td></tr><tr class="sub"><td colspan="2">Popfeed fills in what your record lacks. Where the two differ, you choose, book by book or for all at once; until you do, your library’s version stays.</td></tr>
+          <tr><th scope="row">Dates added, started, finished</th><td colspan="1">Filled in, or your choice</td></tr><tr class="sub"><td colspan="2">Your record keeps its date added.</td></tr>
+          <tr><th scope="row">Rating</th><td colspan="1">Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review</th><td colspan="1">Filled in, or your choice</td></tr>
+          <tr><th scope="row">Review marked as spoilers</th><td colspan="1">Also a long-form review</td></tr><tr class="sub"><td colspan="2">Only when your record ends up with this review’s text. Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
+          <tr><th scope="row">Reading progress</th><td colspan="1">The newer of the two</td></tr>
+          <tr><th scope="row">ISBN and Goodreads ID</th><td colspan="1">Yours, unchanged</td></tr>
+          <tr><th scope="row">Cover</th><td colspan="1">Filled in if missing</td></tr>
+          <tr><th scope="row">Other reviews, older progress</th><td colspan="1">Deleted; kept in the backup</td></tr>
+          <tr><th scope="row">Tags, list position</th><td colspan="1">Not carried; kept in the backup</td></tr>
+          <tr><th scope="row">Others’ likes and comments on your reviews</th><td colspan="1">Lost</td></tr><tr class="sub"><td colspan="2">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
+          </tbody>
+        </table>
+        <p class="ingredients"><b>Ingredients:</b> none that BookHive recognises: no ISBN its catalogue knows, no result with its Goodreads ID, and no title match you confirmed. The book keeps its own details in a Resenha reading.</p>
+        <p class="contains"><b>Contains no guesses.</b> A title-only match is never applied without your tap.</p>
+        <p class="footnote">* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after.</p>
+      </section>
+    </div>
+
+    <div class="excluded">
+      <section class="facts small" aria-labelledby="excluded-h">
+        <h2 class="facts-title" id="excluded-h">Not included</h2>
+        <table class="fields">
+          <thead><tr><th scope="col">Never written or deleted</th><th scope="col">Changes</th></tr></thead>
+          <tbody>
+          <tr><th scope="row">Shelves, and the books on them<span class="row-note">They are BookHive’s shelves too.</span></th><td>0</td></tr>
+          <tr><th scope="row">Films, shows, games and other items that aren’t books, and their reviews</th><td>0</td></tr>
+          <tr><th scope="row">Popfeed records Resenha can’t classify</th><td>0</td></tr>
+          <tr><th scope="row">Bridged items of books you already have in BookHive</th><td>0</td></tr>
+          <tr><th scope="row">Progress records of no book you have or are moving</th><td>0</td></tr>
+          <tr><th scope="row">Books still waiting for a lookup<span class="row-note">They stay in Popfeed for a later run.</span></th><td>0</td></tr>
+          <tr><th scope="row">Your Popfeed likes and comments</th><td>0</td></tr>
+          <tr><th scope="row">Other people’s records</th><td>0</td></tr>
+          <tr><th scope="row">Books you already have that aren’t in Popfeed</th><td>0</td></tr>
+          <tr><th scope="row">Posts on Bluesky</th><td>0</td></tr>
+          </tbody>
+        </table>
+        <p class="footnote">A Popfeed record is deleted only when Resenha has identified it as one of your own reading-list items, reviews or progress records, and only in the commit that writes its book.</p>
+      </section>
+    </div>
+
+    <section class="steps-section" aria-labelledby="steps-h">
+      <h2 id="steps-h">How a book moves</h2>
+      <ol class="steps moves">
+        <li><strong>Backup.</strong> When you confirm, Resenha first saves a file with every record the run will delete or change, exactly as your account has it. It goes to Resenha’s folder in iCloud Drive, which you can open in Files, or stays on the device when iCloud Drive is off. Resenha can’t restore from it yet; it keeps your data.</li>
+        <li><strong>Match.</strong> Each book is matched by its numbers, the ISBN or the Goodreads ID. Titles only suggest. You see the whole plan, change what you like, and confirm once. Until then the only records written are your choices, so they follow you to your other devices.</li>
+        <li><strong>One commit per book.</strong> A book’s new record and the deletion of its Popfeed records travel in one commit, which your account applies whole or not at all, so a book is never half-moved. Just before, Resenha reads the book’s records again; if anything changed, the book is skipped and offered again at the end. A new record takes its key from the book’s oldest Popfeed record, so a retry finds the first attempt instead of making a copy.</li>
+        <li><strong>Paced.</strong> Resenha spends at most 70% of your account’s hourly and daily write budget, by Bluesky’s published limits, and waits before reaching them, so your own posting keeps working. If you close the app, the move picks up where it stopped the next time you open it.</li>
+      </ol>
+      <p class="aside">BookHive lists moved books as recent activity. In Resenha they keep their own dates.</p>
+    </section>
+  </main>
+
+  <footer class="closing slim">
+    <nav>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="/rosetta" aria-current="page">Rosetta</a>
+      <a href="https://userinput.app/s/did:plc:o45y7ehjcfhasrzjjtsxloc5/3mxksvihdi32z">Send Feedback</a>
+      <a href="https://bsky.app/profile/resenha.ink">@resenha.ink on Bluesky</a>
+    </nav>
+    <p class="legal">© 2026 Resenha.</p>
+  </footer>
+
+  <script type="application/json" id="landing-strings">{"getApp":"Get the App","getFor":"Get Resenha for {device}"}</script>
+  <script type="application/json" id="rosetta-strings">{"getApp":"Get the App","getFor":"Get Resenha for {device}","live":"{match}. {heldLegend} {held}. {goesTo}: {summary}.","match":{"isbn":"ISBN match","goodreads":"Goodreads ID","title":"Title only","none":"Not in BookHive"},"held":{"no":"No","bookhive":"In BookHive","reading":"As a Resenha reading"},"heldLegend":"Already in your library?","goesTo":"Goes to"}</script>
+  <script src="/assets/theme.js?v=4ad6472390" defer></script>
+  <script src="/assets/landing/landing.js?v=d6c45e37b4" defer></script>
+  <script src="/assets/rosetta/rosetta.js?v=0d901c738a" defer></script>
+</body>
+</html>

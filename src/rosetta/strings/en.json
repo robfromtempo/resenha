@@ -1,0 +1,159 @@
+{
+  "ogLocale": "en_US",
+  "meta": {
+    "title": "Rosetta — How Resenha moves your Popfeed books",
+    "description": "What happens to each Popfeed record when Resenha moves your books to BookHive or to Resenha readings: how books are matched, what each field becomes, and what is never touched."
+  },
+  "theme": { "toDark": "Switch to dark appearance", "toLight": "Switch to light appearance" },
+  "intro": {
+    "eyebrow": "Moving books from Popfeed",
+    "title": "Rosetta",
+    "body": [
+      "Rosetta is how Resenha 1.6.10 moves your Popfeed books. Each book becomes a BookHive record when BookHive’s catalogue has it for certain, and a Resenha reading when it doesn’t. Its Popfeed records are then deleted.",
+      "Moving book data between apps has a reputation for guessing wrong and losing things. Below is exactly what happens to each book, field by field. Nothing is written until you confirm."
+    ]
+  },
+  "control": {
+    "legend": "How we found your book",
+    "isbn": "ISBN match",
+    "goodreads": "Goodreads ID",
+    "title": "Title only",
+    "none": "Not in BookHive",
+    "heldLegend": "Already in your library?",
+    "heldNo": "No",
+    "heldBookhive": "In BookHive",
+    "heldReading": "As a Resenha reading",
+    "noscript": "Shown: a book found by its ISBN, not yet in your library."
+  },
+  "label": {
+    "heading": "Migration Facts",
+    "serving": "Serving size",
+    "servingValue": "1 book",
+    "servingNote": "Example: 1 list item, 1 review, 1 progress record",
+    "amountPer": "Amount per book",
+    "goesTo": "Goes to",
+    "colYes": "If you confirm",
+    "colNo": "If you don’t",
+    "amountHeader": "Records",
+    "fieldHeader": "Field",
+    "valueHeader": "What happens",
+    "dest": {
+      "newBookHive": "a new BookHive record",
+      "newReading": "a new Resenha reading",
+      "mergeBookHive": "your BookHive record",
+      "upgradeReading": "a new BookHive record",
+      "mergeReading": "your Resenha reading"
+    },
+    "destNote": {
+      "heldBy": "Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book.",
+      "mergeBookHive": "It is updated in the same commit that deletes the Popfeed records.",
+      "upgradeReading": "Your reading is handed over: the new record and the reading’s deletion are in the same commit, and its long-form review link moves with it.",
+      "mergeReading": "It is updated in the same commit that deletes the Popfeed records."
+    },
+    "amounts": {
+      "created": "Book records created",
+      "updated": "Book records updated",
+      "updatedMaybe": "0 or 1",
+      "updatedNote": "0 when your record already says everything Popfeed does.",
+      "deletedPopfeed": "Popfeed records deleted",
+      "deletedReading": "Readings deleted",
+      "commits": "Commits",
+      "commitsValue": "1*, all or nothing",
+      "checked": "Checked against what you confirmed",
+      "checkedValue": "Yes",
+      "checkedNote": "If any of its records changed since you confirmed, the book is skipped and you’re asked about it again."
+    },
+    "rows": {
+      "title": "Title and authors",
+      "status": "Reading status",
+      "dates": "Dates added, started, finished",
+      "rating": "Rating",
+      "review": "Review",
+      "spoiler": "Review marked as spoilers",
+      "progress": "Reading progress",
+      "ids": "ISBN and Goodreads ID",
+      "cover": "Cover",
+      "leftovers": "Other reviews, older progress",
+      "extras": "Tags, list position",
+      "likes": "Others’ likes and comments on your reviews"
+    },
+    "values": {
+      "catalogue": "From BookHive’s catalogue",
+      "keptPopfeed": "Kept as in Popfeed",
+      "unchanged": "Yours, unchanged",
+      "carried": "Carried",
+      "fillChoose": "Filled in, or your choice",
+      "readingFirst": "Your reading’s, gaps filled",
+      "stars": "1–10 → `stars`",
+      "plainText": "Carried, as plain text",
+      "longForm": "Also a long-form review",
+      "newest": "Newest carried",
+      "newer": "The newer of the two",
+      "keptEdition": "Kept, from one edition",
+      "catalogueCover": "BookHive’s catalogue cover",
+      "keptCopy": "Kept, with a copy",
+      "notChanged": "Not changed",
+      "fillMissing": "Filled in if missing",
+      "backup": "Deleted; kept in the backup",
+      "notCarried": "Not carried; kept in the backup",
+      "lost": "Lost"
+    },
+    "notes": {
+      "status": "Read, Currently Reading and Want to Read keep their meaning, and abandoned stays abandoned. A book with only a review comes in as Finished unless you pick another status.",
+      "merge": "Popfeed fills in what your record lacks. Where the two differ, you choose, book by book or for all at once; until you do, your library’s version stays.",
+      "upgrade": "Where your reading has a value, it stays; Popfeed fills in what it lacks. No differences are shown.",
+      "dates": "Taken from the Popfeed records. Never set to today.",
+      "datesMerge": "Your record keeps its date added.",
+      "datesUpgrade": "The earlier of the two dates added is kept.",
+      "rating": "Halves round up, so 7.5 becomes 8. A rating of 0 means none.",
+      "review": "Links and mentions become plain text. The resenha.ink line Resenha added to its own copies is removed. If a book has several reviews, the newest with text is kept unless you pick another.",
+      "spoiler": "Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.",
+      "spoilerMerge": "Only when your record ends up with this review’s text.",
+      "progress": "Older progress records are deleted and kept in the backup. A page or chapter of 0 is left out.",
+      "ids": "No BookHive ID is added to a reading.",
+      "catalogueCover": "Popfeed’s cover addresses aren’t kept.",
+      "keptCopy": "Every cover address the Popfeed records name, and a copy of the cover image saved to your account, so the picture survives the deletion.",
+      "likes": "They live in their writers’ accounts, and point at a Popfeed review that is deleted."
+    },
+    "ingredientsLabel": "Ingredients:",
+    "ingredients": {
+      "isbn": "the book’s ISBN-13 (an ISBN-10 is converted), looked up in BookHive’s catalogue. Certain only when exactly one catalogue book answers; if the book’s ISBNs point to two, you pick. A book BookHive can’t be asked about waits for a later run: it never becomes a reading for want of an answer. Not used: catalogue IDs saved in Popfeed items.",
+      "goodreads": "the book’s Goodreads ID, for a book with no ISBN. Such books wait under Books to Look Up until you tap Look These Up, a BookHive search by title and author that you start. A result with the same Goodreads ID is certain. Any other result is only offered, as a title match. Not used: catalogue IDs saved in Popfeed items.",
+      "title": "the title and the first author’s surname. When you open Title Matches, Resenha searches BookHive and keeps up to three results with the same title and author. This also covers books whose ISBN BookHive doesn’t know. None is used until you confirm it, with one tap each or Confirm All Title Matches.",
+      "none": "none that BookHive recognises: no ISBN its catalogue knows, no result with its Goodreads ID, and no title match you confirmed. The book keeps its own details in a Resenha reading."
+    },
+    "warningLead": "Contains no guesses.",
+    "warning": "A title-only match is never applied without your tap.",
+    "footnote": "* A book needing more than 200 writes, which takes hundreds of progress records, sends the deletions of its older progress records in follow-up commits right after."
+  },
+  "excluded": {
+    "heading": "Not included",
+    "subheading": "Never written or deleted",
+    "header": "Changes",
+    "rows": [
+      ["Shelves, and the books on them", "They are BookHive’s shelves too."],
+      ["Films, shows, games and other items that aren’t books, and their reviews", ""],
+      ["Popfeed records Resenha can’t classify", ""],
+      ["Bridged items of books you already have in BookHive", ""],
+      ["Progress records of no book you have or are moving", ""],
+      ["Books still waiting for a lookup", "They stay in Popfeed for a later run."],
+      ["Your Popfeed likes and comments", ""],
+      ["Other people’s records", ""],
+      ["Books you already have that aren’t in Popfeed", ""],
+      ["Posts on Bluesky", ""]
+    ],
+    "footer": "A Popfeed record is deleted only when Resenha has identified it as one of your own reading-list items, reviews or progress records, and only in the commit that writes its book."
+  },
+  "steps": {
+    "title": "How a book moves",
+    "items": [
+      ["Backup.", "When you confirm, Resenha first saves a file with every record the run will delete or change, exactly as your account has it. It goes to Resenha’s folder in iCloud Drive, which you can open in Files, or stays on the device when iCloud Drive is off. Resenha can’t restore from it yet; it keeps your data."],
+      ["Match.", "Each book is matched by its numbers, the ISBN or the Goodreads ID. Titles only suggest. You see the whole plan, change what you like, and confirm once. Until then the only records written are your choices, so they follow you to your other devices."],
+      ["One commit per book.", "A book’s new record and the deletion of its Popfeed records travel in one commit, which your account applies whole or not at all, so a book is never half-moved. Just before, Resenha reads the book’s records again; if anything changed, the book is skipped and offered again at the end. A new record takes its key from the book’s oldest Popfeed record, so a retry finds the first attempt instead of making a copy."],
+      ["Paced.", "Resenha spends at most 70% of your account’s hourly and daily write budget, by Bluesky’s published limits, and waits before reaching them, so your own posting keeps working. If you close the app, the move picks up where it stopped the next time you open it."]
+    ],
+    "note": "BookHive lists moved books as recent activity. In Resenha they keep their own dates."
+  },
+  "footer": { "legal": "© 2026 Resenha." },
+  "live": "{match}. {heldLegend} {held}. {goesTo}: {summary}."
+}

@@ -1,0 +1,159 @@
+{
+  "ogLocale": "pt_BR",
+  "meta": {
+    "title": "Rosetta — Como o Resenha transfere seus livros do Popfeed",
+    "description": "O que acontece com cada registro do Popfeed quando o Resenha transfere seus livros para o BookHive ou para leituras do Resenha: como os livros são identificados, no que cada campo se transforma e o que nunca é tocado."
+  },
+  "theme": { "toDark": "Mudar para a aparência escura", "toLight": "Mudar para a aparência clara" },
+  "intro": {
+    "eyebrow": "Transferindo livros do Popfeed",
+    "title": "Rosetta",
+    "body": [
+      "Rosetta é como o Resenha 1.6.10 transfere seus livros do Popfeed. Cada livro vira um registro do BookHive quando o catálogo do BookHive tem o livro com certeza, e uma leitura do Resenha quando não tem. Depois, os registros dele no Popfeed são apagados.",
+      "Mover dados de livros entre apps tem fama de errar o palpite e perder coisas pelo caminho. Aqui está exatamente o que acontece com cada livro, campo por campo. Nada é gravado antes de você confirmar."
+    ]
+  },
+  "control": {
+    "legend": "Como achamos seu livro",
+    "isbn": "Pelo ISBN",
+    "goodreads": "ID do Goodreads",
+    "title": "Só pelo título",
+    "none": "Fora do BookHive",
+    "heldLegend": "Já está na sua biblioteca?",
+    "heldNo": "Não",
+    "heldBookhive": "No BookHive",
+    "heldReading": "Como leitura do Resenha",
+    "noscript": "Mostrado: um livro achado pelo ISBN, que ainda não está na sua biblioteca."
+  },
+  "label": {
+    "heading": "Informação da transferência",
+    "serving": "Porção",
+    "servingValue": "1 livro",
+    "servingNote": "Exemplo: 1 item de lista, 1 resenha, 1 registro de progresso",
+    "amountPer": "Quantidade por livro",
+    "goesTo": "Vira",
+    "colYes": "Se você confirmar",
+    "colNo": "Se não",
+    "amountHeader": "Registros",
+    "fieldHeader": "Campo",
+    "valueHeader": "O que acontece",
+    "dest": {
+      "newBookHive": "um novo registro do BookHive",
+      "newReading": "uma nova leitura do Resenha",
+      "mergeBookHive": "seu registro do BookHive",
+      "upgradeReading": "um novo registro do BookHive",
+      "mergeReading": "sua leitura do Resenha"
+    },
+    "destNote": {
+      "heldBy": "Seu registro é encontrado pelo ID do catálogo ou pelo ISBN, ou porque você confirmou a sugestão do Resenha de que é o mesmo livro.",
+      "mergeBookHive": "Ele é atualizado no mesmo commit que apaga os registros do Popfeed.",
+      "upgradeReading": "Sua leitura é passada adiante: o novo registro e a exclusão da leitura estão no mesmo commit, e o link da resenha longa dela vai junto.",
+      "mergeReading": "Ela é atualizada no mesmo commit que apaga os registros do Popfeed."
+    },
+    "amounts": {
+      "created": "Registros de livro criados",
+      "updated": "Registros de livro atualizados",
+      "updatedMaybe": "0 ou 1",
+      "updatedNote": "0 quando seu registro já diz tudo o que o Popfeed diz.",
+      "deletedPopfeed": "Registros do Popfeed apagados",
+      "deletedReading": "Leituras apagadas",
+      "commits": "Commits",
+      "commitsValue": "1*, tudo ou nada",
+      "checked": "Conferido com o que você confirmou",
+      "checkedValue": "Sim",
+      "checkedNote": "Se algum dos registros dele mudou desde a sua confirmação, o livro é pulado e você é perguntado de novo."
+    },
+    "rows": {
+      "title": "Título e autores",
+      "status": "Status de leitura",
+      "dates": "Datas de inclusão, início e fim",
+      "rating": "Nota",
+      "review": "Resenha",
+      "spoiler": "Resenha marcada com spoilers",
+      "progress": "Progresso de leitura",
+      "ids": "ISBN e ID do Goodreads",
+      "cover": "Capa",
+      "leftovers": "Outras resenhas, progresso antigo",
+      "extras": "Tags, posição na lista",
+      "likes": "Curtidas e comentários de outras pessoas nas suas resenhas"
+    },
+    "values": {
+      "catalogue": "Do catálogo do BookHive",
+      "keptPopfeed": "Como no Popfeed",
+      "unchanged": "Os seus, sem mudança",
+      "carried": "Mantido",
+      "fillChoose": "Completado, ou você escolhe",
+      "readingFirst": "Da sua leitura, lacunas completadas",
+      "stars": "1–10 → `stars`",
+      "plainText": "Mantida, como texto simples",
+      "longForm": "Também uma resenha longa",
+      "newest": "O mais recente é mantido",
+      "newer": "O mais recente dos dois",
+      "keptEdition": "Mantidos, de uma edição",
+      "catalogueCover": "A capa do catálogo do BookHive",
+      "keptCopy": "Mantida, com uma cópia",
+      "notChanged": "Sem mudança",
+      "fillMissing": "Completada se faltar",
+      "backup": "Apagados; ficam no backup",
+      "notCarried": "Não transferidos; ficam no backup",
+      "lost": "Perdidos"
+    },
+    "notes": {
+      "status": "Lido, Lendo e Quero ler mantêm o sentido, e Abandonado continua Abandonado. Um livro que só tem uma resenha chega como Lido, a menos que você escolha outro status.",
+      "merge": "O Popfeed completa o que falta no seu registro. Onde os dois são diferentes, você escolhe, livro por livro ou para todos de uma vez; até lá, fica a versão da sua biblioteca.",
+      "upgrade": "Onde sua leitura tem um valor, ele fica; o Popfeed completa o que falta. As diferenças não são mostradas.",
+      "dates": "Tiradas dos registros do Popfeed. Nunca viram a data de hoje.",
+      "datesMerge": "Seu registro mantém a data de inclusão.",
+      "datesUpgrade": "Fica a mais antiga das duas datas de inclusão.",
+      "rating": "Meios pontos são arredondados para cima: 7,5 vira 8. Nota 0 significa sem nota.",
+      "review": "Links e menções viram texto simples. A linha do resenha.ink que o Resenha acrescentava às próprias cópias é removida. Se um livro tem várias resenhas, fica a mais recente com texto, a menos que você escolha outra.",
+      "spoiler": "Publicada no resenha.ink com aviso de spoiler e com os links: 2 registros a mais, a resenha e o link dela. Nada é postado no Bluesky. O registro do livro mantém o texto completo. Não é criada se o livro já tem uma resenha longa.",
+      "spoilerMerge": "Só quando seu registro termina com o texto desta resenha.",
+      "progress": "Os registros de progresso mais antigos são apagados e ficam no backup. Uma página ou capítulo 0 é deixado de fora.",
+      "ids": "Nenhum ID do BookHive é acrescentado a uma leitura.",
+      "catalogueCover": "Os endereços de capa do Popfeed não são mantidos.",
+      "keptCopy": "Todos os endereços de capa dos registros do Popfeed, e uma cópia da imagem salva na sua conta, para a imagem sobreviver à exclusão.",
+      "likes": "Eles ficam nas contas de quem os escreveu e apontam para uma resenha do Popfeed que é apagada."
+    },
+    "ingredientsLabel": "Ingredientes:",
+    "ingredients": {
+      "isbn": "o ISBN-13 do livro (um ISBN-10 é convertido), consultado no catálogo do BookHive. Só é certo quando exatamente um livro do catálogo responde; se os ISBNs do livro levam a dois, você escolhe. Um livro sobre o qual não dá para perguntar ao BookHive espera uma próxima vez: nunca vira leitura por falta de resposta. Não usados: IDs de catálogo salvos em itens do Popfeed.",
+      "goodreads": "o ID do Goodreads do livro, para um livro sem ISBN. Esses livros esperam em “Livros para buscar” até você tocar em “Buscar estes”, uma busca no BookHive por título e autor que você mesmo inicia. Um resultado com o mesmo ID do Goodreads é certo. Qualquer outro resultado é só oferecido, como correspondência de título. Não usados: IDs de catálogo salvos em itens do Popfeed.",
+      "title": "o título e o sobrenome do primeiro autor. Quando você abre “Correspondências de título”, o Resenha busca no BookHive e guarda até três resultados com o mesmo título e autor. Isso também vale para livros cujo ISBN o BookHive não conhece. Nenhum é usado antes de você confirmar, com um toque em cada um ou com “Confirmar todas as correspondências de título”.",
+      "none": "nenhum que o BookHive reconheça: nenhum ISBN que o catálogo conheça, nenhum resultado com o ID do Goodreads e nenhuma correspondência de título que você confirmou. O livro mantém os próprios dados numa leitura do Resenha."
+    },
+    "warningLead": "Não contém palpites.",
+    "warning": "Uma correspondência só pelo título nunca é aplicada sem o seu toque.",
+    "footnote": "* Um livro que precisa de mais de 200 gravações, o que exige centenas de registros de progresso, apaga os registros de progresso mais antigos em outros commits logo em seguida."
+  },
+  "excluded": {
+    "heading": "Não incluído",
+    "subheading": "Nunca gravado nem apagado",
+    "header": "Mudanças",
+    "rows": [
+      ["Estantes, e os livros nelas", "Elas também são as estantes do BookHive."],
+      ["Filmes, séries, jogos e tudo o que não for livro, com as resenhas", ""],
+      ["Registros do Popfeed que o Resenha não consegue classificar", ""],
+      ["Itens de ponte de livros que você já tem no BookHive", ""],
+      ["Registros de progresso de nenhum livro que você tenha ou esteja transferindo", ""],
+      ["Livros que ainda esperam uma busca", "Eles ficam no Popfeed para uma próxima vez."],
+      ["Suas curtidas e comentários no Popfeed", ""],
+      ["Registros de outras pessoas", ""],
+      ["Livros que você já tem e que não estão no Popfeed", ""],
+      ["Posts no Bluesky", ""]
+    ],
+    "footer": "Um registro do Popfeed só é apagado quando o Resenha o identificou como um dos seus próprios itens de lista de leitura, resenhas ou registros de progresso, e só no commit que grava o livro dele."
+  },
+  "steps": {
+    "title": "Como um livro é transferido",
+    "items": [
+      ["Backup.", "Quando você confirma, o Resenha primeiro salva um arquivo com cada registro que a transferência vai apagar ou mudar, exatamente como está na sua conta. Ele vai para a pasta do Resenha no iCloud Drive, que você pode abrir no app Arquivos, ou fica no aparelho quando o iCloud Drive está desligado. O Resenha ainda não consegue restaurar a partir dele; ele guarda seus dados."],
+      ["Identificação.", "Cada livro é identificado pelos números dele, o ISBN ou o ID do Goodreads. Títulos só sugerem. Você vê o plano inteiro, muda o que quiser e confirma uma vez. Até lá, só suas escolhas são gravadas, para elas irem com você para seus outros aparelhos."],
+      ["Um commit por livro.", "O novo registro de um livro e a exclusão dos registros dele no Popfeed vão num único commit, que sua conta aplica inteiro ou não aplica, então um livro nunca fica transferido pela metade. Logo antes, o Resenha lê de novo os registros do livro; se algo mudou, o livro é pulado e oferecido de novo no fim. Um novo registro tira a chave do registro mais antigo do livro no Popfeed, então uma nova tentativa encontra a primeira em vez de criar uma cópia."],
+      ["No ritmo certo.", "O Resenha usa no máximo 70% do limite de gravação por hora e por dia da sua conta, pelos limites publicados pelo Bluesky, e espera antes de chegar neles, para seus próprios posts continuarem funcionando. Se você fechar o app, a transferência continua de onde parou na próxima vez que você abrir."]
+    ],
+    "note": "O BookHive mostra os livros transferidos como atividade recente. No Resenha, eles mantêm as próprias datas."
+  },
+  "footer": { "legal": "© 2026 Resenha." },
+  "live": "{match}. {heldLegend} {held}. {goesTo}: {summary}."
+}

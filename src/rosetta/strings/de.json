@@ -1,0 +1,159 @@
+{
+  "ogLocale": "de_DE",
+  "meta": {
+    "title": "Rosetta — Wie Resenha deine Popfeed-Bücher überträgt",
+    "description": "Was mit jedem Popfeed-Eintrag passiert, wenn Resenha deine Bücher zu BookHive oder zu Lektüren in Resenha überträgt: wie Bücher zugeordnet werden, was aus jedem Feld wird und was nie angetastet wird."
+  },
+  "theme": { "toDark": "Zum dunklen Erscheinungsbild wechseln", "toLight": "Zum hellen Erscheinungsbild wechseln" },
+  "intro": {
+    "eyebrow": "Bücher aus Popfeed übertragen",
+    "title": "Rosetta",
+    "body": [
+      "Mit Rosetta überträgt Resenha 1.6.10 deine Popfeed-Bücher. Jedes Buch wird zu einem BookHive-Eintrag, wenn der Katalog von BookHive es sicher kennt, und sonst zu einer Lektüre in Resenha. Danach werden seine Popfeed-Einträge gelöscht.",
+      "Buchdaten zwischen Apps umzuziehen gilt als fehleranfällig: Es wird falsch geraten, und Dinge gehen verloren. Hier steht genau, was mit jedem Buch passiert, Feld für Feld. Nichts wird geschrieben, bevor du bestätigst."
+    ]
+  },
+  "control": {
+    "legend": "Wie dein Buch gefunden wurde",
+    "isbn": "Über die ISBN",
+    "goodreads": "Goodreads-ID",
+    "title": "Nur über den Titel",
+    "none": "Nicht in BookHive",
+    "heldLegend": "Schon in deiner Bibliothek?",
+    "heldNo": "Nein",
+    "heldBookhive": "In BookHive",
+    "heldReading": "Als Lektüre in Resenha",
+    "noscript": "Gezeigt: ein Buch, das über seine ISBN gefunden wurde und noch nicht in deiner Bibliothek ist."
+  },
+  "label": {
+    "heading": "Umzugsangaben",
+    "serving": "Portionsgröße",
+    "servingValue": "1 Buch",
+    "servingNote": "Beispiel: 1 Listeneintrag, 1 Rezension, 1 Fortschrittseintrag",
+    "amountPer": "Menge pro Buch",
+    "goesTo": "Wird zu",
+    "colYes": "Wenn du bestätigst",
+    "colNo": "Wenn nicht",
+    "amountHeader": "Einträge",
+    "fieldHeader": "Feld",
+    "valueHeader": "Was passiert",
+    "dest": {
+      "newBookHive": "ein neuer BookHive-Eintrag",
+      "newReading": "eine neue Lektüre in Resenha",
+      "mergeBookHive": "dein BookHive-Eintrag",
+      "upgradeReading": "ein neuer BookHive-Eintrag",
+      "mergeReading": "deine Lektüre in Resenha"
+    },
+    "destNote": {
+      "heldBy": "Dein Eintrag wird über seine Katalog-ID oder ISBN gefunden, oder weil du Resenhas Vorschlag bestätigt hast, dass es dasselbe Buch ist.",
+      "mergeBookHive": "Er wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht.",
+      "upgradeReading": "Deine Lektüre wird übergeben: Der neue Eintrag und das Löschen der Lektüre stehen im selben Commit, und der Link zu ihrer ausführlichen Rezension zieht mit um.",
+      "mergeReading": "Sie wird im selben Commit aktualisiert, der die Popfeed-Einträge löscht."
+    },
+    "amounts": {
+      "created": "Neue Bucheinträge",
+      "updated": "Aktualisierte Bucheinträge",
+      "updatedMaybe": "0 oder 1",
+      "updatedNote": "0, wenn dein Eintrag schon alles enthält, was in Popfeed steht.",
+      "deletedPopfeed": "Gelöschte Popfeed-Einträge",
+      "deletedReading": "Gelöschte Lektüren",
+      "commits": "Commits",
+      "commitsValue": "1*, ganz oder gar nicht",
+      "checked": "Mit deiner Bestätigung abgeglichen",
+      "checkedValue": "Ja",
+      "checkedNote": "Hat sich seit deiner Bestätigung einer seiner Einträge geändert, wird das Buch übersprungen und du wirst noch einmal gefragt."
+    },
+    "rows": {
+      "title": "Titel und Autoren",
+      "status": "Lesestatus",
+      "dates": "Hinzugefügt, begonnen, beendet",
+      "rating": "Bewertung",
+      "review": "Rezension",
+      "spoiler": "Rezension mit Spoilern",
+      "progress": "Lesefortschritt",
+      "ids": "ISBN und Goodreads-ID",
+      "cover": "Cover",
+      "leftovers": "Weitere Rezensionen, älterer Fortschritt",
+      "extras": "Tags, Position in der Liste",
+      "likes": "Likes und Kommentare anderer zu deinen Rezensionen"
+    },
+    "values": {
+      "catalogue": "Aus dem BookHive-Katalog",
+      "keptPopfeed": "Wie in Popfeed",
+      "unchanged": "Deine, unverändert",
+      "carried": "Übernommen",
+      "fillChoose": "Ergänzt, oder du wählst",
+      "readingFirst": "Aus deiner Lektüre, Lücken ergänzt",
+      "stars": "1–10 → `stars`",
+      "plainText": "Übernommen, als reiner Text",
+      "longForm": "Zusätzlich eine ausführliche Rezension",
+      "newest": "Der neueste wird übernommen",
+      "newer": "Der neuere von beiden",
+      "keptEdition": "Übernommen, von einer Ausgabe",
+      "catalogueCover": "Das Cover aus dem BookHive-Katalog",
+      "keptCopy": "Übernommen, mit einer Kopie",
+      "notChanged": "Nicht geändert",
+      "fillMissing": "Ergänzt, wenn es fehlt",
+      "backup": "Gelöscht; in der Sicherung",
+      "notCarried": "Nicht übernommen; in der Sicherung",
+      "lost": "Gehen verloren"
+    },
+    "notes": {
+      "status": "Gelesen, Am Lesen und Will ich lesen behalten ihre Bedeutung, und Aufgegeben bleibt Aufgegeben. Ein Buch, zu dem es nur eine Rezension gibt, kommt als Gelesen an, wenn du keinen anderen Status wählst.",
+      "merge": "Popfeed ergänzt, was deinem Eintrag fehlt. Wo sich beide unterscheiden, entscheidest du, Buch für Buch oder für alle auf einmal; bis dahin bleibt die Version deiner Bibliothek.",
+      "upgrade": "Wo deine Lektüre einen Wert hat, bleibt er; Popfeed ergänzt, was ihr fehlt. Unterschiede werden nicht gezeigt.",
+      "dates": "Aus den Popfeed-Einträgen. Nie auf heute gesetzt.",
+      "datesMerge": "Dein Eintrag behält sein Datum „hinzugefügt“.",
+      "datesUpgrade": "Das frühere der beiden Daten „hinzugefügt“ bleibt.",
+      "rating": "Halbe Werte werden aufgerundet, aus 7,5 wird 8. Eine 0 heißt: keine Bewertung.",
+      "review": "Links und Erwähnungen werden zu reinem Text. Die resenha.ink-Zeile, die Resenha an seine eigenen Kopien angehängt hat, wird entfernt. Hat ein Buch mehrere Rezensionen, bleibt die neueste mit Text, wenn du keine andere wählst.",
+      "spoiler": "Auf resenha.ink veröffentlicht, mit Spoiler-Hinweis und ihren Links: 2 Einträge mehr, die Rezension und ihr Link. Auf Bluesky wird nichts gepostet. Der Bucheintrag behält den vollen Text. Entfällt, wenn das Buch schon eine ausführliche Rezension hat.",
+      "spoilerMerge": "Nur wenn dein Eintrag am Ende den Text dieser Rezension hat.",
+      "progress": "Ältere Fortschrittseinträge werden gelöscht und bleiben in der Sicherung. Eine Seite oder ein Kapitel 0 wird weggelassen.",
+      "ids": "Eine Lektüre bekommt keine BookHive-ID.",
+      "catalogueCover": "Die Cover-Adressen aus Popfeed werden nicht übernommen.",
+      "keptCopy": "Jede Cover-Adresse aus den Popfeed-Einträgen und eine Kopie des Coverbilds in deinem Konto, damit das Bild das Löschen übersteht.",
+      "likes": "Sie liegen in den Konten derer, die sie geschrieben haben, und verweisen auf eine Popfeed-Rezension, die gelöscht wird."
+    },
+    "ingredientsLabel": "Zutaten:",
+    "ingredients": {
+      "isbn": "die ISBN-13 des Buchs (eine ISBN-10 wird umgerechnet), im Katalog von BookHive nachgeschlagen. Sicher nur, wenn genau ein Katalogbuch antwortet; führen die ISBNs des Buchs zu zweien, wählst du. Ein Buch, zu dem BookHive nicht erreichbar ist, wartet auf einen späteren Durchlauf: Mangels Antwort wird es nie zur Lektüre. Nicht verwendet: Katalog-IDs, die in Popfeed-Einträgen gespeichert sind.",
+      "goodreads": "die Goodreads-ID des Buchs, für ein Buch ohne ISBN. Solche Bücher warten unter „Bücher zum Suchen“, bis du auf „Diese suchen“ tippst, eine BookHive-Suche nach Titel und Autor, die du selbst startest. Ein Treffer mit derselben Goodreads-ID ist sicher. Jeder andere Treffer wird nur vorgeschlagen, als Titeltreffer. Nicht verwendet: Katalog-IDs, die in Popfeed-Einträgen gespeichert sind.",
+      "title": "der Titel und der Nachname des ersten Autors. Wenn du die Titeltreffer öffnest, durchsucht Resenha BookHive und behält bis zu drei Treffer mit demselben Titel und Autor. Das gilt auch für Bücher, deren ISBN BookHive nicht kennt. Keiner wird verwendet, bevor du ihn bestätigst, mit einem Tippen pro Buch oder mit „Alle Titeltreffer bestätigen“.",
+      "none": "keine, die BookHive erkennt: keine ISBN, die sein Katalog kennt, kein Treffer mit der Goodreads-ID und kein Titeltreffer, den du bestätigt hast. Das Buch behält seine eigenen Angaben in einer Lektüre in Resenha."
+    },
+    "warningLead": "Enthält keine Vermutungen.",
+    "warning": "Ein Treffer nur über den Titel wird nie ohne dein Tippen übernommen.",
+    "footnote": "* Ein Buch, das mehr als 200 Schreibvorgänge braucht, wofür es Hunderte Fortschrittseinträge haben muss, löscht seine älteren Fortschrittseinträge in weiteren Commits gleich danach."
+  },
+  "excluded": {
+    "heading": "Nicht enthalten",
+    "subheading": "Nie geschrieben oder gelöscht",
+    "header": "Änderungen",
+    "rows": [
+      ["Regale und die Bücher darauf", "Sie sind auch die Regale von BookHive."],
+      ["Filme, Serien, Spiele und alles andere, was kein Buch ist, samt Rezensionen", ""],
+      ["Popfeed-Einträge, die Resenha nicht zuordnen kann", ""],
+      ["Gebrückte Einträge von Büchern, die du schon in BookHive hast", ""],
+      ["Fortschrittseinträge, die zu keinem Buch gehören, das du hast oder überträgst", ""],
+      ["Bücher, die noch auf eine Suche warten", "Sie bleiben für einen späteren Durchlauf in Popfeed."],
+      ["Deine Likes und Kommentare in Popfeed", ""],
+      ["Einträge anderer Leute", ""],
+      ["Bücher, die du schon hast und die nicht in Popfeed sind", ""],
+      ["Beiträge auf Bluesky", ""]
+    ],
+    "footer": "Ein Popfeed-Eintrag wird nur gelöscht, wenn Resenha ihn als einen deiner eigenen Leselisten-Einträge, deiner Rezensionen oder Fortschrittseinträge erkannt hat, und nur im Commit, der sein Buch schreibt."
+  },
+  "steps": {
+    "title": "So zieht ein Buch um",
+    "items": [
+      ["Sicherung.", "Wenn du bestätigst, speichert Resenha zuerst eine Datei mit jedem Eintrag, den der Durchlauf löscht oder ändert, genau so, wie er in deinem Konto steht. Sie landet in Resenhas Ordner in iCloud Drive, den du in der Dateien-App öffnen kannst, oder bleibt auf dem Gerät, wenn iCloud Drive aus ist. Wiederherstellen kann Resenha daraus noch nicht; sie bewahrt deine Daten."],
+      ["Zuordnen.", "Jedes Buch wird über seine Nummern zugeordnet, die ISBN oder die Goodreads-ID. Titel machen nur Vorschläge. Du siehst den ganzen Plan, änderst, was du willst, und bestätigst einmal. Bis dahin werden nur deine Entscheidungen gespeichert, damit sie dir auf deine anderen Geräte folgen."],
+      ["Ein Commit pro Buch.", "Der neue Eintrag eines Buchs und das Löschen seiner Popfeed-Einträge gehen in einem Commit, den dein Konto ganz oder gar nicht übernimmt. Ein Buch zieht also nie halb um. Unmittelbar davor liest Resenha die Einträge des Buchs noch einmal; hat sich etwas geändert, wird das Buch übersprungen und am Ende erneut angeboten. Ein neuer Eintrag bekommt seinen Schlüssel vom ältesten Popfeed-Eintrag des Buchs, sodass ein zweiter Versuch auf den ersten trifft, statt eine Kopie anzulegen."],
+      ["Im eigenen Tempo.", "Resenha nutzt höchstens 70 % des stündlichen und täglichen Schreibbudgets deines Kontos, nach den von Bluesky veröffentlichten Grenzen, und wartet, bevor es sie erreicht. So funktioniert dein eigenes Posten weiter. Schließt du die App, geht der Umzug beim nächsten Öffnen dort weiter, wo er stehen geblieben ist."]
+    ],
+    "note": "BookHive zeigt übertragene Bücher als neue Aktivität an. In Resenha behalten sie ihre eigenen Daten."
+  },
+  "footer": { "legal": "© 2026 Resenha." },
+  "live": "{match}. {heldLegend} {held}. {goesTo}: {summary}."
+}
