@@ -46,7 +46,7 @@
     })();
   </script>
   <link rel="stylesheet" href="/assets/landing/landing.css?v=59228ede45">
-  <link rel="stylesheet" href="/assets/rosetta/rosetta.css?v=86251cc79b">
+  <link rel="stylesheet" href="/assets/rosetta/rosetta.css?v=259808b9c3">
 </head>
 <body class="rosetta">
   <div class="glow" aria-hidden="true"></div>
@@ -367,7 +367,7 @@
         <table class="amounts">
           <caption>Amount per book</caption>
           <tr class="cols"><td></td><th scope="col">If you confirm</th><th scope="col">If you don’t</th></tr>
-          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">Goes to</span></th><td><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">a new BookHive record</span></td><td><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">a new Resenha reading</span></td></tr>
+          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">Goes to</span></th><td data-col="If you confirm"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">a new BookHive record</span></td><td data-col="If you don’t"><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">a new Resenha reading</span></td></tr>
           <tr data-row="created"><th scope="row">Book records created</th><td colspan="2">1</td></tr>
           <tr data-row="updated"><th scope="row">Book records updated</th><td colspan="2">0</td></tr>
           <tr data-row="deletedPopfeed"><th scope="row">Popfeed records deleted</th><td colspan="2">3</td></tr>
@@ -378,15 +378,15 @@
         <table class="fields">
           <thead><tr><th scope="col">Field</th><th scope="col">If you confirm</th><th scope="col">If you don’t</th></tr></thead>
           <tbody>
-          <tr data-row="title"><th scope="row">Title and authors</th><td>From BookHive’s catalogue</td><td>Kept as in Popfeed</td></tr>
+          <tr data-row="title"><th scope="row">Title and authors</th><td data-col="If you confirm">From BookHive’s catalogue</td><td data-col="If you don’t">Kept as in Popfeed</td></tr>
           <tr data-row="status" class="has-sub"><th scope="row">Reading status</th><td colspan="2">Carried</td></tr><tr class="sub" data-row="status"><td colspan="3">Read, Currently Reading and Want to Read keep their meaning, and abandoned stays abandoned. A book with only a review comes in as Finished unless you pick another status.</td></tr>
           <tr data-row="dates" class="has-sub"><th scope="row">Dates added, started, finished</th><td colspan="2">Carried</td></tr><tr class="sub" data-row="dates"><td colspan="3">Taken from the Popfeed records. Never set to today.</td></tr>
           <tr data-row="rating" class="has-sub"><th scope="row">Rating</th><td colspan="2">1–10 → <code>stars</code></td></tr><tr class="sub" data-row="rating"><td colspan="3">Halves round up, so 7.5 becomes 8. A rating of 0 means none.</td></tr>
           <tr data-row="review" class="has-sub"><th scope="row">Review</th><td colspan="2">Carried, as plain text</td></tr><tr class="sub" data-row="review"><td colspan="3">Links and mentions become plain text. The resenha.ink line Resenha added to its own copies is removed. If a book has several reviews, the newest with text is kept unless you pick another.</td></tr>
           <tr data-row="spoiler" class="has-sub"><th scope="row">Review marked as spoilers</th><td colspan="2">Also a long-form review</td></tr><tr class="sub" data-row="spoiler"><td colspan="3">Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
           <tr data-row="progress" class="has-sub"><th scope="row">Reading progress</th><td colspan="2">Newest carried</td></tr><tr class="sub" data-row="progress"><td colspan="3">Older progress records are deleted and kept in the backup. A page or chapter of 0 is left out.</td></tr>
-          <tr data-row="ids" class="has-sub"><th scope="row">ISBN and Goodreads ID</th><td>From BookHive’s catalogue</td><td>Kept, from one edition</td></tr><tr class="sub" data-row="ids"><td colspan="3"><b>If you don’t:</b> No BookHive ID is added to a reading.</td></tr>
-          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td>BookHive’s catalogue cover</td><td>Kept, with a copy</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>If you confirm:</b> Popfeed’s cover addresses aren’t kept. <b>If you don’t:</b> Every cover address the Popfeed records name, and a copy of the cover image saved to your account, so the picture survives the deletion.</td></tr>
+          <tr data-row="ids" class="has-sub"><th scope="row">ISBN and Goodreads ID</th><td data-col="If you confirm">From BookHive’s catalogue</td><td data-col="If you don’t">Kept, from one edition</td></tr><tr class="sub" data-row="ids"><td colspan="3"><b>If you don’t:</b> No BookHive ID is added to a reading.</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td data-col="If you confirm">BookHive’s catalogue cover</td><td data-col="If you don’t">Kept, with a copy</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>If you confirm:</b> Popfeed’s cover addresses aren’t kept. <b>If you don’t:</b> Every cover address the Popfeed records name, and a copy of the cover image saved to your account, so the picture survives the deletion.</td></tr>
           <tr data-row="leftovers"><th scope="row">Other reviews, older progress</th><td colspan="2">Deleted; kept in the backup</td></tr>
           <tr data-row="extras"><th scope="row">Tags, list position</th><td colspan="2">Not carried; kept in the backup</td></tr>
           <tr data-row="likes" class="has-sub"><th scope="row">Others’ likes and comments on your reviews</th><td colspan="2">Lost</td></tr><tr class="sub" data-row="likes"><td colspan="3">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>
@@ -439,26 +439,26 @@
         <table class="amounts">
           <caption>Amount per book</caption>
           <tr class="cols"><td></td><th scope="col">If you confirm</th><th scope="col">If you don’t</th></tr>
-          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Goes to</span></th><td><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">a new BookHive record</span></td><td><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">your Resenha reading</span></td></tr><tr class="sub" data-row="dest"><td colspan="3">Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book. <b>If you confirm:</b> Your reading is handed over: the new record and the reading’s deletion are in the same commit, and its long-form review link moves with it. <b>If you don’t:</b> It is updated in the same commit that deletes the Popfeed records.</td></tr>
-          <tr data-row="created"><th scope="row">Book records created</th><td>1</td><td>0</td></tr>
-          <tr data-row="updated" class="has-sub"><th scope="row">Book records updated</th><td>0</td><td>0 or 1</td></tr><tr class="sub" data-row="updated"><td colspan="3"><b>If you don’t:</b> 0 when your record already says everything Popfeed does.</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">Goes to</span></th><td data-col="If you confirm"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">a new BookHive record</span></td><td data-col="If you don’t"><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">your Resenha reading</span></td></tr><tr class="sub" data-row="dest"><td colspan="3">Your record is found by its catalogue ID or ISBN, or because you confirmed Resenha’s suggestion that it’s the same book. <b>If you confirm:</b> Your reading is handed over: the new record and the reading’s deletion are in the same commit, and its long-form review link moves with it. <b>If you don’t:</b> It is updated in the same commit that deletes the Popfeed records.</td></tr>
+          <tr data-row="created"><th scope="row">Book records created</th><td data-col="If you confirm">1</td><td data-col="If you don’t">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">Book records updated</th><td data-col="If you confirm">0</td><td data-col="If you don’t">0 or 1</td></tr><tr class="sub" data-row="updated"><td colspan="3"><b>If you don’t:</b> 0 when your record already says everything Popfeed does.</td></tr>
           <tr data-row="deletedPopfeed"><th scope="row">Popfeed records deleted</th><td colspan="2">3</td></tr>
-          <tr data-row="deletedReading"><th scope="row">Readings deleted</th><td>1</td><td>0</td></tr>
+          <tr data-row="deletedReading"><th scope="row">Readings deleted</th><td data-col="If you confirm">1</td><td data-col="If you don’t">0</td></tr>
           <tr data-row="commits"><th scope="row">Commits</th><td colspan="2">1*, all or nothing</td></tr>
           <tr data-row="checked" class="has-sub"><th scope="row">Checked against what you confirmed</th><td colspan="2">Yes</td></tr><tr class="sub" data-row="checked"><td colspan="3">If any of its records changed since you confirmed, the book is skipped and you’re asked about it again.</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">Field</th><th scope="col">If you confirm</th><th scope="col">If you don’t</th></tr></thead>
           <tbody>
-          <tr data-row="title"><th scope="row">Title and authors</th><td>From BookHive’s catalogue</td><td>Yours, unchanged</td></tr>
-          <tr data-row="status" class="has-sub"><th scope="row">Reading status</th><td>Your reading’s, gaps filled</td><td>Filled in, or your choice</td></tr><tr class="sub" data-row="status"><td colspan="3"><b>If you confirm:</b> Where your reading has a value, it stays; Popfeed fills in what it lacks. No differences are shown. <b>If you don’t:</b> Popfeed fills in what your record lacks. Where the two differ, you choose, book by book or for all at once; until you do, your library’s version stays.</td></tr>
-          <tr data-row="dates" class="has-sub"><th scope="row">Dates added, started, finished</th><td>Your reading’s, gaps filled</td><td>Filled in, or your choice</td></tr><tr class="sub" data-row="dates"><td colspan="3"><b>If you confirm:</b> The earlier of the two dates added is kept. <b>If you don’t:</b> Your record keeps its date added.</td></tr>
-          <tr data-row="rating"><th scope="row">Rating</th><td>Your reading’s, gaps filled</td><td>Filled in, or your choice</td></tr>
-          <tr data-row="review"><th scope="row">Review</th><td>Your reading’s, gaps filled</td><td>Filled in, or your choice</td></tr>
+          <tr data-row="title"><th scope="row">Title and authors</th><td data-col="If you confirm">From BookHive’s catalogue</td><td data-col="If you don’t">Yours, unchanged</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">Reading status</th><td data-col="If you confirm">Your reading’s, gaps filled</td><td data-col="If you don’t">Filled in, or your choice</td></tr><tr class="sub" data-row="status"><td colspan="3"><b>If you confirm:</b> Where your reading has a value, it stays; Popfeed fills in what it lacks. No differences are shown. <b>If you don’t:</b> Popfeed fills in what your record lacks. Where the two differ, you choose, book by book or for all at once; until you do, your library’s version stays.</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">Dates added, started, finished</th><td data-col="If you confirm">Your reading’s, gaps filled</td><td data-col="If you don’t">Filled in, or your choice</td></tr><tr class="sub" data-row="dates"><td colspan="3"><b>If you confirm:</b> The earlier of the two dates added is kept. <b>If you don’t:</b> Your record keeps its date added.</td></tr>
+          <tr data-row="rating"><th scope="row">Rating</th><td data-col="If you confirm">Your reading’s, gaps filled</td><td data-col="If you don’t">Filled in, or your choice</td></tr>
+          <tr data-row="review"><th scope="row">Review</th><td data-col="If you confirm">Your reading’s, gaps filled</td><td data-col="If you don’t">Filled in, or your choice</td></tr>
           <tr data-row="spoiler" class="has-sub"><th scope="row">Review marked as spoilers</th><td colspan="2">Also a long-form review</td></tr><tr class="sub" data-row="spoiler"><td colspan="3">Only when your record ends up with this review’s text. Published on resenha.ink with a spoiler label, its links kept: 2 more records, the review and its link. Nothing is posted to Bluesky. The book’s record keeps the full text. Not made when the book already has a long-form review.</td></tr>
           <tr data-row="progress"><th scope="row">Reading progress</th><td colspan="2">The newer of the two</td></tr>
-          <tr data-row="ids"><th scope="row">ISBN and Goodreads ID</th><td>From BookHive’s catalogue</td><td>Yours, unchanged</td></tr>
-          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td>BookHive’s catalogue cover</td><td>Filled in if missing</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>If you confirm:</b> Popfeed’s cover addresses aren’t kept.</td></tr>
+          <tr data-row="ids"><th scope="row">ISBN and Goodreads ID</th><td data-col="If you confirm">From BookHive’s catalogue</td><td data-col="If you don’t">Yours, unchanged</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">Cover</th><td data-col="If you confirm">BookHive’s catalogue cover</td><td data-col="If you don’t">Filled in if missing</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>If you confirm:</b> Popfeed’s cover addresses aren’t kept.</td></tr>
           <tr data-row="leftovers"><th scope="row">Other reviews, older progress</th><td colspan="2">Deleted; kept in the backup</td></tr>
           <tr data-row="extras"><th scope="row">Tags, list position</th><td colspan="2">Not carried; kept in the backup</td></tr>
           <tr data-row="likes" class="has-sub"><th scope="row">Others’ likes and comments on your reviews</th><td colspan="2">Lost</td></tr><tr class="sub" data-row="likes"><td colspan="3">They live in their writers’ accounts, and point at a Popfeed review that is deleted.</td></tr>

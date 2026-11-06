@@ -109,7 +109,7 @@ const FIELDS = [
 function row(name, values, notes, cols, key, extra = "") {
   const cells = values.every((v) => v === values[0])
     ? `<td colspan="${cols.length}">${values[0]}</td>`
-    : values.map((v) => `<td>${v}</td>`).join("");
+    : values.map((v, i) => `<td data-col="${esc(cols[i].name)}">${v}</td>`).join("");
   const classes = [extra, notes.length ? "has-sub" : ""].filter(Boolean).join(" ");
   let html = `<tr data-row="${key}"${classes ? ` class="${classes}"` : ""}><th scope="row">${name}</th>${cells}</tr>`;
   if (notes.length) html += `<tr class="sub" data-row="${key}"><td colspan="${cols.length + 1}">${notes.join(" ")}</td></tr>`;
@@ -132,7 +132,7 @@ function columnNotes(perColumn, cols, t) {
 function label(lang, match, held) {
   const t = strings[lang];
   const L = t.label;
-  const cols = columns(match, held);
+  const cols = columns(match, held).map((c) => ({ ...c, name: c.key ? L[c.key] : "" }));
   const id = `facts-${match}-${held}`;
   const word = (s) => (s.startsWith("@") ? fmt(L.amounts[s.slice(1)]) : fmt(s));
 

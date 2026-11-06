@@ -30,7 +30,7 @@
   <meta property="og:description" content="ResenhaがPopfeedの本をBookHiveやResenhaの読書記録に移すとき、Popfeedの各レコードがどうなるか。本の照合方法、各項目の行き先、決して触れないものを説明します。">
   <meta property="og:url" content="https://resenha.ink/ja/rosetta">
   <link rel="stylesheet" href="/assets/landing/landing.css?v=59228ede45">
-  <link rel="stylesheet" href="/assets/rosetta/rosetta.css?v=86251cc79b">
+  <link rel="stylesheet" href="/assets/rosetta/rosetta.css?v=259808b9c3">
 </head>
 <body class="rosetta">
   <div class="glow" aria-hidden="true"></div>
@@ -351,7 +351,7 @@
         <table class="amounts">
           <caption>1冊あたり</caption>
           <tr class="cols"><td></td><th scope="col">確定した場合</th><th scope="col">確定しない場合</th></tr>
-          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">行き先</span></th><td><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">新しいBookHiveのレコード</span></td><td><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">新しいResenhaの読書記録</span></td></tr>
+          <tr data-row="dest" class="dest"><th scope="row"><span class="goes">行き先</span></th><td data-col="確定した場合"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">新しいBookHiveのレコード</span></td><td data-col="確定しない場合"><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">新しいResenhaの読書記録</span></td></tr>
           <tr data-row="created"><th scope="row">作成される本のレコード</th><td colspan="2">1</td></tr>
           <tr data-row="updated"><th scope="row">更新される本のレコード</th><td colspan="2">0</td></tr>
           <tr data-row="deletedPopfeed"><th scope="row">削除されるPopfeedのレコード</th><td colspan="2">3</td></tr>
@@ -362,15 +362,15 @@
         <table class="fields">
           <thead><tr><th scope="col">項目</th><th scope="col">確定した場合</th><th scope="col">確定しない場合</th></tr></thead>
           <tbody>
-          <tr data-row="title"><th scope="row">タイトルと著者</th><td>BookHiveのカタログから</td><td>Popfeedのまま</td></tr>
+          <tr data-row="title"><th scope="row">タイトルと著者</th><td data-col="確定した場合">BookHiveのカタログから</td><td data-col="確定しない場合">Popfeedのまま</td></tr>
           <tr data-row="status" class="has-sub"><th scope="row">読書ステータス</th><td colspan="2">引き継ぐ</td></tr><tr class="sub" data-row="status"><td colspan="3">読了、読書中、読みたいはそのままの意味で引き継がれ、中断は中断のままです。書評しかない本は、ほかのステータスを選ばない限り読了として移ります。</td></tr>
           <tr data-row="dates" class="has-sub"><th scope="row">追加日・開始日・読了日</th><td colspan="2">引き継ぐ</td></tr><tr class="sub" data-row="dates"><td colspan="3">Popfeedのレコードから取ります。今日の日付になることはありません。</td></tr>
           <tr data-row="rating" class="has-sub"><th scope="row">評価</th><td colspan="2">1〜10 → <code>stars</code></td></tr><tr class="sub" data-row="rating"><td colspan="3">0.5は切り上げられ、7.5は8になります。0は評価なしです。</td></tr>
           <tr data-row="review" class="has-sub"><th scope="row">書評</th><td colspan="2">プレーンテキストで引き継ぐ</td></tr><tr class="sub" data-row="review"><td colspan="3">リンクとメンションはプレーンテキストになります。Resenhaが自分のコピーに付けたresenha.inkの行は取り除かれます。書評が複数ある本は、ほかを選ばない限り、本文のある最新の書評が残ります。</td></tr>
           <tr data-row="spoiler" class="has-sub"><th scope="row">ネタバレありの書評</th><td colspan="2">長文書評も作成</td></tr><tr class="sub" data-row="spoiler"><td colspan="3">ネタバレ表示とリンクを付けてresenha.inkに公開されます。書評とそのリンクで、レコードが2件増えます。Blueskyには何も投稿されません。本のレコードには全文が残ります。その本にすでに長文書評がある場合は作られません。</td></tr>
           <tr data-row="progress" class="has-sub"><th scope="row">読書の進捗</th><td colspan="2">最新のものを引き継ぐ</td></tr><tr class="sub" data-row="progress"><td colspan="3">古い進捗レコードは削除され、バックアップに保管されます。0ページや0章は含めません。</td></tr>
-          <tr data-row="ids" class="has-sub"><th scope="row">ISBNとGoodreads ID</th><td>BookHiveのカタログから</td><td>1つの版のものを引き継ぐ</td></tr><tr class="sub" data-row="ids"><td colspan="3"><b>確定しない場合：</b> 読書記録にBookHiveのIDは追加されません。</td></tr>
-          <tr data-row="cover" class="has-sub"><th scope="row">表紙</th><td>BookHiveのカタログの表紙</td><td>コピーとともに引き継ぐ</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>確定した場合：</b> Popfeedの表紙のアドレスは残りません。 <b>確定しない場合：</b> Popfeedのレコードにある表紙のアドレスすべてと、あなたのアカウントに保存した表紙画像のコピー。削除後も画像が残ります。</td></tr>
+          <tr data-row="ids" class="has-sub"><th scope="row">ISBNとGoodreads ID</th><td data-col="確定した場合">BookHiveのカタログから</td><td data-col="確定しない場合">1つの版のものを引き継ぐ</td></tr><tr class="sub" data-row="ids"><td colspan="3"><b>確定しない場合：</b> 読書記録にBookHiveのIDは追加されません。</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">表紙</th><td data-col="確定した場合">BookHiveのカタログの表紙</td><td data-col="確定しない場合">コピーとともに引き継ぐ</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>確定した場合：</b> Popfeedの表紙のアドレスは残りません。 <b>確定しない場合：</b> Popfeedのレコードにある表紙のアドレスすべてと、あなたのアカウントに保存した表紙画像のコピー。削除後も画像が残ります。</td></tr>
           <tr data-row="leftovers"><th scope="row">ほかの書評、古い進捗</th><td colspan="2">削除、バックアップに保管</td></tr>
           <tr data-row="extras"><th scope="row">タグ、リスト内の位置</th><td colspan="2">引き継がない、バックアップに保管</td></tr>
           <tr data-row="likes" class="has-sub"><th scope="row">あなたの書評へのほかの人の「いいね」とコメント</th><td colspan="2">失われる</td></tr><tr class="sub" data-row="likes"><td colspan="3">それらは書いた人のアカウントにあり、削除されるPopfeedの書評を指しています。</td></tr>
@@ -423,26 +423,26 @@
         <table class="amounts">
           <caption>1冊あたり</caption>
           <tr class="cols"><td></td><th scope="col">確定した場合</th><th scope="col">確定しない場合</th></tr>
-          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">行き先</span></th><td><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">新しいBookHiveのレコード</span></td><td><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">あなたのResenhaの読書記録</span></td></tr><tr class="sub" data-row="dest"><td colspan="3">あなたのレコードは、カタログIDやISBN、または同じ本だというResenhaの提案をあなたが確定したことで見つかります。 <b>確定した場合：</b> 読書記録は引き継がれます。新しいレコードの作成と読書記録の削除は同じコミットで行われ、長文書評へのリンクも一緒に移ります。 <b>確定しない場合：</b> Popfeedのレコードを削除するのと同じコミットで更新されます。</td></tr>
-          <tr data-row="created"><th scope="row">作成される本のレコード</th><td>1</td><td>0</td></tr>
-          <tr data-row="updated" class="has-sub"><th scope="row">更新される本のレコード</th><td>0</td><td>0または1</td></tr><tr class="sub" data-row="updated"><td colspan="3"><b>確定しない場合：</b> あなたのレコードにPopfeedの内容がすべてそろっていれば0です。</td></tr>
+          <tr data-row="dest" class="dest has-sub"><th scope="row"><span class="goes">行き先</span></th><td data-col="確定した場合"><code>buzz.<wbr>bookhive.<wbr>book</code><span class="dest-words">新しいBookHiveのレコード</span></td><td data-col="確定しない場合"><code>ink.<wbr>resenha.<wbr>reading</code><span class="dest-words">あなたのResenhaの読書記録</span></td></tr><tr class="sub" data-row="dest"><td colspan="3">あなたのレコードは、カタログIDやISBN、または同じ本だというResenhaの提案をあなたが確定したことで見つかります。 <b>確定した場合：</b> 読書記録は引き継がれます。新しいレコードの作成と読書記録の削除は同じコミットで行われ、長文書評へのリンクも一緒に移ります。 <b>確定しない場合：</b> Popfeedのレコードを削除するのと同じコミットで更新されます。</td></tr>
+          <tr data-row="created"><th scope="row">作成される本のレコード</th><td data-col="確定した場合">1</td><td data-col="確定しない場合">0</td></tr>
+          <tr data-row="updated" class="has-sub"><th scope="row">更新される本のレコード</th><td data-col="確定した場合">0</td><td data-col="確定しない場合">0または1</td></tr><tr class="sub" data-row="updated"><td colspan="3"><b>確定しない場合：</b> あなたのレコードにPopfeedの内容がすべてそろっていれば0です。</td></tr>
           <tr data-row="deletedPopfeed"><th scope="row">削除されるPopfeedのレコード</th><td colspan="2">3</td></tr>
-          <tr data-row="deletedReading"><th scope="row">削除される読書記録</th><td>1</td><td>0</td></tr>
+          <tr data-row="deletedReading"><th scope="row">削除される読書記録</th><td data-col="確定した場合">1</td><td data-col="確定しない場合">0</td></tr>
           <tr data-row="commits"><th scope="row">コミット</th><td colspan="2">1*、すべてか無か</td></tr>
           <tr data-row="checked" class="has-sub"><th scope="row">確定した内容との照合</th><td colspan="2">あり</td></tr><tr class="sub" data-row="checked"><td colspan="3">確定したあとにその本のレコードが変わっていたら、その本は飛ばされ、もう一度確認を求められます。</td></tr>
         </table>
         <table class="fields">
           <thead><tr><th scope="col">項目</th><th scope="col">確定した場合</th><th scope="col">確定しない場合</th></tr></thead>
           <tbody>
-          <tr data-row="title"><th scope="row">タイトルと著者</th><td>BookHiveのカタログから</td><td>あなたのもの、変更なし</td></tr>
-          <tr data-row="status" class="has-sub"><th scope="row">読書ステータス</th><td>読書記録の値、不足を補完</td><td>補完、または選択</td></tr><tr class="sub" data-row="status"><td colspan="3"><b>確定した場合：</b> 読書記録に値があればそれが残り、ないものはPopfeedから補われます。違いは表示されません。 <b>確定しない場合：</b> あなたのレコードにないものはPopfeedから補われます。違いがある項目は、本ごとに、またはまとめてあなたが選びます。選ぶまではライブラリの内容が残ります。</td></tr>
-          <tr data-row="dates" class="has-sub"><th scope="row">追加日・開始日・読了日</th><td>読書記録の値、不足を補完</td><td>補完、または選択</td></tr><tr class="sub" data-row="dates"><td colspan="3"><b>確定した場合：</b> 2つの追加日のうち早いほうが残ります。 <b>確定しない場合：</b> 追加日はあなたのレコードのままです。</td></tr>
-          <tr data-row="rating"><th scope="row">評価</th><td>読書記録の値、不足を補完</td><td>補完、または選択</td></tr>
-          <tr data-row="review"><th scope="row">書評</th><td>読書記録の値、不足を補完</td><td>補完、または選択</td></tr>
+          <tr data-row="title"><th scope="row">タイトルと著者</th><td data-col="確定した場合">BookHiveのカタログから</td><td data-col="確定しない場合">あなたのもの、変更なし</td></tr>
+          <tr data-row="status" class="has-sub"><th scope="row">読書ステータス</th><td data-col="確定した場合">読書記録の値、不足を補完</td><td data-col="確定しない場合">補完、または選択</td></tr><tr class="sub" data-row="status"><td colspan="3"><b>確定した場合：</b> 読書記録に値があればそれが残り、ないものはPopfeedから補われます。違いは表示されません。 <b>確定しない場合：</b> あなたのレコードにないものはPopfeedから補われます。違いがある項目は、本ごとに、またはまとめてあなたが選びます。選ぶまではライブラリの内容が残ります。</td></tr>
+          <tr data-row="dates" class="has-sub"><th scope="row">追加日・開始日・読了日</th><td data-col="確定した場合">読書記録の値、不足を補完</td><td data-col="確定しない場合">補完、または選択</td></tr><tr class="sub" data-row="dates"><td colspan="3"><b>確定した場合：</b> 2つの追加日のうち早いほうが残ります。 <b>確定しない場合：</b> 追加日はあなたのレコードのままです。</td></tr>
+          <tr data-row="rating"><th scope="row">評価</th><td data-col="確定した場合">読書記録の値、不足を補完</td><td data-col="確定しない場合">補完、または選択</td></tr>
+          <tr data-row="review"><th scope="row">書評</th><td data-col="確定した場合">読書記録の値、不足を補完</td><td data-col="確定しない場合">補完、または選択</td></tr>
           <tr data-row="spoiler" class="has-sub"><th scope="row">ネタバレありの書評</th><td colspan="2">長文書評も作成</td></tr><tr class="sub" data-row="spoiler"><td colspan="3">最終的にあなたのレコードがこの書評の本文になる場合のみです。 ネタバレ表示とリンクを付けてresenha.inkに公開されます。書評とそのリンクで、レコードが2件増えます。Blueskyには何も投稿されません。本のレコードには全文が残ります。その本にすでに長文書評がある場合は作られません。</td></tr>
           <tr data-row="progress"><th scope="row">読書の進捗</th><td colspan="2">新しいほう</td></tr>
-          <tr data-row="ids"><th scope="row">ISBNとGoodreads ID</th><td>BookHiveのカタログから</td><td>あなたのもの、変更なし</td></tr>
-          <tr data-row="cover" class="has-sub"><th scope="row">表紙</th><td>BookHiveのカタログの表紙</td><td>ない場合に補完</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>確定した場合：</b> Popfeedの表紙のアドレスは残りません。</td></tr>
+          <tr data-row="ids"><th scope="row">ISBNとGoodreads ID</th><td data-col="確定した場合">BookHiveのカタログから</td><td data-col="確定しない場合">あなたのもの、変更なし</td></tr>
+          <tr data-row="cover" class="has-sub"><th scope="row">表紙</th><td data-col="確定した場合">BookHiveのカタログの表紙</td><td data-col="確定しない場合">ない場合に補完</td></tr><tr class="sub" data-row="cover"><td colspan="3"><b>確定した場合：</b> Popfeedの表紙のアドレスは残りません。</td></tr>
           <tr data-row="leftovers"><th scope="row">ほかの書評、古い進捗</th><td colspan="2">削除、バックアップに保管</td></tr>
           <tr data-row="extras"><th scope="row">タグ、リスト内の位置</th><td colspan="2">引き継がない、バックアップに保管</td></tr>
           <tr data-row="likes" class="has-sub"><th scope="row">あなたの書評へのほかの人の「いいね」とコメント</th><td colspan="2">失われる</td></tr><tr class="sub" data-row="likes"><td colspan="3">それらは書いた人のアカウントにあり、削除されるPopfeedの書評を指しています。</td></tr>

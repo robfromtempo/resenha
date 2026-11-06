@@ -2,7 +2,7 @@
   "ogLocale": "fr_FR",
   "meta": {
     "title": "Rosetta — Comment Resenha transfère vos livres Popfeed",
-    "description": "Ce que devient chaque enregistrement Popfeed quand Resenha transfère vos livres vers BookHive ou vers des lectures Resenha : comment les livres sont identifiés, ce que devient chaque champ, et ce qui n’est jamais touché."
+    "description": "Ce que devient chaque enregistrement Popfeed quand Resenha transfère vos livres vers BookHive ou vers des lectures Resenha : comment les livres sont identifiés, ce que devient chaque champ, et ce qui n’est jamais touché."
   },
   "theme": {
     "toDark": "Passer à l’apparence sombre",
@@ -13,7 +13,7 @@
     "title": "Rosetta",
     "lede": "Rosetta, c’est la façon dont Resenha transfère vos enregistrements d’autres apps vers des enregistrements BookHive {version}.",
     "version": "(à partir de la version 1.6.10)",
-    "how": "Comment ça marche :",
+    "how": "Comment ça marche :",
     "body": [
       "Chaque livre Popfeed devient un enregistrement BookHive quand le catalogue de BookHive le connaît avec certitude, et une lecture Resenha sinon. Ses enregistrements Popfeed sont ensuite supprimés.",
       "Déplacer des données de livres d’une app à l’autre a la réputation de mal deviner et de perdre des choses. Voici exactement ce qui arrive à chaque livre, champ par champ. Rien n’est écrit avant que vous ne confirmiez."
@@ -25,25 +25,25 @@
     "goodreads": "ID Goodreads",
     "title": "Par le titre seul",
     "none": "Absent de BookHive",
-    "heldLegend": "Déjà dans votre bibliothèque ?",
+    "heldLegend": "Déjà dans votre bibliothèque ?",
     "heldNo": "Non",
     "heldBookhive": "Dans BookHive",
     "heldReading": "En lecture Resenha",
-    "noscript": "Affiché : un livre trouvé par son ISBN, pas encore dans votre bibliothèque."
+    "noscript": "Affiché : un livre trouvé par son ISBN, pas encore dans votre bibliothèque."
   },
   "explain": {
-    "isbn": "Le catalogue de BookHive a répondu à l’ISBN du livre par un seul livre : la correspondance est donc certaine.",
-    "goodreads": "Le livre a un ID Goodreads mais pas d’ISBN. Quand vous touchez « Les rechercher », un résultat BookHive avec le même ID Goodreads compte comme certain.",
+    "isbn": "Le catalogue de BookHive a répondu à l’ISBN du livre par un seul livre : la correspondance est donc certaine.",
+    "goodreads": "Le livre a un ID Goodreads mais pas d’ISBN. Quand vous touchez « Les rechercher », un résultat BookHive avec le même ID Goodreads compte comme certain.",
     "title": "Seuls le titre et l’auteur correspondent. Resenha vous propose le livre BookHive trouvé, et rien n’est utilisé avant que vous ne confirmiez.",
     "none": "Le catalogue de BookHive n’a pas le livre avec certitude, et aucune correspondance de titre n’a été confirmée.",
-    "bookhive": "Vous l’avez déjà dans BookHive : cet enregistrement est mis à jour. Popfeed complète ce qui manque, et vous choisissez là où ils diffèrent.",
-    "reading": "Vous l’avez déjà en lecture Resenha. Avec une correspondance certaine, il passe dans BookHive ; sans elle, la lecture est mise à jour."
+    "bookhive": "Vous l’avez déjà dans BookHive : cet enregistrement est mis à jour. Popfeed complète ce qui manque, et vous choisissez là où ils diffèrent.",
+    "reading": "Vous l’avez déjà en lecture Resenha. Avec une correspondance certaine, il passe dans BookHive ; sans elle, la lecture est mise à jour."
   },
   "label": {
     "heading": "Valeurs du transfert",
     "serving": "Portion",
     "servingValue": "1 livre",
-    "servingNote": "Exemple : 1 élément de liste, 1 critique, 1 enregistrement de progression",
+    "servingNote": "Exemple : 1 élément de liste, 1 critique, 1 enregistrement de progression",
     "amountPer": "Quantité par livre",
     "goesTo": "Devient",
     "colYes": "Si vous confirmez",
@@ -61,7 +61,7 @@
     "destNote": {
       "heldBy": "Votre enregistrement est retrouvé par son ID de catalogue ou son ISBN, ou parce que vous avez confirmé la suggestion de Resenha selon laquelle c’est le même livre.",
       "mergeBookHive": "Il est mis à jour dans le même commit que celui qui supprime les enregistrements Popfeed.",
-      "upgradeReading": "Votre lecture est cédée : le nouvel enregistrement et la suppression de la lecture sont dans le même commit, et le lien de sa critique longue suit.",
+      "upgradeReading": "Votre lecture est cédée : le nouvel enregistrement et la suppression de la lecture sont dans le même commit, et le lien de sa critique longue suit.",
       "mergeReading": "Elle est mise à jour dans le même commit que celui qui supprime les enregistrements Popfeed."
     },
     "amounts": {
@@ -108,20 +108,20 @@
       "keptCopy": "Conservée, avec une copie",
       "notChanged": "Inchangée",
       "fillMissing": "Complétée si elle manque",
-      "backup": "Supprimées ; gardées dans la sauvegarde",
-      "notCarried": "Non transférés ; gardés dans la sauvegarde",
+      "backup": "Supprimées ; gardées dans la sauvegarde",
+      "notCarried": "Non transférés ; gardés dans la sauvegarde",
       "lost": "Perdus"
     },
     "notes": {
       "status": "Lu, En cours et À lire gardent leur sens, et Abandonné reste Abandonné. Un livre qui n’a qu’une critique arrive en Lu, sauf si vous choisissez un autre statut.",
-      "merge": "Popfeed complète ce qui manque à votre enregistrement. Là où les deux diffèrent, vous choisissez, livre par livre ou pour tous d’un coup ; d’ici là, la version de votre bibliothèque reste.",
-      "upgrade": "Là où votre lecture a une valeur, elle reste ; Popfeed complète ce qui lui manque. Aucune différence n’est montrée.",
+      "merge": "Popfeed complète ce qui manque à votre enregistrement. Là où les deux diffèrent, vous choisissez, livre par livre ou pour tous d’un coup ; d’ici là, la version de votre bibliothèque reste.",
+      "upgrade": "Là où votre lecture a une valeur, elle reste ; Popfeed complète ce qui lui manque. Aucune différence n’est montrée.",
       "dates": "Tirées des enregistrements Popfeed. Jamais fixées à aujourd’hui.",
       "datesMerge": "Votre enregistrement garde sa date d’ajout.",
       "datesUpgrade": "La plus ancienne des deux dates d’ajout est gardée.",
-      "rating": "Les demi-points sont arrondis au-dessus : 7,5 devient 8. Une note de 0 signifie aucune note.",
+      "rating": "Les demi-points sont arrondis au-dessus : 7,5 devient 8. Une note de 0 signifie aucune note.",
       "review": "Les liens et les mentions deviennent du texte brut. La ligne resenha.ink que Resenha ajoutait à ses propres copies est retirée. Si un livre a plusieurs critiques, la plus récente avec du texte est gardée, sauf si vous en choisissez une autre.",
-      "spoiler": "Publiée sur resenha.ink avec un avertissement et ses liens : 2 enregistrements de plus, la critique et son lien. Rien n’est publié sur Bluesky. L’enregistrement du livre garde le texte complet. Pas créée si le livre a déjà une critique longue.",
+      "spoiler": "Publiée sur resenha.ink avec un avertissement et ses liens : 2 enregistrements de plus, la critique et son lien. Rien n’est publié sur Bluesky. L’enregistrement du livre garde le texte complet. Pas créée si le livre a déjà une critique longue.",
       "spoilerMerge": "Seulement si votre enregistrement finit avec le texte de cette critique.",
       "progress": "Les enregistrements de progression plus anciens sont supprimés et gardés dans la sauvegarde. Une page ou un chapitre 0 est omis.",
       "ids": "Aucun ID BookHive n’est ajouté à une lecture.",
@@ -129,12 +129,12 @@
       "keptCopy": "Toutes les adresses de couverture des enregistrements Popfeed, et une copie de l’image enregistrée sur votre compte, pour que l’image survive à la suppression.",
       "likes": "Ils se trouvent dans les comptes de leurs auteurs et renvoient à une critique Popfeed qui est supprimée."
     },
-    "ingredientsLabel": "Ingrédients :",
+    "ingredientsLabel": "Ingrédients :",
     "ingredients": {
-      "isbn": "l’ISBN-13 du livre (un ISBN-10 est converti), recherché dans le catalogue de BookHive. Certain seulement quand exactement un livre du catalogue répond ; si les ISBN du livre mènent à deux, vous choisissez. Un livre pour lequel BookHive ne peut pas être interrogé attend un prochain passage : il ne devient jamais une lecture faute de réponse. Non utilisés : les ID de catalogue enregistrés dans les éléments Popfeed.",
-      "goodreads": "l’ID Goodreads du livre, pour un livre sans ISBN. Ces livres attendent sous « Livres à rechercher » jusqu’à ce que vous touchiez « Les rechercher », une recherche BookHive par titre et auteur que vous lancez vous-même. Un résultat avec le même ID Goodreads est certain. Tout autre résultat est seulement proposé, comme correspondance de titre. Non utilisés : les ID de catalogue enregistrés dans les éléments Popfeed.",
-      "title": "le titre et le nom du premier auteur. Quand vous ouvrez « Correspondances de titre », Resenha cherche dans BookHive et garde jusqu’à trois résultats de même titre et même auteur. Cela vaut aussi pour les livres dont BookHive ne connaît pas l’ISBN. Aucun n’est utilisé avant que vous ne le confirmiez, d’un toucher chacun ou avec « Confirmer toutes les correspondances de titre ».",
-      "none": "aucun que BookHive reconnaisse : aucun ISBN connu de son catalogue, aucun résultat avec son ID Goodreads, et aucune correspondance de titre que vous avez confirmée. Le livre garde ses propres informations dans une lecture Resenha."
+      "isbn": "l’ISBN-13 du livre (un ISBN-10 est converti), recherché dans le catalogue de BookHive. Certain seulement quand exactement un livre du catalogue répond ; si les ISBN du livre mènent à deux, vous choisissez. Un livre pour lequel BookHive ne peut pas être interrogé attend un prochain passage : il ne devient jamais une lecture faute de réponse. Non utilisés : les ID de catalogue enregistrés dans les éléments Popfeed.",
+      "goodreads": "l’ID Goodreads du livre, pour un livre sans ISBN. Ces livres attendent sous « Livres à rechercher » jusqu’à ce que vous touchiez « Les rechercher », une recherche BookHive par titre et auteur que vous lancez vous-même. Un résultat avec le même ID Goodreads est certain. Tout autre résultat est seulement proposé, comme correspondance de titre. Non utilisés : les ID de catalogue enregistrés dans les éléments Popfeed.",
+      "title": "le titre et le nom du premier auteur. Quand vous ouvrez « Correspondances de titre », Resenha cherche dans BookHive et garde jusqu’à trois résultats de même titre et même auteur. Cela vaut aussi pour les livres dont BookHive ne connaît pas l’ISBN. Aucun n’est utilisé avant que vous ne le confirmiez, d’un toucher chacun ou avec « Confirmer toutes les correspondances de titre ».",
+      "none": "aucun que BookHive reconnaisse : aucun ISBN connu de son catalogue, aucun résultat avec son ID Goodreads, et aucune correspondance de titre que vous avez confirmée. Le livre garde ses propres informations dans une lecture Resenha."
     },
     "warningLead": "Ne contient aucune supposition.",
     "warning": "Une correspondance par le titre seul n’est jamais appliquée sans votre toucher.",
@@ -193,7 +193,7 @@
     "items": [
       [
         "Sauvegarde.",
-        "Quand vous confirmez, Resenha enregistre d’abord un fichier avec chaque enregistrement que le transfert va supprimer ou modifier, tel qu’il est sur votre compte. Il va dans le dossier de Resenha sur iCloud Drive, que vous pouvez ouvrir dans Fichiers, ou reste sur l’appareil quand iCloud Drive est désactivé. Resenha ne peut pas encore restaurer à partir de ce fichier ; il conserve vos données."
+        "Quand vous confirmez, Resenha enregistre d’abord un fichier avec chaque enregistrement que le transfert va supprimer ou modifier, tel qu’il est sur votre compte. Il va dans le dossier de Resenha sur iCloud Drive, que vous pouvez ouvrir dans Fichiers, ou reste sur l’appareil quand iCloud Drive est désactivé. Resenha ne peut pas encore restaurer à partir de ce fichier ; il conserve vos données."
       ],
       [
         "Identification.",
@@ -201,7 +201,7 @@
       ],
       [
         "Un commit par livre.",
-        "Le nouvel enregistrement d’un livre et la suppression de ses enregistrements Popfeed partent dans un seul commit, que votre compte applique en entier ou pas du tout : un livre n’est jamais transféré à moitié. Juste avant, Resenha relit les enregistrements du livre ; si quelque chose a changé, le livre est sauté et proposé de nouveau à la fin. Un nouvel enregistrement prend sa clé du plus ancien enregistrement Popfeed du livre, si bien qu’une nouvelle tentative retrouve la première au lieu de créer une copie."
+        "Le nouvel enregistrement d’un livre et la suppression de ses enregistrements Popfeed partent dans un seul commit, que votre compte applique en entier ou pas du tout : un livre n’est jamais transféré à moitié. Juste avant, Resenha relit les enregistrements du livre ; si quelque chose a changé, le livre est sauté et proposé de nouveau à la fin. Un nouvel enregistrement prend sa clé du plus ancien enregistrement Popfeed du livre, si bien qu’une nouvelle tentative retrouve la première au lieu de créer une copie."
       ],
       [
         "À son rythme.",
@@ -213,5 +213,5 @@
   "footer": {
     "legal": "© 2026 Resenha."
   },
-  "live": "{match}. {heldLegend} {held}. {goesTo} : {summary}."
+  "live": "{match}. {heldLegend} {held}. {goesTo} : {summary}."
 }

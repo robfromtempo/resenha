@@ -4,20 +4,33 @@
    rules, figures on the right, "Ingredients", a boxed warning) but is drawn as the site draws content: a raised card
    in the page's own type and colours, light or dark. Glass is for the controls alone, floating above the content
    (Apple's Liquid Glass rule): the two switches are glass tracks with a raised lens that slides to the pick. On wide
-   screens they sit in a sticky column beside the label; on narrower ones they dock under the site's bar.
+   screens they sit in a sticky column beside the label; on narrower ones they dock under the site's bar, each with
+   its heading still showing.
 
-   Spacing comes from one scale: 4, 8, 12, 16, 24, 32, 48, 72, 112. */
+   Spacing comes from one scale: 4, 8, 12, 16, 24, 32, 48, 72, 112. No text on the page is smaller than 14px. */
 
 .visually-hidden {
   position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
   clip-path: inset(50%); white-space: nowrap; border: 0;
 }
 
+/* The small, spaced capitals the site uses for section heads, at a size that stays readable: 14px. */
+.rosetta-main .eyebrow, .becomes-if, .switch legend, .facts caption, .facts tr.cols th, .facts .fields thead th {
+  font-size: .875rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink2);
+}
+:lang(ja) .rosetta-main .eyebrow, :lang(ja) .becomes-if, :lang(ja) .switch legend, :lang(ja) .facts caption,
+:lang(ja) .facts tr.cols th, :lang(ja) .facts .fields thead th { letter-spacing: .04em; }
+
+/* Headings balance their lines; paragraphs avoid a lonely last word. */
+.rosetta-main h1, .rosetta-main h2, .rosetta-main h3, .becomes-dest, .facts-title, .lede { text-wrap: balance; }
+.rosetta-main p, .facts td, .facts th { text-wrap: pretty; }
+
 /* Record names, in a monospace on a quiet pill. */
 .rosetta-main code {
-  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; font-size: .85em; font-weight: 500;
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; font-size: max(.85em, 14px); font-weight: 500;
   padding: .12em .5em; border-radius: 6px; background: var(--hover); border: 1px solid var(--rule); white-space: nowrap;
 }
+.rosetta-main code wbr { display: none; }
 
 /* MARK: - Hero: the landing's scale */
 
@@ -34,16 +47,13 @@
   display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: start;
 }
 .labels { min-width: 0; }
-.explain .eyebrow { margin-bottom: 12px; }
+.explain .eyebrow { margin: 0 0 12px; }
 
 .case[hidden] { display: none; }
 .becomes { margin: 0; }
 .becomes + .becomes { margin-top: 24px; }
-.becomes-if {
-  display: block; margin-bottom: 4px;
-  font-size: .74rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink2);
-}
-.becomes-dest { display: block; font: 400 clamp(2.2rem, 3.6vw, 3.1rem)/1.02 var(--display); letter-spacing: -.005em; }
+.becomes-if { display: block; margin-bottom: 4px; }
+.becomes-dest { display: block; font: 400 clamp(2.2rem, 3.6vw, 3.1rem)/1.05 var(--display); letter-spacing: -.005em; }
 .becomes code { display: inline-block; margin-top: 12px; }
 .case-text { margin: 24px 0 0; max-width: 34rem; color: var(--ink2); font-size: 1.05rem; line-height: 1.55; }
 .noscript { margin: 24px 0 0; color: var(--ink2); font-size: .95rem; }
@@ -54,10 +64,7 @@
 .switcher[hidden] { display: none; }
 .switch { border: 0; margin: 0; padding: 0; min-width: 0; }
 .switch + .switch { margin-top: 24px; }
-.switch legend {
-  padding: 0; margin: 0 0 8px;
-  font-size: .74rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink2);
-}
+.switch legend { padding: 0; margin: 0 0 8px; }
 .track {
   --track-pad: 4px;
   --track-radius: 22px;
@@ -116,15 +123,13 @@
 
 .facts-title {
   margin: 0; padding-bottom: 12px; border-bottom: 1px solid var(--ink);
-  font: 400 clamp(2.8rem, 6vw, 4rem)/.95 var(--display); letter-spacing: -.01em;
+  font: 400 clamp(2.8rem, 6vw, 4rem)/1 var(--display); letter-spacing: -.01em;
 }
-.serving { display: flex; justify-content: space-between; gap: 16px; margin: 12px 0 0; font-size: 1.15rem; font-weight: 600; }
+.serving { display: flex; flex-wrap: wrap; justify-content: space-between; column-gap: 16px; margin: 12px 0 0; font-size: 1.15rem; font-weight: 600; }
+.serving span:last-child { margin-left: auto; }
 .serving-note { margin: 4px 0 0; padding-bottom: 12px; border-bottom: 10px solid var(--ink); color: var(--ink2); font-size: .9rem; }
 
 .facts table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-.facts caption, .facts tr.cols th, .facts .fields thead th {
-  font-size: .74rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink2);
-}
 .facts caption { caption-side: top; text-align: left; padding: 12px 0 4px; }
 .facts th, .facts td { padding: 12px 0; border-top: 1px solid var(--ink); vertical-align: top; text-align: left; }
 .facts th { font-weight: 600; }
@@ -135,18 +140,29 @@
 .facts tr.cols th, .facts tr.cols td { border-top: 0; padding: 4px 0 8px 16px; text-align: right; }
 
 /* "Goes to", the label's Calories line. */
-.facts tr.dest .goes { font: 400 1.9rem/1 var(--display); }
-.facts tr.dest td code { display: inline-block; font-size: .85em; }
-/* Only a phone's two narrow columns break a record name, at its dots. */
-.facts tr.dest td code wbr { display: none; }
-@media (max-width: 600px) { .facts[data-match="title"] tr.dest td code { white-space: normal; } .facts[data-match="title"] tr.dest td code wbr { display: inline; } }
-@media (max-width: 400px) { .facts tr.dest td code { white-space: normal; } .facts tr.dest td code wbr { display: inline; } }
+.facts tr.dest .goes { font: 400 1.9rem/1.05 var(--display); }
+.facts tr.dest td code { display: inline-block; }
 .facts tr.dest td .dest-words { display: block; margin-top: 4px; color: var(--ink2); font-size: .9rem; }
 
 .facts .amounts { border-bottom: 5px solid var(--ink); }
 .facts .fields thead th { padding: 12px 0 8px; border-top: 0; }
 .facts .fields thead th:not(:first-child) { text-align: right; padding-left: 16px; }
 .facts .fields { border-bottom: 10px solid var(--ink); }
+
+/* A row's value sits beside its name when both fit with room between them, and moves under it, still on the right,
+   when they don't: each row is a wrapping line of two boxes rather than a table row. The two-column "Title only"
+   label keeps its table on wider screens; on phones it stacks (below). */
+.facts[data-match]:not([data-match="title"]) :is(table, caption, thead, tbody) { display: block; width: 100%; }
+.facts[data-match]:not([data-match="title"]) tr { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; row-gap: 4px; padding: 12px 0; border-top: 1px solid var(--ink); }
+.facts[data-match]:not([data-match="title"]) tr.has-sub { padding-bottom: 0; }
+.facts[data-match]:not([data-match="title"]) tr.sub { border-top: 0; padding: 4px 0 12px; }
+.facts[data-match]:not([data-match="title"]) thead tr { border-top: 0; padding: 12px 0 8px; }
+.facts[data-match]:not([data-match="title"]) :is(th, td) { display: block; border-top: 0; padding: 0; flex: 0 0 auto; max-width: 100%; }
+.facts[data-match]:not([data-match="title"]) tr.sub td, .facts[data-match]:not([data-match="title"]) thead th { padding: 0; }
+.facts[data-match]:not([data-match="title"]) tr > td:last-child:not(:first-child),
+.facts[data-match]:not([data-match="title"]) thead th:last-child { margin-left: auto; text-align: right; }
+.facts[data-match]:not([data-match="title"]) tr.sub td { flex: 1 1 100%; }
+.facts[data-match]:not([data-match="title"]) tr.dest { align-items: flex-start; }
 
 .ingredients { margin: 16px 0 0; font-size: .95rem; line-height: 1.55; }
 .contains { margin: 16px 0 0; padding: 12px 16px; border: 2px solid var(--ink); border-radius: 14px; font-size: .98rem; }
@@ -159,7 +175,7 @@
 
 /* MARK: - "Not included": the narrower label beside its paragraph */
 
-.excluded-section { padding-top: 24px; padding-bottom: 112px; }
+.excluded-section { padding-top: 24px; padding-bottom: 112px; align-items: start; }
 .excluded-section .copy p { max-width: 34rem; }
 .excluded-section .device { display: block; }
 .facts.small { max-width: 30rem; margin: 0 auto; }
@@ -170,61 +186,66 @@
 .facts.small .row-note { display: block; margin-top: 4px; color: var(--ink2); font-size: .9rem; font-weight: 400; }
 .facts.small .fields { border-bottom: 5px solid var(--ink); }
 
-/* MARK: - How a book moves: four cards in a row, joined by a hairline */
+/* MARK: - How a book moves: four cards, two by two, their text from the top */
 
 .moves-section { max-width: 1180px; margin: 0 auto; padding: 0 var(--gutter) 112px; }
-.moves-section h2 { margin: 0; text-align: center; font: 400 clamp(2.4rem, 4.6vw, 3.6rem)/1 var(--display); }
+.moves-section h2 { margin: 0; text-align: center; font: 400 clamp(2.4rem, 4.6vw, 3.6rem)/1.05 var(--display); }
 .moves {
-  position: relative; list-style: none; margin: 48px 0 0; padding: 0;
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px;
-}
-.moves::before { /* the hairline that runs behind the cards, seen between them */
-  content: ""; position: absolute; left: 24px; right: 24px; top: 56px; height: 1px; background: var(--rule);
+  list-style: none; margin: 48px auto 0; padding: 0; max-width: 960px;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: stretch;
 }
 .move {
-  position: relative; padding: 24px; border-radius: 22px;
+  display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); column-gap: 16px; align-content: start;
+  padding: 32px; border-radius: 22px;
   background: var(--raised); border: 1px solid var(--glass-edge);
   box-shadow: 0 30px 60px -40px rgba(var(--shadow), .3);
 }
-.move .num { display: block; font: 400 clamp(3rem, 4vw, 4rem)/1 var(--display); color: var(--accent); }
-.move h3 { margin: 12px 0 0; font-size: 1.05rem; font-weight: 600; }
+.move .num { grid-row: 1 / span 2; font: 400 clamp(3rem, 4vw, 4rem)/.9 var(--display); color: var(--accent); }
+.move h3 { margin: 4px 0 0; font-size: 1.05rem; font-weight: 600; }
 .move p { margin: 8px 0 0; color: var(--ink2); font-size: .98rem; line-height: 1.55; }
 .moves-section .aside { max-width: 62ch; margin: 32px auto 0; text-align: center; color: var(--ink2); font-size: .95rem; }
 
+/* MARK: - The footer: the landing's closing card, its small print at 14px */
+
+.rosetta .closing nav { gap: 12px 24px; }
+.rosetta .closing .legal { font-size: .875rem; }
+
 /* Japanese: the display face is Mincho, which wants a little more leading. */
-:lang(ja) .becomes-dest, :lang(ja) .facts-title { line-height: 1.15; }
+:lang(ja) .becomes-dest, :lang(ja) .facts-title { line-height: 1.2; }
 :lang(ja) .becomes-dest { font-size: clamp(1.8rem, 2.6vw, 2.3rem); }
 :lang(ja) .facts-title { font-size: clamp(2.4rem, 5vw, 3.2rem); }
-@media (min-width: 601px) { :lang(ja) .facts tr > th[scope="row"] { min-width: 9.5em; } }
-:lang(ja) .switch legend, :lang(ja) .becomes-if, :lang(ja) .facts caption, :lang(ja) .facts .fields thead th, :lang(ja) .facts tr.cols th { letter-spacing: .04em; }
+@media (min-width: 601px) { :lang(ja) .facts[data-match="title"] tr > th[scope="row"] { min-width: 9.5em; } }
 
-/* Wide screens with room to spare: the words and switches stay beside the label while it scrolls. */
+/* Wide screens with room to spare: the words and switches stay beside the label while it scrolls, and the
+   "Not included" paragraph beside its card. */
 @media (min-width: 1000px) and (min-height: 820px) {
   .explain { position: sticky; top: 96px; }
+  .excluded-section .copy { position: sticky; top: 96px; }
 }
 
-/* MARK: - Tablets and phones: one column; the switches dock under the bar as a glass control bar */
+/* MARK: - Tablets and phones: one column; the switches dock under the bar as one glass control bar */
 
 @media (max-width: 999px) {
   .explorer { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 72px var(--gutter); }
   .explain { display: contents; }
   .explain .eyebrow { margin-bottom: -12px; }
   .case-text { margin-top: 16px; }
-  /* One glass layer for both switches, docked under the bar: the tracks inside it are plain, so there is no glass
-     on glass, and nothing shows through between them. */
+  /* One glass layer for both switches, docked 12px or more under the bar so the two never look stacked. The tracks inside
+     are plain, so there is no glass on glass; each keeps its heading above it. */
   .switcher {
-    position: sticky; top: 74px; z-index: 15; margin: 0;
-    display: grid; gap: 2px; padding: 6px; border-radius: 30px;
+    position: sticky; top: 84px; z-index: 15; margin: 0;
+    display: grid; gap: 6px; padding: 8px 6px 6px; border-radius: 28px;
     background: var(--glass-solid);
     -webkit-backdrop-filter: saturate(1.6) blur(18px); backdrop-filter: saturate(1.6) blur(18px);
     border: 1px solid var(--glass-edge);
     box-shadow: 0 10px 30px -12px rgba(var(--shadow), .25);
   }
   .switch + .switch { margin-top: 0; }
-  .switch legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* In the bar the headings drop the spaced capitals, which would wrap in French and German on a small phone. */
+  .switch legend { margin: 0 0 2px; padding: 0 12px; line-height: 1.2; text-transform: none; letter-spacing: 0; }
   .track {
     --track-radius: 999px;
-    --track-pad: 3px;
+    --track-pad: 2px;
     background: none; border: 0; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none;
     overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none;
     scroll-snap-type: x proximity;
@@ -237,31 +258,46 @@
   .rail label { flex: 1 0 auto; justify-content: center; white-space: nowrap; scroll-snap-align: center; padding: 8px 16px; font-size: .9rem; }
   .lens, .rail label { border-radius: 999px; }
 
-  .moves { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .moves::before { display: none; }
   .excluded-section { padding-top: 0; padding-bottom: 72px; }
+  .excluded-section .copy { text-align: left; }
+  .excluded-section .copy p { margin-left: 0; }
+}
+
+@media (max-width: 699px) {
+  .moves { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .move { padding: 24px; }
 }
 
 @media (max-width: 600px) {
   .moves-section { padding-bottom: 72px; }
-  .moves { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .facts { padding: 20px; border-radius: 24px; }
   .facts td { padding-left: 12px; }
   .becomes-dest { font-size: clamp(2rem, 9vw, 2.6rem); }
+  .facts tr.dest .goes { font-size: 1.7rem; }
 
-  /* Two columns don't fit beside a row's name on a phone: the name takes its own line, and the two values go
-     under it side by side, as a two-column food label sets them. */
-  .facts[data-match="title"] tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 12px; border-top: 1px solid var(--ink); }
-  .facts[data-match="title"] th, .facts[data-match="title"] td { border-top: 0; padding-left: 0; }
-  .facts[data-match="title"] tr > th[scope="row"] { grid-column: 1 / -1; padding-bottom: 0; }
-  .facts[data-match="title"] tr > td[colspan] { grid-column: 1 / -1; }
-  .facts[data-match="title"] tr:not(.has-sub) > td { padding-top: 4px; }
-  .facts[data-match="title"] tr.has-sub > td { padding-top: 4px; }
-  .facts[data-match="title"] tr.sub, .facts[data-match="title"] tr.cols, .facts[data-match="title"] .fields thead tr { border-top: 0; }
-  .facts[data-match="title"] tr.cols td:first-child { display: none; }
-  .facts[data-match="title"] tr.cols th { padding-left: 0; }
-  .facts[data-match="title"] .fields thead th:first-child { grid-column: 1 / -1; }
-  .facts[data-match="title"] .fields thead th:not(:first-child) { padding-left: 0; }
+  /* "Title only" on a phone: each row's name, then what happens if you confirm and if you don't, one under the
+     other, each with its heading, rather than two squeezed columns. */
+  .facts[data-match="title"] :is(table, caption, thead, tbody) { display: block; width: 100%; }
+  .facts[data-match="title"] tr { display: block; border-top: 1px solid var(--ink); padding: 12px 0; }
+  .facts[data-match="title"] tr.has-sub { padding-bottom: 0; }
+  .facts[data-match="title"] tr.sub { border-top: 0; padding: 4px 0 12px; }
+  .facts[data-match="title"] tr.cols, .facts[data-match="title"] .fields thead th:not(:first-child) { display: none; }
+  .facts[data-match="title"] .fields thead tr { border-top: 0; padding: 12px 0 8px; }
+  .facts[data-match="title"] :is(th, td) { display: block; border-top: 0; padding: 0; text-align: left; }
+  .facts[data-match="title"] tr.sub td { padding: 0; }
+  .facts[data-match="title"] tr > td { margin-top: 8px; }
+  /* Each value on the line of its heading, the heading on the left: "IF YOU CONFIRM ... 1". A value too long for
+     that line goes under its heading. */
+  .facts[data-match="title"] tr:not(.dest) > td[data-col] {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-gap: 16px;
+  }
+  .facts[data-match="title"] tr > td[data-col]::before {
+    content: attr(data-col);
+    font-size: .875rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink2);
+  }
+  .facts[data-match="title"] tr.dest > td[data-col]::before { display: block; margin-bottom: 4px; }
+  :lang(ja) .facts[data-match="title"] tr > td[data-col]::before { letter-spacing: .04em; }
+  .facts[data-match="title"] tr.dest td code + .dest-words { margin-top: 4px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
