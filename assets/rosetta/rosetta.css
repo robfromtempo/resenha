@@ -287,15 +287,17 @@
   .facts[data-match="title"] tr.sub td { padding: 0; }
   .facts[data-match="title"] tr > td { margin-top: 8px; }
   /* Each value on the line of its heading, the heading on the left: "IF YOU CONFIRM ... 1". A value too long for
-     that line goes under its heading. */
+     that line goes under its heading, still on the right, as every value on the page does. */
   .facts[data-match="title"] tr:not(.dest) > td[data-col] {
-    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; column-gap: 16px;
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: flex-end; column-gap: 16px; row-gap: 4px; text-align: right;
   }
+  .facts[data-match="title"] tr:not(.dest) > td[data-col]::before { margin-right: auto; text-align: left; }
   .facts[data-match="title"] tr > td[data-col]::before {
     content: attr(data-col);
     font-size: .875rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink2);
   }
-  .facts[data-match="title"] tr.dest > td[data-col]::before { display: block; margin-bottom: 4px; }
+  .facts[data-match="title"] tr.dest > td { text-align: right; }
+  .facts[data-match="title"] tr.dest > td[data-col]::before { display: block; margin-bottom: 4px; text-align: left; }
   /* A value both outcomes share follows the single-column rule: beside its name on the right when they fit with
      16px between them, otherwise under it, still on the right. */
   .facts[data-match="title"] tr:not(.sub):has(> td[colspan]) { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; row-gap: 4px; }
