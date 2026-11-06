@@ -11,8 +11,11 @@
   "intro": {
     "eyebrow": "Popfeedから本を移す",
     "title": "Rosetta",
+    "lede": "Rosettaは、ほかのアプリのレコードをBookHiveのレコードに移す、Resenhaのしくみです{version}。",
+    "version": "（バージョン1.6.10から）",
+    "how": "しくみ：",
     "body": [
-      "Rosettaは、Resenha 1.6.10がPopfeedの本を移すしくみです。BookHiveのカタログで確実に見つかった本はBookHiveのレコードに、見つからなかった本はResenhaの読書記録になります。そのあと、その本のPopfeedのレコードは削除されます。",
+      "Popfeedの本は、BookHiveのカタログで確実に見つかればBookHiveのレコードに、見つからなければResenhaの読書記録になります。そのあと、その本のPopfeedのレコードは削除されます。",
       "アプリ間で本のデータを移すと、照合を誤ったりデータが失われたりしがちだと言われます。ここでは、それぞれの本に何が起きるかを項目ごとに正確に示します。あなたが確定するまで、何も書き込まれません。"
     ]
   },

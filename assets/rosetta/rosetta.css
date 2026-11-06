@@ -22,7 +22,10 @@
 /* MARK: - Hero: the landing's scale */
 
 .intro.hero { padding-bottom: 0; }
-.intro .lede + .lede { margin-top: 12px; }
+/* Rob's lede, then how it works in smaller type: 24px, then 8px, then 12px between the small paragraphs. */
+.intro .how { margin: 24px auto 0; max-width: 34rem; font-size: .95rem; font-weight: 600; color: var(--ink); }
+.intro .how-text { margin: 8px auto 0; max-width: 34rem; font-size: .95rem; line-height: 1.5; color: var(--ink2); }
+.intro .how-text + .how-text { margin-top: 12px; }
 
 /* MARK: - The explorer: words and switches beside the label */
 

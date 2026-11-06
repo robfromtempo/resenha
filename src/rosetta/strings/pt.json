@@ -11,8 +11,11 @@
   "intro": {
     "eyebrow": "Transferindo livros do Popfeed",
     "title": "Rosetta",
+    "lede": "Rosetta é como o Resenha transfere seus registros de outros apps para registros do BookHive {version}.",
+    "version": "(a partir da versão 1.6.10)",
+    "how": "Como funciona:",
     "body": [
-      "Rosetta é como o Resenha 1.6.10 transfere seus livros do Popfeed. Cada livro vira um registro do BookHive quando o catálogo do BookHive tem o livro com certeza, e uma leitura do Resenha quando não tem. Depois, os registros dele no Popfeed são apagados.",
+      "Cada livro do Popfeed vira um registro do BookHive quando o catálogo do BookHive tem o livro com certeza, e uma leitura do Resenha quando não tem. Depois, os registros dele no Popfeed são apagados.",
       "Mover dados de livros entre apps tem fama de errar o palpite e perder coisas pelo caminho. Aqui está exatamente o que acontece com cada livro, campo por campo. Nada é gravado antes de você confirmar."
     ]
   },

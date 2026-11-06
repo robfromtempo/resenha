@@ -327,7 +327,9 @@ ${lang === "en" ? `  <script>
     <section class="hero intro">
       <p class="eyebrow">${esc(t.intro.eyebrow)}</p>
       <h1>${esc(t.intro.title)}</h1>
-${t.intro.body.map((p) => `      <p class="lede">${fmt(p)}</p>`).join("\n")}
+      <p class="lede">${fmt(t.intro.lede).replace("{version}", `<span class="lede-version">${esc(t.intro.version)}</span>`)}</p>
+      <p class="how">${esc(t.intro.how)}</p>
+${t.intro.body.map((p) => `      <p class="how-text">${fmt(p)}</p>`).join("\n")}
     </section>
 
     <section class="explorer" aria-labelledby="explorer-h">

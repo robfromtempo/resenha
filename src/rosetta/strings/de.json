@@ -11,8 +11,11 @@
   "intro": {
     "eyebrow": "Bücher aus Popfeed übertragen",
     "title": "Rosetta",
+    "lede": "Mit Rosetta überträgt Resenha deine Einträge aus anderen Apps in BookHive-Einträge {version}.",
+    "version": "(ab Version 1.6.10)",
+    "how": "So funktioniert’s:",
     "body": [
-      "Mit Rosetta überträgt Resenha 1.6.10 deine Popfeed-Bücher. Jedes Buch wird zu einem BookHive-Eintrag, wenn der Katalog von BookHive es sicher kennt, und sonst zu einer Lektüre in Resenha. Danach werden seine Popfeed-Einträge gelöscht.",
+      "Jedes Popfeed-Buch wird zu einem BookHive-Eintrag, wenn der Katalog von BookHive es sicher kennt, und sonst zu einer Lektüre in Resenha. Danach werden seine Popfeed-Einträge gelöscht.",
       "Buchdaten zwischen Apps umzuziehen gilt als fehleranfällig: Es wird falsch geraten, und Dinge gehen verloren. Hier steht genau, was mit jedem Buch passiert, Feld für Feld. Nichts wird geschrieben, bevor du bestätigst."
     ]
   },
