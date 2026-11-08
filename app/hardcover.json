@@ -1,1 +1,1 @@
-{"connect": false, "allow": ["did:plc:o45y7ehjcfhasrzjjtsxloc5", "did:plc:ud62jstdevybp24x5z4pthzp"]}
+{"connect": true, "allow": ["did:plc:o45y7ehjcfhasrzjjtsxloc5", "did:plc:ud62jstdevybp24x5z4pthzp"]}
