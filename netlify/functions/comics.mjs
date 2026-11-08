@@ -128,11 +128,14 @@ function seriesEntry(record, did, pds, chapters) {
 }
 
 /** A blob resized by Netlify's image CDN, read through resenha.ink's own picture door (`/img/<did>/<cid>`, which
- *  checks the host and passes pictures only); netlify.toml lets the CDN fetch from that door and nowhere else. */
-function thumbnail(pds, did, value, width) {
+ *  checks the host and passes pictures only); netlify.toml lets the CDN fetch from that door and nowhere else.
+ *  The DID goes in as it is, colons and all: Netlify's router doesn't match `/img/:did/:cid` against an escaped
+ *  `did%3Aplc%3A…`, which falls through to the site's 404 page. `isDid` and the cid pattern admit nothing a path
+ *  segment would need escaped. */
+export function thumbnail(pds, did, value, width) {
   const cid = value?.ref?.$link;
-  if (typeof cid !== "string" || !/^[a-z2-7]{20,80}$/i.test(cid)) return null;
-  const source = `https://resenha.ink/img/${encodeURIComponent(did)}/${encodeURIComponent(cid)}`;
+  if (!isDid(did) || typeof cid !== "string" || !/^[a-z2-7]{20,80}$/i.test(cid)) return null;
+  const source = `https://resenha.ink/img/${did}/${cid}`;
   return `https://resenha.ink/.netlify/images?url=${encodeURIComponent(source)}&w=${width}&q=75`;
 }
 
