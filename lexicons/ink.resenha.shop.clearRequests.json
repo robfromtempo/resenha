@@ -1,0 +1,26 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.shop.clearRequests",
+  "description": "Delete All My Requests: every Notify me request of the caller, delivered or not.",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Requires the caller's service token.",
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "removed"
+          ],
+          "properties": {
+            "removed": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

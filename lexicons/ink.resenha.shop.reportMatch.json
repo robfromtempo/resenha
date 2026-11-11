@@ -1,0 +1,41 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.shop.reportMatch",
+  "description": "\"No\" to \"Is this the same book?\": the Shop work offered on a book page by a title match isn't that book. Counted per book and work for review, with no account kept.",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Requires the caller's service token.",
+      "input": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "book",
+            "work"
+          ],
+          "properties": {
+            "book": {
+              "type": "string",
+              "maxLength": 128,
+              "description": "The book page's key."
+            },
+            "work": {
+              "type": "string",
+              "maxLength": 128,
+              "description": "The Shop work offered."
+            }
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        }
+      }
+    }
+  }
+}

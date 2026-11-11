@@ -1,0 +1,67 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.shop.setRequest",
+  "description": "Notify me: asks to be told when the Shop has a book in a format, or stops asking. The server keeps the request against the book's Open Library work when one resolves, else its BookHive ID, with the page it was asked on and the book's title, until it is cancelled, delivered and cleared, or the account is deleted.",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Requires the caller's service token. Turning a request off works while the Shop is paused.",
+      "input": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "book",
+            "format",
+            "on"
+          ],
+          "properties": {
+            "book": {
+              "type": "string",
+              "maxLength": 128,
+              "description": "The book page's key: its BookHive ID. Stand-in keys (popfeed-, isbn-, resenha-) are refused, and a shop- page always has the book."
+            },
+            "format": {
+              "type": "string",
+              "knownValues": [
+                "ebook",
+                "audiobook"
+              ]
+            },
+            "on": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "on"
+          ],
+          "properties": {
+            "on": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "errors": [
+        {
+          "name": "ShopOff",
+          "description": "The Shop is paused; no new requests."
+        },
+        {
+          "name": "RequestCap",
+          "description": "The account has made 30 requests today (UTC)."
+        },
+        {
+          "name": "Available",
+          "description": "The Shop already has the book in that format."
+        }
+      ]
+    }
+  }
+}

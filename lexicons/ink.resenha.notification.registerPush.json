@@ -41,6 +41,18 @@
                 "production"
               ],
               "description": "sandbox for debug builds, production for TestFlight and the App Store."
+            },
+            "capabilities": {
+              "type": "array",
+              "maxLength": 10,
+              "items": {
+                "type": "string",
+                "maxLength": 64,
+                "knownValues": [
+                  "shop"
+                ]
+              },
+              "description": "What the app can show: shop for the Shop's availability notifications. Apps that send none are never sent them."
             }
           }
         }

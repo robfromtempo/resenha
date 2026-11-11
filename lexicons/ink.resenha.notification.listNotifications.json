@@ -18,6 +18,18 @@
             "minimum": 1,
             "maximum": 100,
             "default": 50
+          },
+          "capabilities": {
+            "type": "array",
+            "maxLength": 10,
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "knownValues": [
+                "shop"
+              ]
+            },
+            "description": "What the app can show: with shop, the Shop's availability notifications are included."
           }
         }
       },
@@ -78,9 +90,10 @@
             "reply",
             "comicComment",
             "readingLike",
-            "readingComment"
+            "readingComment",
+            "shopAvailable"
           ],
-          "description": "like and quote group under their review; readingLike groups under the book record it's on, and readingComment is a comment on the caller reading a book; reply is to a comment of the caller's, on Bluesky (with thread), Popfeed, BookHive or Resenha (with thread, the book record)."
+          "description": "like and quote group under their review; readingLike groups under the book record it's on, and readingComment is a comment on the caller reading a book; reply is to a comment of the caller's, on Bluesky (with thread), Popfeed, BookHive or Resenha (with thread, the book record). shopAvailable: a book the caller asked for is now in the Shop (from the official account; subject is the book page's key, book the page and its title, format what arrived)."
         },
         "source": {
           "type": "string",
@@ -98,8 +111,7 @@
         },
         "subject": {
           "type": "string",
-          "format": "at-uri",
-          "description": "What it's about: the caller's post, review or comment."
+          "description": "What it's about: the caller's post, review or comment (an at-uri), or for shopAvailable the key of the book page the request was made on."
         },
         "review": {
           "type": "string",
@@ -131,6 +143,14 @@
               "type": "string"
             }
           }
+        },
+        "format": {
+          "type": "string",
+          "knownValues": [
+            "ebook",
+            "audiobook"
+          ],
+          "description": "For shopAvailable: the format that arrived."
         }
       }
     },

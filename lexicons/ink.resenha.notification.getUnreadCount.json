@@ -5,10 +5,23 @@
   "defs": {
     "main": {
       "type": "query",
-      "description": "Likes on one review count once, as the app shows them.",
+      "description": "Likes on one review count once, as the app shows them. The Shop's notifications count only with capabilities shop.",
       "parameters": {
         "type": "params",
-        "properties": {}
+        "properties": {
+          "capabilities": {
+            "type": "array",
+            "maxLength": 10,
+            "items": {
+              "type": "string",
+              "maxLength": 64,
+              "knownValues": [
+                "shop"
+              ]
+            },
+            "description": "What the app can show: with shop, the Shop's availability notifications are included."
+          }
+        }
       },
       "output": {
         "encoding": "application/json",

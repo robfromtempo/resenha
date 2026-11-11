@@ -1,0 +1,85 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.shop.listRequests",
+  "description": "The caller's Notify me requests, newest first, for My Requests.",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Requires the caller's service token. Only the caller's own.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "cursor": {
+            "type": "string",
+            "description": "Where the previous page ended."
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "requests"
+          ],
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Where the previous page ended."
+            },
+            "requests": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#request"
+              }
+            }
+          }
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "required": [
+        "book",
+        "format",
+        "createdAt"
+      ],
+      "properties": {
+        "book": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "The key of the page the request was made on."
+        },
+        "format": {
+          "type": "string",
+          "knownValues": [
+            "ebook",
+            "audiobook"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "authors": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "cover": {
+          "type": "string",
+          "format": "uri"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "deliveredAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "When the format arrived and the caller was told."
+        }
+      }
+    }
+  }
+}

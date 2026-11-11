@@ -1,0 +1,19 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.actor.deleteData",
+  "description": "Deletes what Resenha's server keeps about the caller: Notify me requests, daily Get counts, notification state and push tokens. The app calls it while deleting the account; a weekly check on the server clears the data of accounts deleted any other way.",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Requires the caller's service token.",
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [],
+          "properties": {}
+        }
+      }
+    }
+  }
+}

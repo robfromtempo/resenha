@@ -11,7 +11,7 @@
           "hiveId": {
             "type": "string",
             "maxLength": 128,
-            "description": "The book's BookHive ID. Not a stand-in beginning popfeed-, which names one reader's copy."
+            "description": "The book's BookHive ID, or a Shop book's shop-<edition> key, whose page gathers the readers of every edition of its Shop work. Not a stand-in beginning popfeed-, isbn- or resenha-, which names one reader's copy."
           },
           "isbn13": {
             "type": "string",
@@ -70,6 +70,10 @@
                 "type": "ref",
                 "ref": "ink.resenha.defs#profileView"
               }
+            },
+            "shop": {
+              "type": "ref",
+              "ref": "#shop"
             }
           }
         }
@@ -286,6 +290,61 @@
             "type": "ref",
             "ref": "ink.resenha.defs#reviewView"
           }
+        }
+      }
+    },
+    "shop": {
+      "type": "object",
+      "description": "Whether Resenha's Shop has the book, per format: has, sureNot (Notify me is offered) or notSure (nothing is offered).",
+      "required": [
+        "eBook",
+        "audiobook",
+        "paused"
+      ],
+      "properties": {
+        "eBook": {
+          "type": "string",
+          "knownValues": [
+            "has",
+            "sureNot",
+            "notSure"
+          ]
+        },
+        "audiobook": {
+          "type": "string",
+          "knownValues": [
+            "has",
+            "sureNot",
+            "notSure"
+          ]
+        },
+        "work": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "The Shop work, when a format is has."
+        },
+        "match": {
+          "type": "string",
+          "knownValues": [
+            "id",
+            "title"
+          ],
+          "description": "title when the answer came from the title and author alone: the app asks \"Is this the same book?\" before Get."
+        },
+        "requested": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "knownValues": [
+              "ebook",
+              "audiobook"
+            ]
+          },
+          "description": "The formats the caller asked to be told about."
+        },
+        "paused": {
+          "type": "boolean",
+          "description": "The Shop is paused: Get and new requests are refused."
         }
       }
     }
