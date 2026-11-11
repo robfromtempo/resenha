@@ -5,7 +5,7 @@
   "defs": {
     "main": {
       "type": "record",
-      "description": "One per reviewed book. The record key is the book's BookHive ID (hiveId), so a reader's review of a book can be found with a single getRecord. A book BookHive doesn't hold is keyed by a stand-in instead, which is also its hiveId: isbn-… and the edition's ISBN-13, or resenha-… and the ink.resenha.reading's record key for a book with no ISBN. Records written before Resenha 1.6.10 may also be keyed popfeed-…, for a book the reader kept in Popfeed.",
+      "description": "One per reviewed book. The record key is the book's BookHive ID (hiveId), so a reader's review of a book can be found with a single getRecord. A book BookHive doesn't hold is keyed by a stand-in instead, which is also its hiveId: isbn-… and the edition's ISBN-13, shop-… and the edition's shopId for a book taken from Resenha's Shop with no ISBN, or resenha-… and the ink.resenha.reading's record key for any other book with no ISBN. Records written before Resenha 1.6.10 may also be keyed popfeed-…, for a book the reader kept in Popfeed.",
       "key": "any",
       "record": {
         "type": "object",
@@ -28,7 +28,7 @@
           },
           "hiveId": {
             "type": "string",
-            "maxLength": 64,
+            "maxLength": 128,
             "description": "The book's BookHive ID, or the stand-in the record is keyed by for a book BookHive doesn't hold. Also the record key."
           },
           "spoiler": {

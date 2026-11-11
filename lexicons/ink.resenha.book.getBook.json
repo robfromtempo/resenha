@@ -10,7 +10,7 @@
         "properties": {
           "hiveId": {
             "type": "string",
-            "maxLength": 64,
+            "maxLength": 128,
             "description": "The book's BookHive ID. Not a stand-in beginning popfeed-, which names one reader's copy."
           },
           "isbn13": {
@@ -81,7 +81,7 @@
       "properties": {
         "hiveId": {
           "type": "string",
-          "maxLength": 64
+          "maxLength": 128
         },
         "isbn13": {
           "type": "string",

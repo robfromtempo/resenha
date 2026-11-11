@@ -12,7 +12,7 @@
       "properties": {
         "hiveId": {
           "type": "string",
-          "maxLength": 64,
+          "maxLength": 128,
           "description": "The book's BookHive ID, or, for a Popfeed book BookHive's catalogue doesn't know, a stand-in beginning with popfeed- that no BookHive call takes."
         },
         "isbn13": {
@@ -643,7 +643,7 @@
       "properties": {
         "hiveId": {
           "type": "string",
-          "maxLength": 64,
+          "maxLength": 128,
           "description": "BookHive's ID for the edition."
         },
         "isbn13": {
@@ -672,6 +672,11 @@
           "type": "string",
           "maxLength": 32,
           "description": "Open Library's edition key, such as /books/OL62590811M."
+        },
+        "shopId": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "An edition in Resenha's Shop, such as se:jane-austen_pride-and-prejudice or pg:1342."
         }
       }
     },
