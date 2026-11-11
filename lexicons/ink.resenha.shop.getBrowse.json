@@ -140,6 +140,15 @@
             "maxLength": 128
           },
           "description": "CIDv1 (raw, sha2-256) of every copied version of every edition of the work."
+        },
+        "editions": {
+          "type": "array",
+          "maxLength": 50,
+          "items": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "description": "The work's eBook editions, such as se:jane-austen/pride-and-prejudice or pg:42671, so an app can match the eBooks that name their edition."
         }
       }
     }
