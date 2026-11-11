@@ -1,0 +1,103 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.shop.take",
+  "description": "Get: a short-lived address for an edition's current file, which the app downloads, checks against contentCID and saves as an uploaded eBook. The server counts takes per edition without the account, and per account without the book.",
+  "defs": {
+    "main": {
+      "type": "procedure",
+      "description": "Requires the caller's service token. The first take of a version may take up to a minute while the server copies it from its source.",
+      "input": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "edition"
+          ],
+          "properties": {
+            "edition": {
+              "type": "string",
+              "maxLength": 128
+            }
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "url",
+            "expiresAt",
+            "size",
+            "contentCID",
+            "version",
+            "source",
+            "id",
+            "filename"
+          ],
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "Pre-signed; good for 15 minutes."
+            },
+            "expiresAt": {
+              "type": "string",
+              "format": "datetime"
+            },
+            "size": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "contentCID": {
+              "type": "string",
+              "maxLength": 128,
+              "description": "CIDv1 (raw, sha2-256, base32) of the file's bytes."
+            },
+            "version": {
+              "type": "string",
+              "maxLength": 64
+            },
+            "source": {
+              "type": "string",
+              "knownValues": [
+                "se",
+                "pg"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "filename": {
+              "type": "string",
+              "maxLength": 256
+            }
+          }
+        }
+      },
+      "errors": [
+        {
+          "name": "ShopOff",
+          "description": "The Shop is paused."
+        },
+        {
+          "name": "DailyCap",
+          "description": "The account has taken 20 books today (UTC)."
+        },
+        {
+          "name": "SourceBusy",
+          "description": "The Shop has copied all it may from its sources today."
+        },
+        {
+          "name": "SourceFailed",
+          "description": "The source refused or the file didn't arrive."
+        },
+        {
+          "name": "NotFound",
+          "description": "No such edition, or it is hidden."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.shop.getBrowse",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "The Shop's front page: a featured row and shelves of free public-domain books from Standard Ebooks, Project Gutenberg and LibriVox, built from the catalogue's data. Public, no sign-in; answers may be cached for five minutes; limited per address.",
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "lang": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 16
+            },
+            "maxLength": 10,
+            "description": "The reader's languages (BCP 47 codes; only the language part is compared). Without it, every language."
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "featured",
+            "shelves",
+            "paused"
+          ],
+          "properties": {
+            "featured": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#workSummary"
+              }
+            },
+            "shelves": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#shelf"
+              }
+            },
+            "paused": {
+              "type": "boolean",
+              "description": "True while the Shop is paused on the server: Get and Notify me are shown disabled. Browsing keeps working."
+            }
+          }
+        }
+      },
+      "errors": [
+        {
+          "name": "RateLimited",
+          "description": "Too many calls from this address in the last minute."
+        }
+      ]
+    },
+    "shelf": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "works"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "works": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#workSummary"
+          }
+        }
+      }
+    },
+    "workSummary": {
+      "type": "object",
+      "required": [
+        "work",
+        "title",
+        "authors",
+        "formats",
+        "explicit",
+        "contentCIDs"
+      ],
+      "description": "A work: editions of one text in one language. Enough for a row or a cover, and every copied version's fingerprint so the app can show You have it without another call. Readers ignore fields they don't know; later stages may add some (such as a price).",
+      "properties": {
+        "work": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "The work's id: its lowest Gutenberg edition's (pg:<n>), else its Standard Ebooks (se:<slug>) or LibriVox (lv:<n>) one. It can change between catalogue rebuilds; editions' ids never do."
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 512
+          }
+        },
+        "language": {
+          "type": "string",
+          "maxLength": 16,
+          "description": "ISO 639-1."
+        },
+        "cover": {
+          "type": "string",
+          "format": "uri"
+        },
+        "formats": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "knownValues": [
+              "ebook",
+              "audiobook"
+            ]
+          }
+        },
+        "explicit": {
+          "type": "boolean",
+          "description": "Marked explicit by its sources' subjects or by Resenha's list: hidden or blurred by the reader's adult content setting."
+        },
+        "contentCIDs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "description": "CIDv1 (raw, sha2-256) of every copied version of every edition of the work."
+        }
+      }
+    }
+  }
+}

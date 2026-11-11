@@ -1,0 +1,74 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.shop.search",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "Searches the Shop's works by title, author and subject: Standard Ebooks' editions first among equal matches, then the most downloaded. Nothing typed is stored. Public, no sign-in; answers may be cached for five minutes; limited per address.",
+      "parameters": {
+        "type": "params",
+        "required": [
+          "q"
+        ],
+        "properties": {
+          "q": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "lang": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 16
+            },
+            "maxLength": 10,
+            "description": "The reader's languages (BCP 47 codes; only the language part is compared). Without it, every language."
+          },
+          "cursor": {
+            "type": "string",
+            "maxLength": 32
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 25,
+            "default": 25
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "works",
+            "paused"
+          ],
+          "properties": {
+            "works": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.shop.getBrowse#workSummary"
+              }
+            },
+            "cursor": {
+              "type": "string",
+              "maxLength": 32
+            },
+            "paused": {
+              "type": "boolean",
+              "description": "True while the Shop is paused on the server: Get and Notify me are shown disabled. Browsing keeps working."
+            }
+          }
+        }
+      },
+      "errors": [
+        {
+          "name": "RateLimited",
+          "description": "Too many calls from this address in the last minute."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,311 @@
+{
+  "lexicon": 1,
+  "id": "ink.resenha.shop.getWork",
+  "defs": {
+    "main": {
+      "type": "query",
+      "description": "A work's page in the Shop: its eBook editions (Standard Ebooks' first) with every copied version's fingerprint, its LibriVox recordings with their sections, and the catalogue book it maps to, for linking a taken eBook to the reader's library. Public, no sign-in; answers may be cached for five minutes; limited per address.",
+      "parameters": {
+        "type": "params",
+        "required": [
+          "work"
+        ],
+        "properties": {
+          "work": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      },
+      "output": {
+        "encoding": "application/json",
+        "schema": {
+          "type": "object",
+          "required": [
+            "work",
+            "title",
+            "authors",
+            "formats",
+            "explicit",
+            "editions",
+            "recordings",
+            "book",
+            "paused"
+          ],
+          "properties": {
+            "work": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 1024
+            },
+            "authors": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 512
+              }
+            },
+            "language": {
+              "type": "string",
+              "maxLength": 16
+            },
+            "cover": {
+              "type": "string",
+              "format": "uri"
+            },
+            "formats": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "knownValues": [
+                  "ebook",
+                  "audiobook"
+                ]
+              }
+            },
+            "explicit": {
+              "type": "boolean"
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 20000
+            },
+            "editions": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#edition"
+              }
+            },
+            "recordings": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#recording"
+              }
+            },
+            "book": {
+              "type": "ref",
+              "ref": "#catalogueBook"
+            },
+            "paused": {
+              "type": "boolean",
+              "description": "True while the Shop is paused on the server: Get and Notify me are shown disabled. Browsing keeps working."
+            }
+          }
+        }
+      },
+      "errors": [
+        {
+          "name": "NotFound",
+          "description": "No such work, or it is hidden."
+        },
+        {
+          "name": "RateLimited",
+          "description": "Too many calls from this address in the last minute."
+        }
+      ]
+    },
+    "edition": {
+      "type": "object",
+      "required": [
+        "id",
+        "source",
+        "title",
+        "authors",
+        "contentCIDs",
+        "versions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "se:<slug> or pg:<n>, never reused. Get takes it."
+        },
+        "source": {
+          "type": "string",
+          "knownValues": [
+            "se",
+            "pg"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 512
+          }
+        },
+        "language": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "version": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "The version Get gives now: Standard Ebooks' last update, or the Gutenberg mirror file's time once a copy exists."
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Bytes of the file Get gives."
+        },
+        "credit": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "cover": {
+          "type": "string",
+          "format": "uri"
+        },
+        "contentCIDs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 128
+          }
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#version"
+          }
+        }
+      }
+    },
+    "version": {
+      "type": "object",
+      "required": [
+        "version",
+        "contentCID",
+        "size"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "contentCID": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "recording": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "readers",
+        "length",
+        "sections"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "lv:<n>."
+        },
+        "kind": {
+          "type": "string",
+          "knownValues": [
+            "solo",
+            "group",
+            "dramatic"
+          ]
+        },
+        "readers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 256
+          }
+        },
+        "language": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Seconds."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "The project's LibriVox page."
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#section"
+          }
+        }
+      }
+    },
+    "section": {
+      "type": "object",
+      "required": [
+        "n",
+        "length",
+        "url"
+      ],
+      "properties": {
+        "n": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Seconds."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "The MP3 on the Internet Archive, over HTTPS."
+        }
+      }
+    },
+    "catalogueBook": {
+      "type": "object",
+      "required": [
+        "isbn13s"
+      ],
+      "description": "The catalogue book the work maps to, from Open Library works linked to its editions: the BookHive ID when BookHive has one of its ISBNs.",
+      "properties": {
+        "hiveId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "olWork": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "isbn13s": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 13
+          }
+        }
+      }
+    }
+  }
+}
