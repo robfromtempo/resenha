@@ -7,13 +7,16 @@
       "description": "A work's page in the Shop: its eBook editions (Standard Ebooks' first) with every copied version's fingerprint, its LibriVox recordings with their sections, and the catalogue book it maps to, for linking a taken eBook to the reader's library. Public, no sign-in; answers may be cached for five minutes; limited per address.",
       "parameters": {
         "type": "params",
-        "required": [
-          "work"
-        ],
         "properties": {
           "work": {
             "type": "string",
-            "maxLength": 128
+            "maxLength": 128,
+            "description": "The work's id. Work ids may change between catalogue rebuilds; give edition too, and the work it is in now answers when this one is gone."
+          },
+          "edition": {
+            "type": "string",
+            "maxLength": 128,
+            "description": "An edition or recording id (se:<slug>, pg:<n>, lv:<n>), which never changes: the work it is in now answers when work is absent or names no work. One of work and edition is required."
           }
         }
       },
@@ -133,6 +136,15 @@
               "type": "ref",
               "ref": "#catalogueBook"
             },
+            "related": {
+              "type": "array",
+              "maxLength": 6,
+              "items": {
+                "type": "ref",
+                "ref": "ink.resenha.shop.getBrowse#workSummary"
+              },
+              "description": "Works holding the same text under other ids, by the same first author in the same language (Other Editions across works): Standard Ebooks' first, then those with an eBook, then by downloads. Never hidden works."
+            },
             "paused": {
               "type": "boolean",
               "description": "True while the Shop is paused on the server: Get and Notify me are shown disabled. Browsing keeps working."
@@ -143,7 +155,7 @@
       "errors": [
         {
           "name": "NotFound",
-          "description": "No such work, or it is hidden."
+          "description": "No such work, nor one holding the edition given, or it is hidden."
         },
         {
           "name": "RateLimited",
@@ -288,6 +300,11 @@
           "type": "string",
           "format": "uri",
           "description": "The project's LibriVox page."
+        },
+        "cover": {
+          "type": "string",
+          "format": "uri",
+          "description": "The recording's cover: LibriVox's full-size cover art, else the Internet Archive's 180-pixel image of the item holding its sections."
         },
         "sections": {
           "type": "array",
