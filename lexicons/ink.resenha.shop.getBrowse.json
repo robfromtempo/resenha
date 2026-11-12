@@ -4,7 +4,7 @@
   "defs": {
     "main": {
       "type": "query",
-      "description": "The Shop's front page: a featured row and shelves of free public-domain books from Standard Ebooks, Project Gutenberg and LibriVox, built from the catalogue's data. Public, no sign-in; answers may be cached for five minutes; limited per address.",
+      "description": "The Shop's front page: a featured row and shelves of public-domain books from Standard Ebooks, Project Gutenberg and LibriVox, built from the catalogue's data. Public, no sign-in; answers may be cached for five minutes; limited per address.",
       "parameters": {
         "type": "params",
         "properties": {
