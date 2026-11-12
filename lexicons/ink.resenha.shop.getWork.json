@@ -66,6 +66,48 @@
                 ]
               }
             },
+            "genres": {
+              "type": "array",
+              "maxLength": 3,
+              "items": {
+                "type": "string",
+                "maxLength": 32,
+                "knownValues": [
+                  "fiction",
+                  "nonfiction",
+                  "adventure",
+                  "biography",
+                  "children",
+                  "comedy",
+                  "comingOfAge",
+                  "drama",
+                  "essays",
+                  "familyLife",
+                  "fantasy",
+                  "gothic",
+                  "historical",
+                  "history",
+                  "horror",
+                  "mystery",
+                  "mythology",
+                  "nature",
+                  "philosophy",
+                  "poetry",
+                  "politics",
+                  "religion",
+                  "romance",
+                  "satire",
+                  "science",
+                  "scienceFiction",
+                  "shortStories",
+                  "thriller",
+                  "travel",
+                  "war",
+                  "western"
+                ]
+              },
+              "description": "The work's genres, at most three, most telling first, read from its sources' subjects (Standard Ebooks', the Library of Congress headings, Gutenberg's categories, LibriVox's genres). fiction or nonfiction only when nothing more specific is known. Apps name them in their own words and ignore keys they don't know."
+            },
             "explicit": {
               "type": "boolean"
             },
