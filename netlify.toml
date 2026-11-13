@@ -68,6 +68,14 @@
     Content-Type = "application/json"
     Cache-Control = "no-store, max-age=0"
 
+# The Restore Popfeed Library switch, which the app reads before showing the row, before confirming and before every
+# book it puts back. Never cached, for the same reason.
+[[headers]]
+  for = "/app/restore.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Cache-Control = "no-store, max-age=0"
+
 # Tells Apple devices that resenha.ink review links open in Resenha. Served as JSON, at its exact path, with no redirect.
 [[headers]]
   for = "/.well-known/apple-app-site-association"
